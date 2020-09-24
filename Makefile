@@ -10,7 +10,7 @@ compose_config=-f docker-compose.yml
 
 container=mycalendar
 
-# build the generator container
+# build the mycalendar container
 build:
 	docker-compose $(compose_config) build
 
@@ -22,7 +22,7 @@ start:
 stop:
 	docker-compose $(compose_config) down
 
-# restart the generator container
+# restart the mycalendar container
 restart: stop start
 
 # get a shell within the app container
