@@ -36,6 +36,6 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install curl gcc musl-dev
           poetry install
-          poetry run isort --recursive --check-only vmagent tests
-          poetry run black --check vmagent tests
+          poetry run isort --recursive --check-only mycalendar tests
+          poetry run black --check mycalendar tests
           poetry run nose2 -v
