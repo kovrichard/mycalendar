@@ -1,8 +1,9 @@
 import unittest
 
+from flask import template_rendered
+
 from mycalendar.server.factory import create_app
 
-from flask import template_rendered
 
 class AppTestCase(unittest.TestCase):
     def __init__(self, methodName):

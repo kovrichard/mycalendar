@@ -1,8 +1,8 @@
+from datetime import datetime
+
 from flask import Flask
 
 from mycalendar.main.api import main_bp
-
-from datetime import datetime
 
 
 def create_app():

@@ -1,6 +1,7 @@
+from truth.truth import AssertThat
+
 from tests import AppTestCase, TemplateRenderMixin, TestClientMixin
 
-from truth.truth import AssertThat
 
 class TestApi(TestClientMixin, TemplateRenderMixin, AppTestCase):
     def test_welcome_renders_template(self):

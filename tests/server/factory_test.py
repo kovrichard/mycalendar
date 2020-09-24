@@ -1,7 +1,9 @@
-from tests import AppTestCase
+from datetime import datetime
+
 from truth.truth import AssertThat
 
-from datetime import datetime
+from tests import AppTestCase
+
 
 class TestFactory(AppTestCase):
     def test_create_app_sets_current_year(self):
