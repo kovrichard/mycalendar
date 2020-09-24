@@ -23,7 +23,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           apt-get -y update && apt-get -y upgrade
-          apk-get -y install curl gcc musl-dev
+          apt-get -y install curl gcc musl-dev
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
           /root/.poetry/bin/poetry install
           /root/.poetry/bin/poetry run isort --recursive --check-only vmagent tests
