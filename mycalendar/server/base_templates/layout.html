@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <title>{% block title %}{% endblock %} - Calendar</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename = "bootstrap.4.5.0.min.css") }}">
+</head>
+<body class="h-100">
+    <div class="container text-center h-100">
+        <div class="row mb-5">
+            <div class="col">
+                <div>
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="row fixed-bottom mb-5 d-flex justify-content-center">
+            <div class="row-cols-10">
+                <footer id="footer">
+                    &copy; Copyright {{ current_year }} by Máté & Ricsi</a>.
+                </footer>
+            </div>
+    </div>
+</body>
+</html>

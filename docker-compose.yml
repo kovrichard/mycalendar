@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mycalendar:
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: mycalendar.server.factory
+    build: ./
+    image: mycalendar
+    working_dir: /usr/src/app
+    volumes: 
+      - ./:/usr/src/app/
+    ports:
+      - "80:80"
+    command: poetry run flask run --host=0.0.0.0 --port=80
