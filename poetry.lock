@@ -29,6 +29,14 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
+category = "dev"
+description = "Fast, simple object-to-object and broadcast signaling"
+name = "blinker"
+optional = false
+python-versions = "*"
+version = "1.4"
+
+[[package]]
 category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
@@ -217,7 +225,7 @@ version = "0.35.1"
 test = ["pytest (>=3.0.0)", "pytest-cov"]
 
 [metadata]
-content-hash = "78dd41e585d06066bef52115005fcd46faccd985df3c5c5684f8be7c73e27aca"
+content-hash = "69776e405f8cac2d2b2d66cb5c54cce1573d5decda3b55abaf99fc50fe07a58e"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -228,6 +236,9 @@ appdirs = [
 ]
 black = [
     {file = "black-20.8b1.tar.gz", hash = "sha256:1c02557aa099101b9d21496f8a914e9ed2222ef70336404eeeac8edba836fbea"},
+]
+blinker = [
+    {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},

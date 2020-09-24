@@ -43,8 +43,8 @@ config:
 
 # lint code
 lint:
-	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar
-	docker-compose $(compose_config) exec $(container) poetry run black mycalendar
+	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar tests
+	docker-compose $(compose_config) exec $(container) poetry run black mycalendar tests
 
 ####################################################
 
