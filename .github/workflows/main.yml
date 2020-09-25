@@ -36,7 +36,7 @@ jobs:
           poetry install
       - name: Run linter
         run: |
-          poetry run isort --recursive --check-only mycalendar tests
+          poetry run isort --check-only mycalendar tests
           poetry run black --check mycalendar tests
       - name: Run tests
         run: poetry run nose2 -v
