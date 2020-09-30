@@ -1,10 +1,18 @@
-.PHONY: build start stop restart sh logs config lint db tdb mstart mstop clear
+.PHONY: build start stop restart sh tsh logs config lint db tdb mstart mstop clear migrate tmigrate rollback trollback
 
 # \
 !ifdef USE_LEGACY_DOCKER # \
 compose_config=-f docker-compose.yml -f docker-compose-legacy.yml # \
 !else
 compose_config=-f docker-compose.yml
+# \
+!endif
+
+# \
+!ifndef 0 # \
+test_env="DB_URL=$$TEST_DB_URL" # \
+!else
+test_env=DB_URL=\$$TEST_DB_URL
 # \
 !endif
 
@@ -29,6 +37,9 @@ restart: stop start
 sh:
 	docker-compose $(compose_config) exec $(container) /bin/sh
 
+tsh:
+	docker-compose $(compose_config) exec $(container) /bin/sh -c "$(test_env) sh"
+
 # run tests
 test:
 	docker-compose $(compose_config) exec $(container) /bin/sh -c "poetry run nose2 -v"
@@ -43,14 +54,26 @@ config:
 
 # lint code
 lint:
-	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar tests
-	docker-compose $(compose_config) exec $(container) poetry run black mycalendar tests
+	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar tests alembic
+	docker-compose $(compose_config) exec $(container) poetry run black mycalendar tests alembic
 
 db:
 	docker-compose $(compose_config) exec db psql calendar_db db_user
 
 tdb:
 	docker-compose $(compose_config) exec db psql calendar_test_db test_db_user
+
+migrate:
+	docker-compose $(compose_config) exec $(container) poetry run alembic upgrade head
+
+tmigrate:
+	docker-compose $(compose_config) exec $(container) /bin/sh -c "$(test_env) poetry run alembic upgrade head"
+
+rollback:
+	docker-compose $(compose_config) exec $(container) poetry run alembic downgrade -1
+
+trollback:
+	docker-compose $(compose_config) exec $(container) /bin/sh -c "$(test_env) poetry run alembic downgrade -1"
 
 ####################################################
 

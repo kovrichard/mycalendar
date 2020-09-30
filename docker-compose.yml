@@ -4,7 +4,8 @@ services:
     environment:
       FLASK_ENV: development
       FLASK_APP: mycalendar.server.factory
-      DB_URL: postgres://db:4532
+      DB_URL: postgres://db_user:db_pw@db/calendar_db
+      TEST_DB_URL: postgres://test_db_user:test_db_pw@db/calendar_test_db
     build: ./
     image: mycalendar
     working_dir: /usr/src/app

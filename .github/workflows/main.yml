@@ -32,11 +32,11 @@ jobs:
       - name: Update and install dependencies
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install curl gcc musl-dev
+          sudo apt-get -y install curl gcc musl-dev postgresql-dev
           poetry install
       - name: Run linter
         run: |
-          poetry run isort --check-only mycalendar tests
-          poetry run black --check mycalendar tests
+          poetry run isort --check-only mycalendar tests alembic
+          poetry run black --check mycalendar tests alembic
       - name: Run tests
         run: poetry run nose2 -v
