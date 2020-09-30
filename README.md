@@ -36,3 +36,45 @@ Download `Build Tools for Visual Studio 2019` from [Microsoft's VS site](https:/
 Dependencies are managed via `poetry`. To manage dependencies always connect to the container (`make sh`)  first and run poetry within.
 
 To add a new package use `poetry add [package-name]`.
+
+# database
+The project uses Postgresql with SQLAlchemy as an ORM and Alembic to handle migrations.
+
+Migrations are stored under `alembic/versions`.
+
+To get a completely clean postgres database, delete the `database-data` docker volume. Find it by running `docker volume ls`, delete it by running `docker volume rm [project]_database-data`.
+
+## to get a db console
+```
+make db
+make tdb # for test db
+```
+
+## to migrate to the latest schema
+```
+make migrate
+make tmigrate # for test db
+```
+
+## to rollback one migration
+```
+make rollback
+make trollback # for test tb
+```
+
+## to create a new migration
+Edit the model first (or create new models), and then run the following script.
+
+```
+make sh
+poetry run alembic revision --autogenerate -m "[description]"
+```
+
+Adjust the generated migration if needed.
+
+### to check a migration
+```
+make sh
+poetry run alembic upgrade --sql head
+```
+

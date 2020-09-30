@@ -32,7 +32,7 @@ jobs:
       - name: Update and install dependencies
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install curl gcc musl-dev postgresql-dev
+          sudo apt-get -y install curl gcc musl-dev
           poetry install
       - name: Run linter
         run: |
