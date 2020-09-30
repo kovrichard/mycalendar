@@ -1,4 +1,4 @@
-.PHONY: build start stop restart sh logs config lint mstart mstop clear
+.PHONY: build start stop restart sh logs config lint db tdb mstart mstop clear
 
 # \
 !ifdef USE_LEGACY_DOCKER # \
@@ -45,6 +45,12 @@ config:
 lint:
 	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar tests
 	docker-compose $(compose_config) exec $(container) poetry run black mycalendar tests
+
+db:
+	docker-compose $(compose_config) exec db psql calendar_db db_user
+
+tdb:
+	docker-compose $(compose_config) exec db psql calendar_test_db test_db_user
 
 ####################################################
 

@@ -3,3 +3,7 @@ services:
   mycalendar:
     volumes:
       - /mycalendar/:/usr/src/app/
+
+  db:
+    volumes:
+      - /mycalendar/postgres/:/docker-entrypoint-initdb.d/

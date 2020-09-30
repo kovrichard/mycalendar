@@ -17,6 +17,11 @@ Install these and you are good to go. All development happens within the contain
 
 On older machines - instead of localhost - the app will be available on a different IP, which is assigned to Docker Toolbox on start. To get this IP, type `docker-machine ip`.
 
+# network
+The calendar and the database communicate through a network called `szoftarch`. This needs to be created once.
+
+Create it by: `docker network create szoftarch`
+
 # how to run
 Using `make`. Check out the `Makefile`. The most important Docker commands (like building, starting and stopping a container) are described here. For Windows, there is [NMake](https://docs.microsoft.com/en-us/cpp/build/reference/nmake-reference?view=vs-2019).
 
