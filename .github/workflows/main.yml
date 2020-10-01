@@ -37,7 +37,7 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install curl gcc musl-dev
           poetry install
-      -name: Migrate database
+      - name: Migrate database
         run: poetry run alembic upgrade head
       - name: Run linter
         run: |
