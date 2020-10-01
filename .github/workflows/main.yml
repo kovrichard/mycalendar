@@ -67,11 +67,14 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install curl gcc musl-dev
           poetry install
+
       - name: Migrate database
         run: poetry run alembic upgrade head
+
       - name: Run linter
         run: |
           poetry run isort --check-only mycalendar tests alembic
           poetry run black --check mycalendar tests alembic
+          
       - name: Run tests
         run: poetry run nose2 -v
