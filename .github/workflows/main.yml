@@ -9,7 +9,10 @@ on:
     branches: [ master ]
 
 env:
-  DB_URL: postgres://test_db_user:test_db_pw@db/calendar_test_db
+  POSTGRES_DB: calendar_test_db
+  POSTGRES_USER: test_db_user
+  POSTGRES_PW: ""
+  DB_URL: postgres://test_db_user@db/calendar_test_db
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,6 +20,15 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
