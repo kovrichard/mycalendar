@@ -26,6 +26,8 @@ jobs:
     services:
       db:
         image: postgres:12.3
+        env:
+          POSTGRES_PASSWORD: "test_db_pw"
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
