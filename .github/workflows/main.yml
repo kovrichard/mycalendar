@@ -12,7 +12,8 @@ env:
   POSTGRES_DB: calendar_test_db
   POSTGRES_USER: test_db_user
   POSTGRES_PW: ""
-  DB_URL: postgres://test_db_user@db/calendar_test_db
+  DB_HOST: localhost
+  DB_URL: postgres://test_db_user@localhost/calendar_test_db
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
