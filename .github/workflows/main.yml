@@ -30,7 +30,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout code
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
@@ -41,7 +41,7 @@ jobs:
         uses: dschep/install-poetry-action@v1.2
         with:
           poetry-version: 1.0.10
-          
+
       - name: Cache Poetry virtualenv
         uses: actions/cache@v1
         id: cache
