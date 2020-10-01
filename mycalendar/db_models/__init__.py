@@ -1,6 +1,12 @@
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import BaseQuery, SQLAlchemy
 
-db = SQLAlchemy()
+
+class GetOrQuery(BaseQuery):
+    def get_or(self, ident, default=None):
+        return self.get(ident) or default
+
+
+db = SQLAlchemy(query_class=GetOrQuery)
 
 
 def import_models():
