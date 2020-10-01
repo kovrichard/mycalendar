@@ -9,7 +9,7 @@ on:
     branches: [ master ]
 
 env:
-  DB_URL: postgres://test_db_user@db/calendar_test_db
+  DB_URL: postgres://test_db_user:test_db_pw@db/calendar_test_db
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
