@@ -14,7 +14,6 @@ env:
   POSTGRES_PW: ""
   DB_HOST: localhost
   DB_URL: postgres://test_db_user@localhost:5432/calendar_test_db
-  PG_PORT: ${{ job.services.postgres.ports['5432'] }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
