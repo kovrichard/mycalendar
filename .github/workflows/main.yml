@@ -61,12 +61,11 @@ jobs:
 
       - name: Cache Poetry virtualenv
         uses: actions/cache@v1
-        id: cache
         with:
           path: ~/.poetry
-          key: poetry-$
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            poetry-$
+            ${{ runner.os }}-poetry-
 
       # Runs a set of commands using the runners shell
       - name: Update and install dependencies
