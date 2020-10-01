@@ -8,6 +8,9 @@ on:
   push:
     branches: [ master ]
 
+env:
+  DATABASE_URL: postgres://test_db_user:test_db_pw@db/calendar_test_db
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -34,6 +37,8 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install curl gcc musl-dev
           poetry install
+      -name: Migrate database
+        run: poetry run alembic upgrade head
       - name: Run linter
         run: |
           poetry run isort --check-only mycalendar tests alembic
