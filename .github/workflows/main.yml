@@ -11,7 +11,7 @@ on:
 env:
   POSTGRES_DB: calendar_test_db
   POSTGRES_USER: test_db_user
-  POSTGRES_PW: "test_db_pw"
+  POSTGRES_PASSWORD: "test_db_pw"
   DB_HOST: localhost
   DB_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
 
@@ -25,7 +25,7 @@ jobs:
 
     services:
       db:
-        image: postgres
+        image: postgres:12.3
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
