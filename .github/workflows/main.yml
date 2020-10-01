@@ -11,9 +11,9 @@ on:
 env:
   POSTGRES_DB: calendar_test_db
   POSTGRES_USER: test_db_user
-  POSTGRES_PW: ""
+  POSTGRES_PW: "test_db_pw"
   DB_HOST: localhost
-  DB_URL: postgres://test_db_user@localhost:5432/calendar_test_db
+  DB_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,7 +29,11 @@ jobs:
         ports:
         - 5432:5432
         # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
