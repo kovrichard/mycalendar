@@ -9,9 +9,6 @@ on:
     branches: [ master ]
 
 env:
-  POSTGRES_DB: calendar_test_db
-  POSTGRES_USER: test_db_user
-  POSTGRES_PASSWORD: test_db_pw
   DB_HOST: localhost
   DB_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
 
@@ -27,6 +24,8 @@ jobs:
       db:
         image: postgres:12.3
         env:
+          POSTGRES_DB: calendar_test_db
+          POSTGRES_USER: test_db_user
           POSTGRES_PASSWORD: test_db_pw
         ports:
         - 5432:5432
