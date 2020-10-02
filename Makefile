@@ -42,7 +42,7 @@ tsh:
 
 # run tests
 test:
-	docker-compose $(compose_config) exec $(container) /bin/sh -c "poetry run nose2 -v"
+	docker-compose $(compose_config) exec $(container) /bin/sh -c "$(test_env) poetry run nose2 -v"
 
 # check console output
 logs:
