@@ -15,11 +15,6 @@ class TestFactory(TestCase):
             datetime.today().year
         )
 
-    def test_create_app_database_url_is_set(self):
-        app = create_app()
-
-        AssertThat(app.config["DB_URL"]).IsEqualTo(os.environ.get("TEST_DB_URL"))
-
     def test_create_app_config_can_be_set_from_outside(self):
         app = create_app({"<KEY>": "<VALUE>"})
 
