@@ -1,0 +1,11 @@
+.tw-4 {
+    width: 4rem;
+}
+
+.tw-10 {
+    width: 10rem;
+}
+
+.event-btn:hover {
+    background-color: gray;
+}

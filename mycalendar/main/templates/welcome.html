@@ -3,4 +3,37 @@
 
 {% block content %}
     <h1>Welcome to Calendar!</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Hour</th>
+                <th scope="col">Monday</th>
+                <th scope="col">Tuesday</th>
+                <th scope="col">Wednesday</th>
+                <th scope="col">Thursday</th>
+                <th scope="col">Friday</th>
+                <th scope="col">Saturday</th>
+                <th scope="col">Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for n in range(24) %}
+                <tr>
+                    <th scope="row" class="tw-4">{{ n }}:00</th>
+                    {% for m in range(7) %}
+                    <td id="btn-{{ n }}{{ m }}"class="tw-10 p-0">
+                        <form method="post">
+                            <!-- <button type="submit" name="btn-{{ n }}{{ m }}" class="w-100 btn event-btn" style="height:3rem">
+                                
+                            </button> -->
+                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ n }}{{ m }}" style="height:3rem">
+                        </form>
+
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
