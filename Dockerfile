@@ -1,6 +1,8 @@
 FROM python:3.8.3-alpine
 
 RUN apk update && apk upgrade
+# Needed for psycopg2 to run
+RUN apk add --no-cache postgresql-libs
 RUN apk add --no-cache --virtual .build-deps curl gcc musl-dev postgresql-dev
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python && \
