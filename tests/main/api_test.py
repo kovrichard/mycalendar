@@ -1,8 +1,7 @@
 from truth.truth import AssertThat
 
-from tests import AppTestCase, TemplateRenderMixin, TestClientMixin, DbMixin
-
 from mycalendar.db_models.user import User
+from tests import AppTestCase, DbMixin, TemplateRenderMixin, TestClientMixin
 
 
 class TestApi(TestClientMixin, TemplateRenderMixin, DbMixin, AppTestCase):
@@ -18,6 +17,6 @@ class TestApi(TestClientMixin, TemplateRenderMixin, DbMixin, AppTestCase):
     def test_welcome_user_is_inserted(self):
         r = self.client.get("/")
 
-        user = User.query.filter_by(username="mas").first()
+        user = User.query.filter(User.username.like("mas%")).first()
 
         AssertThat(user.password).IsEqualTo("pw")
