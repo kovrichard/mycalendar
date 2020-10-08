@@ -3,7 +3,7 @@ import random
 from flask import Blueprint, current_app, render_template, request
 from flask.views import MethodView
 
-from mycalendar.db_models import db
+from mycalendar.db_models import session
 from mycalendar.db_models.user import User
 
 main_bp = Blueprint("main", __name__, template_folder="templates")
@@ -11,10 +11,9 @@ main_bp = Blueprint("main", __name__, template_folder="templates")
 
 class CalendarController(MethodView):
     def get(self):
-        db.session.add(
-            User(username="mas" + str(random.randint(1, 100000)), password="pw")
-        )
-        db.session.commit()
+        user = User(username="mas" + str(random.randint(1, 100000)), password="pw")
+        session.add(user)
+        session.commit()
 
         return render_template("welcome.html")
 

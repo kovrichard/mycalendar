@@ -1,12 +1,13 @@
 from truth.truth import AssertThat
 
+from mycalendar.db_models import session
 from mycalendar.db_models.user import User
-from tests import AppTestCase, DbMixin, TemplateRenderMixin, TestClientMixin
+from tests import AppTestCase, TemplateRenderMixin, TestClientMixin
 
 
-class TestApi(TestClientMixin, TemplateRenderMixin, DbMixin, AppTestCase):
+class TestApi(TestClientMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
-        User.query.delete()
+        session.query(User).delete()
 
     def test_welcome_renders_template(self):
         r = self.client.get("/")
@@ -17,6 +18,13 @@ class TestApi(TestClientMixin, TemplateRenderMixin, DbMixin, AppTestCase):
     def test_welcome_user_is_inserted(self):
         r = self.client.get("/")
 
-        user = User.query.filter(User.username.like("mas%")).first()
+        user = session.query(User).filter(User.username.like("mas%")).first()
 
         AssertThat(user.password).IsEqualTo("pw")
+
+    def test_welcome_get_or_works(self):
+        r = self.client.get("/")
+
+        user = session.query(User).get_or(10, 1)
+
+        AssertThat(user).IsEqualTo(1)

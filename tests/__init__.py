@@ -18,13 +18,6 @@ class TestClientMixin:
             super().run(result)
 
 
-class DbMixin:
-    def run(self, result=None):
-        with self.app.app_context() as ctx:
-            self.app_ctx = ctx
-            super().run(result)
-
-
 class TemplateRenderMixin:
     def run(self, result=None):
         self.rendered_templates = []
