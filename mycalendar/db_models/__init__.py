@@ -1,11 +1,12 @@
 # from flask_sqlalchemy import BaseQuery, SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Query
+from sqlalchemy.orm import Query, sessionmaker
 
 from mycalendar.server.config import DB_URL
 
 Base = declarative_base()
+
 
 class GetOrQuery(Query):
     def get_or(self, ident, default=None):
