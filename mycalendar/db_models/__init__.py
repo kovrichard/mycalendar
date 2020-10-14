@@ -21,6 +21,8 @@ session = Session()
 
 def import_models():
     from .user import User
+    from .role import Role
+    from .user_roles import UserRoles
 
 
 def init_db(app):
