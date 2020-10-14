@@ -1,6 +1,6 @@
 import random
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, render_template
 from flask.views import MethodView
 
 from mycalendar.db_models import session

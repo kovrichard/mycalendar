@@ -1,7 +1,7 @@
 import os
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine, engine_from_config
+from sqlalchemy import create_engine
 
 from alembic import context
 from mycalendar.db_models import Base, import_models
