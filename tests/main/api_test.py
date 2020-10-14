@@ -15,13 +15,6 @@ class TestApi(TestClientMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("welcome.html")
 
-    def test_welcome_user_is_inserted(self):
-        r = self.client.get("/")
-
-        user = session.query(User).filter(User.username.like("mas%")).first()
-
-        AssertThat(user.password).IsEqualTo("pw")
-
     def test_welcome_get_or_works(self):
         r = self.client.get("/")
 

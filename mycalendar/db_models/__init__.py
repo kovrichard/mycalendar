@@ -1,4 +1,3 @@
-# from flask_sqlalchemy import BaseQuery, SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Query, sessionmaker
@@ -27,5 +26,3 @@ def import_models():
 
 def init_db(app):
     import_models()
-
-    # db.init_app(app)
