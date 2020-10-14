@@ -13,4 +13,6 @@ class RoleTest(DbMixin, AppTestCase):
     def test_role_can_be_inserted_and_queried(self):
         db.session.add(Role(name="admin"))
 
-        AssertThat(Role.query.filter_by(name="admin").first().name).IsEqualTo("admin")
+        AssertThat(Role.query.filter_by(name="admin").first().name).IsEqualTo(
+            "admin"
+        )

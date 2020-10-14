@@ -18,6 +18,6 @@ class UserTest(DbMixin, AppTestCase):
     def test_user_can_be_inserted_and_queried(self):
         db.session.add(User(username="<user>", password="<password>"))
 
-        AssertThat(User.query.filter_by(username="<user>").first().password).IsEqualTo(
-            "<password>"
-        )
+        AssertThat(
+            User.query.filter_by(username="<user>").first().password
+        ).IsEqualTo("<password>")
