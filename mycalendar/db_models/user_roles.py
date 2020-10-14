@@ -1,14 +1,12 @@
-from sqlalchemy import Column, ForeignKey, Integer
-
-from . import Base
+from . import db
 
 
-class UserRoles(Base):
+class UserRoles(db.Model):
     __tablename__ = "user_roles"
 
-    id = Column(Integer(), primary_key=True)
-    user_id = Column(Integer(), ForeignKey("users.id", ondelete="CASCADE"))
-    role_id = Column(Integer(), ForeignKey("roles.id", ondelete="CASCADE"))
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey("users.id", ondelete="CASCADE"))
+    role_id = db.Column(db.Integer(), db.ForeignKey("roles.id", ondelete="CASCADE"))
 
     def __repr__(self):
         return "<UserRole(id='%d', user_id='%d', role_id='%d')>" % (

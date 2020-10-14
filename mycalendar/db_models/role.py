@@ -1,13 +1,11 @@
-from sqlalchemy import Column, Integer, String
-
-from . import Base
+from . import db
 
 
-class Role(Base):
+class Role(db.Model):
     __tablename__ = "roles"
 
-    id = Column(Integer(), primary_key=True)
-    name = Column(String(50), unique=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
 
     def __repr__(self):
         return "<Role(id='%d', name='%s')>" % (self.id, self.name)

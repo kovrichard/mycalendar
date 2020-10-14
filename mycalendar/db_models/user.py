@@ -1,21 +1,22 @@
 from flask_user import UserMixin
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
 
-from . import Base
+from . import db
 
 
-class User(Base, UserMixin):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(255), unique=True)
-    password = Column(String(255))
-    roles = relationship("Role", secondary="user_roles")
+    id = db.Column(db.Integer, primary_key=True)
+    active = db.Column("is_active", db.Boolean(), nullable=False, server_default="1")
+    username = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False, server_default="")
+    roles = db.relationship("Role", secondary="user_roles")
 
     def __repr__(self):
-        return "<User(id=%d', username='%s', password='%s')>" % (
+        return "<User(id=%d', active='%s', username='%s', password='%s', roles='%s')>" % (
             self.id,
+            self.active,
             self.username,
             self.password,
+            self.roles
         )
