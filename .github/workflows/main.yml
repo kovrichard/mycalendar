@@ -79,6 +79,7 @@ jobs:
 
       - name: Run linter
         run: |
+          poetry run autoflake --check --ignore-init-module-imports --recursive mycalendar tests alembic
           poetry run isort --check-only mycalendar tests alembic
           poetry run black --check mycalendar tests alembic
           

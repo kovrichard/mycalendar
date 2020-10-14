@@ -54,6 +54,7 @@ config:
 
 # lint code
 lint:
+	docker-compose $(compose_config) exec $(container) poetry run autoflake --remove-all-unused-imports --ignore-init-module-imports --in-place --recursive mycalendar tests alembic
 	docker-compose $(compose_config) exec $(container) poetry run isort mycalendar tests alembic
 	docker-compose $(compose_config) exec $(container) poetry run black mycalendar tests alembic
 
