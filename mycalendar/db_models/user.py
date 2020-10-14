@@ -1,9 +1,8 @@
+from flask_user import UserMixin
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from . import Base
-
-from flask_user import UserMixin
 
 
 class User(Base, UserMixin):

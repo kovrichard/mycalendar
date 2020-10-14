@@ -20,8 +20,8 @@ session = Session()
 
 
 def import_models():
-    from .user import User
     from .role import Role
+    from .user import User
     from .user_roles import UserRoles
 
 

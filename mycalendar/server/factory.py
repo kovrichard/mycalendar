@@ -31,11 +31,12 @@ def __init_db(app):
 
     init_db(app)
 
+
 def __init_user_manager(app):
-    from mycalendar.db_models.user import User
-    from mycalendar.db_models.role import Role
-    from flask_user import UserManager
     from flask_sqlalchemy import SQLAlchemy
+    from flask_user import UserManager
+
+    from mycalendar.db_models.user import User
 
     user_manager = UserManager(app, SQLAlchemy(app), User)
 

@@ -1,9 +1,10 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer
 
 from . import Base
 
+
 class UserRoles(Base):
-    __tablename__ = 'user_roles'
+    __tablename__ = "user_roles"
 
     id = Column(Integer(), primary_key=True)
     user_id = Column(Integer(), ForeignKey("users.id", ondelete="CASCADE"))
