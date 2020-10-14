@@ -18,6 +18,7 @@ def create_app(config=None):
     app.jinja_env.globals["current_year"] = datetime.today().year
 
     __init_db(app)
+    __init_user_manager(app)
 
     return app
 
@@ -29,3 +30,13 @@ def __init_db(app):
     from mycalendar.db_models import init_db
 
     init_db(app)
+
+def __init_user_manager(app):
+    from mycalendar.db_models.user import User
+    from mycalendar.db_models.role import Role
+    from flask_user import UserManager
+    from flask_sqlalchemy import SQLAlchemy
+
+    user_manager = UserManager(app, SQLAlchemy(app), User)
+
+    return user_manager
