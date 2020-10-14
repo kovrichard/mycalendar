@@ -1,11 +1,12 @@
-from mycalendar.db_models.role import Role
-from mycalendar.db_models.user import User
-from mycalendar.db_models.user_roles import UserRoles
-from mycalendar.db_models import session
+import unittest
 
 from truth.truth import AssertThat
 
-import unittest
+from mycalendar.db_models import session
+from mycalendar.db_models.role import Role
+from mycalendar.db_models.user import User
+from mycalendar.db_models.user_roles import UserRoles
+
 
 class UserRolesTest(unittest.TestCase):
     def setUp(self):
@@ -21,4 +22,6 @@ class UserRolesTest(unittest.TestCase):
         role = session.query(Role).filter_by(name="<role>").first()
         session.add(UserRoles(user_id=user.id, role_id=role.id))
 
-        AssertThat(session.query(UserRoles).filter_by(user_id=user.id).first().role_id).IsEqualTo(role.id)
+        AssertThat(
+            session.query(UserRoles).filter_by(user_id=user.id).first().role_id
+        ).IsEqualTo(role.id)

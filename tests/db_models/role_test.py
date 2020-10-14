@@ -1,9 +1,10 @@
-from mycalendar.db_models.role import Role
-from mycalendar.db_models import session
+import unittest
 
 from truth.truth import AssertThat
 
-import unittest
+from mycalendar.db_models import session
+from mycalendar.db_models.role import Role
+
 
 class RoleTest(unittest.TestCase):
     def setUp(self):
@@ -13,4 +14,6 @@ class RoleTest(unittest.TestCase):
     def test_role_can_be_inserted_and_queried(self):
         session.add(Role(name="admin"))
 
-        AssertThat(session.query(Role).filter_by(name="admin").first().name).IsEqualTo("admin")
+        AssertThat(session.query(Role).filter_by(name="admin").first().name).IsEqualTo(
+            "admin"
+        )
