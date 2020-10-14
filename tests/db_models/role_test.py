@@ -2,18 +2,19 @@ import unittest
 
 from truth.truth import AssertThat
 
-from mycalendar.db_models import session
 from mycalendar.db_models.role import Role
+from tests import AppTestCase, DbMixin
 
+from mycalendar.db_models import db
 
-class RoleTest(unittest.TestCase):
+class RoleTest(DbMixin, AppTestCase):
     def setUp(self):
         super().setUp()
-        session.query(Role).delete()
+        Role.query.delete()
 
     def test_role_can_be_inserted_and_queried(self):
-        session.add(Role(name="admin"))
+        db.session.add(Role(name="admin"))
 
-        AssertThat(session.query(Role).filter_by(name="admin").first().name).IsEqualTo(
+        AssertThat(Role.query.filter_by(name="admin").first().name).IsEqualTo(
             "admin"
         )

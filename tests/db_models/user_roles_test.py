@@ -2,26 +2,27 @@ import unittest
 
 from truth.truth import AssertThat
 
-from mycalendar.db_models import session
+from mycalendar.db_models import db
+
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
+from tests import AppTestCase, DbMixin
 
-
-class UserRolesTest(unittest.TestCase):
+class UserRolesTest(DbMixin, AppTestCase):
     def setUp(self):
         super().setUp()
-        session.query(UserRoles).delete()
-        session.query(User).delete()
-        session.query(Role).delete()
+        UserRoles.query.delete()
+        User.query.delete()
+        Role.query.delete()
 
     def test_role_can_be_assigned_to_user(self):
-        session.add(User(username="<username>"))
-        session.add(Role(name="<role>"))
-        user = session.query(User).filter_by(username="<username>").first()
-        role = session.query(Role).filter_by(name="<role>").first()
-        session.add(UserRoles(user_id=user.id, role_id=role.id))
+        db.session.add(User(username="<username>", password="<password>"))
+        db.session.add(Role(name="<role>"))
+        user = User.query.filter_by(username="<username>").first()
+        role = Role.query.filter_by(name="<role>").first()
+        db.session.add(UserRoles(user_id=user.id, role_id=role.id))
 
         AssertThat(
-            session.query(UserRoles).filter_by(user_id=user.id).first().role_id
+            UserRoles.query.filter_by(user_id=user.id).first().role_id
         ).IsEqualTo(role.id)

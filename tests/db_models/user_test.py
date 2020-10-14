@@ -2,18 +2,24 @@ import unittest
 
 from truth.truth import AssertThat
 
-from mycalendar.db_models import session
 from mycalendar.db_models.user import User
+from tests import AppTestCase, DbMixin
 
+from mycalendar.db_models import db
 
-class UserTest(unittest.TestCase):
+class UserTest(DbMixin, AppTestCase):
     def setUp(self):
         super().setUp()
-        session.query(User).delete()
+        User.query.delete()
+
+    def test_get_or_query_works(self):
+        user = User.query.get_or(10, 1)
+
+        AssertThat(user).IsEqualTo(1)
 
     def test_user_can_be_inserted_and_queried(self):
-        session.add(User(username="<user>", password="<password>"))
+        db.session.add(User(username="<user>", password="<password>"))
 
         AssertThat(
-            session.query(User).filter_by(username="<user>").first().password
+            User.query.filter_by(username="<user>").first().password
         ).IsEqualTo("<password>")
