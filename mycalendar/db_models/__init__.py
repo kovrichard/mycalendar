@@ -6,11 +6,13 @@
 
 # Base = declarative_base()
 
-from flask_sqlalchemy import SQLAlchemy, BaseQuery
+from flask_sqlalchemy import BaseQuery, SQLAlchemy
+
 
 class GetOrQuery(BaseQuery):
     def get_or(self, ident, default=None):
         return self.get(ident) or default
+
 
 db = SQLAlchemy(query_class=GetOrQuery)
 

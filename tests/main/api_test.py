@@ -1,7 +1,12 @@
 from truth.truth import AssertThat
 
-from mycalendar.db_models.user import User
-from tests import AppTestCase, TemplateRenderMixin, TestClientMixin, DbMixin, logged_in_user
+from tests import (
+    AppTestCase,
+    DbMixin,
+    TemplateRenderMixin,
+    TestClientMixin,
+    logged_in_user,
+)
 
 
 class ApiTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):

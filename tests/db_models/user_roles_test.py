@@ -1,13 +1,11 @@
-import unittest
-
 from truth.truth import AssertThat
 
 from mycalendar.db_models import db
-
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
 from tests import AppTestCase, DbMixin
+
 
 class UserRolesTest(DbMixin, AppTestCase):
     def setUp(self):

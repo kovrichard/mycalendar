@@ -1,17 +1,18 @@
+import random
 import unittest
-
-from flask import template_rendered
 from contextlib import contextmanager
 from functools import wraps
-from mycalendar.server.factory import create_app
 
-import random
+from flask import template_rendered
+
+from mycalendar.server.factory import create_app
 
 
 class AppTestCase(unittest.TestCase):
     def __init__(self, methodName):
         self.app = create_app()
         super().__init__(methodName)
+
 
 class DbMixin:
     def run(self, result=None):
@@ -31,6 +32,7 @@ class DbMixin:
         db_manager.add_user_role(user, role)
 
         return user
+
 
 class TestClientMixin:
     def run(self, result=None):
@@ -54,7 +56,6 @@ class TestClientMixin:
         self.logout()
 
 
-
 class TemplateRenderMixin:
     def run(self, result=None):
         self.rendered_templates = []
@@ -65,6 +66,7 @@ class TemplateRenderMixin:
         template_rendered.connect(record, self.app)
         super().run(result)
         template_rendered.disconnect(record, self.app)
+
 
 def logged_in_user(role="admin"):
     def wrap(f):
