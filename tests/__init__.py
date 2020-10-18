@@ -5,6 +5,10 @@ from functools import wraps
 
 from flask import template_rendered
 
+from mycalendar.db_models import db
+from mycalendar.db_models.role import Role
+from mycalendar.db_models.user import User
+from mycalendar.db_models.user_roles import UserRoles
 from mycalendar.server.factory import create_app
 
 
@@ -23,13 +27,20 @@ class DbMixin:
     def add_user(self, role="admin"):
         db_manager = self.app.user_manager.db_manager
         username = str(random.randrange(100001, 999999, 2))
-        password = username[::-1]
+        password = username[len(username) :: -1]
 
-        user = db_manager.add_user(
+        user = User(
             username=username,
             password=self.app.user_manager.hash_password(password),
         )
-        db_manager.add_user_role(user, role)
+        db.session.add(user)
+        role_1 = Role(name=role)
+        db.session.add(role_1)
+        user_role = UserRoles(user_id=user.id, role_id=role_1.id)
+        db.session.add(user_role)
+        db.session.commit()
+
+        # db_manager.add_user_role(user, role)
 
         return user
 
@@ -71,13 +82,14 @@ class TemplateRenderMixin:
 def logged_in_user(role="admin"):
     def wrap(f):
         @wraps(f)
-        def wrapper(*args, **kwargs):
+        def _wrapped_f(*args, **kwargs):
             # self.logged_in_user()
             with args[0].logged_in_user(role) as user:
                 args = list(args)
                 args.append(user)
-                return f(*args, **kwargs)
+                result = f(*args, **kwargs)
+                return result
 
-        return wrapper
+        return _wrapped_f
 
     return wrap
