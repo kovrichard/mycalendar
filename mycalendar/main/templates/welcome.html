@@ -4,6 +4,18 @@
 {% block content %}
     <h1>Welcome to Calendar!</h1>
 
+    <div class="container">
+        <div class="row justify-content-center">
+            <form method="get">
+                <input type="submit" value={{ week_number - 1 }} name="week" class="btn col col-1 week-btn">
+            </form>
+            <h2 class="col-auto">Week - {{ week_number }}</h2>
+            <form method="get">
+                <input type="submit" value={{ week_number + 1 }} name="week" class="btn col col-1 week-btn">
+            </form>
+        </div>
+    </div>
+
     <table class="table table-bordered">
         <thead>
             <tr>
