@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask
 
 from mycalendar.main.api import main_bp
+from mycalendar.week.api import week_bp
 
 
 def create_app(config=None):
@@ -14,6 +15,7 @@ def create_app(config=None):
             app.config[key] = config[key]
 
     app.register_blueprint(main_bp, url_prefix="/")
+    app.register_blueprint(week_bp, url_prefix="/week")
 
     app.jinja_env.globals["current_year"] = datetime.today().year
 
