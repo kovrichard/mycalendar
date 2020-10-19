@@ -14,16 +14,13 @@ class Event(db.Model):
     week_id = db.Column(db.Integer, db.ForeignKey("weeks.id"))
 
     def __repr__(self):
-        return (
-            "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d')>"
-            % (
-                self.id,
-                self.event_type,
-                self.title,
-                self.description,
-                self.location,
-                self.start,
-                self.end,
-                self.week_id,
-            )
+        return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d')>" % (
+            self.id,
+            self.event_type,
+            self.title,
+            self.description,
+            self.location,
+            self.start,
+            self.end,
+            self.week_id,
         )

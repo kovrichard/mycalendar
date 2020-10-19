@@ -82,7 +82,7 @@ jobs:
         run: |
           poetry run autoflake --check --remove-all-unused-imports --ignore-init-module-imports --recursive mycalendar tests alembic
           poetry run isort --check-only mycalendar tests alembic
-          poetry run black --check --fast mycalendar tests alembic
+          poetry run black --check mycalendar tests alembic
           
       - name: Run tests
         run: poetry run nose2 -v
