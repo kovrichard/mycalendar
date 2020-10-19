@@ -3,6 +3,8 @@ from truth.truth import AssertThat
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
+
+from datetime import datetime
 from tests import (
     AppTestCase,
     DbMixin,
@@ -29,3 +31,4 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("week.html")
         AssertThat(context["week_number"]).IsEqualTo(week_num)
+        AssertThat(context["current_week"]).IsEqualTo(datetime.now().isocalendar()[1])

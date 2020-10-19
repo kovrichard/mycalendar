@@ -3,6 +3,9 @@
 
 {% block content %}
     <h1>Welcome to Calendar!</h1>
+    <form action="{{ url_for('week.get_week', week_num = current_week) }}" class="col col-1">
+        <input type="submit" value="Week {{ current_week }}" class="btn week-btn">
+    </form>
 
     <div class="container">
         <div class="row justify-content-center">
