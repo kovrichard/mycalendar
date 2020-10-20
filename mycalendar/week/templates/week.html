@@ -38,10 +38,12 @@
                     <th scope="row" class="tw-4">{{ n }}:00</th>
                     {% for m in range(7) %}
                     <td id="btn-{{ n }}{{ m }}"class="tw-10 p-0">
-                        <form method="post">
-                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ n }}{{ m }}" style="height:3rem">
+                        <form method="post" action="{{ url_for('event_modification.event_mod') }}">
+                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ n }}{{ m }}" style="height:3rem"/>
+                            <input value={{ week_number }} name="week_num" hidden/>
+                            <input value={{ n }} name="n" hidden/>
+                            <input value={{ m }} name="m" hidden/>
                         </form>
-
                     </td>
                     {% endfor %}
                 </tr>

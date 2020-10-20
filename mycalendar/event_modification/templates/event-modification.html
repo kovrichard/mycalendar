@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+    <h1>Create new event</h1>
+    
+    <form action="{{ url_for('week.get_week', week_num = week_num) }}">
+        <input type="text" placeholder="Title"></input>
+        <br>
+        <input type="text" placeholder="Description"></input>
+        <br>
+        <input type="text" placeholder="Location"></input>
+        {{ week_num }}
+        <br>
+        Start
+        <input type="date" value={{ start_date }}></input>
+        <input type="time" value={{ start_time }}></input>
+        <br>
+        End
+        <input type="date" value={{ start_date }}></input>
+        <input type="time" value={{ end_time }}></input>
+        <br>
+        <div class="control-group">
+            <div class="controls">
+                <label><input type="checkbox"/> Fogadóóra</label>
+            </div>
+        </div>
+        <br>
+        <input type="submit" value="Mentés"/>
+    </form>
+{% endblock %}
