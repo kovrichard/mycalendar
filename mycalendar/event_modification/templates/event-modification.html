@@ -4,25 +4,24 @@
 {% block content %}
     <h1>Create new event</h1>
     
-    <form action="{{ url_for('week.get_week', week_num = week_num) }}">
-        <input type="text" placeholder="Title"></input>
+    <form method="post" action="{{ url_for('week.get_week', week_num = week_num) }}">
+        <input type="text" name="title" placeholder="Title"></input>
         <br>
-        <input type="text" placeholder="Description"></input>
+        <input type="text" name="description" placeholder="Description"></input>
         <br>
-        <input type="text" placeholder="Location"></input>
-        {{ week_num }}
+        <input type="text" name="location" placeholder="Location"></input>
         <br>
         Start
-        <input type="date" value={{ start_date }}></input>
-        <input type="time" value={{ start_time }}></input>
+        <input type="date" name="start_date" value={{ start_date }}></input>
+        <input type="time" name="start_time" value={{ start_time }}></input>
         <br>
         End
-        <input type="date" value={{ start_date }}></input>
-        <input type="time" value={{ end_time }}></input>
+        <input type="date" name="end_date" value={{ start_date }}></input>
+        <input type="time" name="end_time" value={{ end_time }}></input>
         <br>
         <div class="control-group">
             <div class="controls">
-                <label><input type="checkbox"/> Fogadóóra</label>
+                <label><input type="checkbox" name="business_hour"/> Fogadóóra</label>
             </div>
         </div>
         <br>
