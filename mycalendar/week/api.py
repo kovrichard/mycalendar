@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request
-from flask_user import login_required
+from flask import Blueprint, render_template, request, current_app
+from flask_user import login_required, current_user
 
 from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
@@ -33,20 +33,21 @@ def handle_get(year, week):
 def handle_post(year, week):
     event_type = 1 if "business_hour" in request.form else 0
 
-    event = Event(
-        title=request.form["title"],
-        description=request.form["description"],
-        location=request.form["location"],
-        start=request.form["start_date"] + " " + request.form["start_time"],
-        end=request.form["end_date"] + " " + request.form["end_time"],
-        event_type=event_type,
-    )
-    db.session.add(event)
+    if current_week := Week.query.filter_by(year=year, week_num=week).first():
+        event = Event(
+            title=request.form["title"],
+            description=request.form["description"],
+            location=request.form["location"],
+            start=request.form["start_date"] + " " + request.form["start_time"],
+            end=request.form["end_date"] + " " + request.form["end_time"],
+            event_type=event_type,
+        )
 
-    current_week = Week.query.filter_by(year=year, week_num=week).first()
-    current_week.events.append(event)
+        db.session.add(event)
+        current_week.events.append(event)
+        current_user.events.append(event)
 
-    db.session.commit()
+        db.session.commit()
 
     return render_template("week.html", year_number=year, week_number=week)
 

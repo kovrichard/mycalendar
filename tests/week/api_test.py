@@ -22,10 +22,11 @@ WEEK = 2
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
         super().setUp()
+        Event.query.delete()
+        Week.query.delete()
         UserRoles.query.delete()
         User.query.delete()
         Role.query.delete()
-        Event.query.delete()
 
     @logged_in_user()
     def test_get_week_renders_week_template(self, default_user):
@@ -61,8 +62,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r2.status_code).IsEqualTo(200)
         AssertThat(len(weeks)).IsEqualTo(1)
 
-    @logged_in_user()
-    def test_get_week_post_saves_event_to_db(self, default_user):
+    def test_get_week_post_saves_event_to_db(self):
         payload = {
             "title": "<title>",
             "description": "<description>",
@@ -74,25 +74,30 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "business_hour": 1,
         }
 
-        r = self.client.post(f"/{YEAR}/{WEEK}", data=payload)
+        with self.logged_in_user() as user:
+            self.client.get(f"/{YEAR}/{WEEK}")
 
-        AssertThat(r.status_code).IsEqualTo(200)
-        event = Event.query.filter_by(title="<title>").first()
+            r = self.client.post(f"/{YEAR}/{WEEK}", data=payload)
 
-        AssertThat(event.title).IsEqualTo(payload["title"])
-        AssertThat(event.description).IsEqualTo(payload["description"])
-        AssertThat(event.location).IsEqualTo(payload["location"])
-        start_string = f"{payload['start_date']} {payload['start_time']}"
-        AssertThat(event.start).IsEqualTo(
-            datetime.strptime(start_string, "%Y-%m-%d %H:%M")
-        )
-        end_string = f"{payload['end_date']} {payload['end_time']}"
-        AssertThat(event.end).IsEqualTo(
-            datetime.strptime(end_string, "%Y-%m-%d %H:%M")
-        )
-        AssertThat(event.event_type).IsEqualTo(payload["business_hour"])
+            AssertThat(r.status_code).IsEqualTo(200)
+            event = Event.query.filter_by(title="<title>").first()
 
-        week = Week.query.filter_by(year=YEAR, week_num=WEEK).first()
+            AssertThat(event.title).IsEqualTo(payload["title"])
+            AssertThat(event.description).IsEqualTo(payload["description"])
+            AssertThat(event.location).IsEqualTo(payload["location"])
+            start_string = f"{payload['start_date']} {payload['start_time']}"
+            AssertThat(event.start).IsEqualTo(
+                datetime.strptime(start_string, "%Y-%m-%d %H:%M")
+            )
+            end_string = f"{payload['end_date']} {payload['end_time']}"
+            AssertThat(event.end).IsEqualTo(
+                datetime.strptime(end_string, "%Y-%m-%d %H:%M")
+            )
+            AssertThat(event.event_type).IsEqualTo(payload["business_hour"])
 
-        AssertThat(len(week.events)).IsEqualTo(1)
-        AssertThat(week.events[0].title).IsEqualTo(payload["title"])
+            week = Week.query.filter_by(year=YEAR, week_num=WEEK).first()
+
+            AssertThat(len(week.events)).IsEqualTo(1)
+            AssertThat(week.events[0].title).IsEqualTo(payload["title"])
+
+            AssertThat(week.events[0].user_id).IsEqualTo(user.id)
