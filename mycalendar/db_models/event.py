@@ -12,6 +12,7 @@ class Event(db.Model):
     start = db.Column(db.DateTime, nullable=False)
     end = db.Column(db.DateTime, nullable=False)
     week_id = db.Column(db.Integer, db.ForeignKey("weeks.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def __repr__(self):
         return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d')>" % (
