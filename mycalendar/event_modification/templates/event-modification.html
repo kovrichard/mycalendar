@@ -4,7 +4,7 @@
 {% block content %}
     <h1>Create new event</h1>
     
-    <form method="post" action="{{ url_for('week.get_week', week_num = week_num) }}">    
+    <form method="post" action="{{ url_for('week.get_week', week = week_num) }}">    
         <div class="form-group row justify-content-center">
             <input type="text" name="title" class="form-control col-4" id="title" placeholder="Title" required>
         </div>
