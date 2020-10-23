@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import Blueprint, render_template, request
 from flask_user import login_required
 
@@ -13,11 +11,7 @@ week_bp = Blueprint("week", __name__, template_folder="templates")
 @login_required
 def get_week(week_num):
     if request.method == "GET":
-        return render_template(
-            "week.html",
-            week_number=week_num,
-            current_week=datetime.now().isocalendar()[1],
-        )
+        return render_template("week.html", week_number=week_num)
     else:
         event_type = 1 if "business_hour" in request.form else 0
 
@@ -34,8 +28,4 @@ def get_week(week_num):
         db.session.add(event)
         db.session.commit()
 
-        return render_template(
-            "week.html",
-            week_number=week_num,
-            current_week=datetime.now().isocalendar()[1],
-        )
+        return render_template("week.html", week_number=week_num)

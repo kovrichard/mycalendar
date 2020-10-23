@@ -33,9 +33,6 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("week.html")
         AssertThat(context["week_number"]).IsEqualTo(week_num)
-        AssertThat(context["current_week"]).IsEqualTo(
-            datetime.now().isocalendar()[1]
-        )
 
     @logged_in_user()
     def test_get_week_post_saves_event_to_db(self, default_user):
