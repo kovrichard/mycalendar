@@ -2,11 +2,11 @@ from datetime import datetime
 
 from truth.truth import AssertThat
 
+from mycalendar.db_models import db
+from mycalendar.db_models.event import Event
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
-from mycalendar.db_models.event import Event
 from mycalendar.db_models.user_roles import UserRoles
-from mycalendar.db_models import db
 from tests import (
     AppTestCase,
     DbMixin,
@@ -44,7 +44,13 @@ class EventModificationTest(
 
     @logged_in_user()
     def test_event_mod_loads_already_defined_event(self, default_user):
-        event = Event(title="<title>", description="<desc>", location="<loc>", start="2020-10-19 00:00:00", end="2020-10-19 01:00:00")
+        event = Event(
+            title="<title>",
+            description="<desc>",
+            location="<loc>",
+            start="2020-10-19 00:00:00",
+            end="2020-10-19 01:00:00",
+        )
         db.session.add(event)
         db.session.commit()
 
@@ -55,8 +61,6 @@ class EventModificationTest(
         AssertThat(r.status_code).IsEqualTo(200)
         template, context = self.rendered_templates[0]
 
-        print(context)
-        
         AssertThat(context["title"]).IsEqualTo(event.title)
         AssertThat(context["description"]).IsEqualTo(event.description)
         AssertThat(context["location"]).IsEqualTo(event.location)
