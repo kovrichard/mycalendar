@@ -17,7 +17,7 @@ def create_app(config=None):
             app.config[key] = config[key]
 
     app.register_blueprint(main_bp, url_prefix="/")
-    app.register_blueprint(week_bp, url_prefix="/week")
+    app.register_blueprint(week_bp, url_prefix="/")
     app.register_blueprint(event_mod_bp, url_prefix="/add-event")
     app.register_blueprint(share_bp, url_prefix="/share")
 

@@ -7,13 +7,13 @@ from mycalendar.db_models.event import Event
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
 
-@week_bp.route("/<int:week>", methods=["GET", "POST"])
+@week_bp.route("/<int:year>/<int:week>", methods=["GET", "POST"])
 @login_required
-def get_week(week):
+def get_week(year, week):
 
 
     if request.method == "GET":
-        return render_template("week.html", week_number=week)
+        return render_template("week.html", year_number=2020, week_number=week)
     else:
         event_type = 1 if "business_hour" in request.form else 0
 
@@ -30,4 +30,4 @@ def get_week(week):
         db.session.add(event)
         db.session.commit()
 
-        return render_template("week.html", week_number=week)
+        return render_template("week.html", year_number=2020, week_number=week)

@@ -1,5 +1,5 @@
 {% block button %}
-    <form action="{{ url_for('week.get_week', week = week_number) }}" class="col col-1">
+    <form action="{{ url_for('week.get_week', year = year_number, week = week_number) }}" class="col col-1">
         <input type="submit" value="Week {{ week_number }}" class="btn week-btn">
     </form>
 {% endblock %}

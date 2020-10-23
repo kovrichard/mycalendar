@@ -20,6 +20,7 @@ def event_mod():
 
     return render_template(
         "event-modification.html",
+        year_number=2020,
         week_num=request.form["week_num"],
         start_date=start_date,
         start_time=start_time,

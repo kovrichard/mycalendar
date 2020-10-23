@@ -25,14 +25,16 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
     @logged_in_user()
     def test_get_week_renders_week_template(self, default_user):
-        week_num = 2
-        r = self.client.get(f"/week/{week_num}")
+        year = 2020
+        week = 2
+
+        r = self.client.get(f"/{year}/{week}")
 
         template, context = self.rendered_templates[0]
 
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("week.html")
-        AssertThat(context["week_number"]).IsEqualTo(week_num)
+        AssertThat(context["week_number"]).IsEqualTo(week)
 
     @logged_in_user()
     def test_get_week_post_saves_event_to_db(self, default_user):
@@ -47,7 +49,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "business_hour": 1,
         }
 
-        r = self.client.post("/week/2", data=payload)
+        r = self.client.post("/2020/2", data=payload)
 
         event = Event.query.filter_by(title="<title>").first()
 

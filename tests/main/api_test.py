@@ -8,4 +8,4 @@ class MainTest(TestClientMixin, TemplateRenderMixin, AppTestCase):
         r = self.client.get("/")
 
         AssertThat(r.status_code).IsEqualTo(302)
-        AssertThat(r.headers["Location"]).Contains("/week/")
+        AssertThat(r.headers["Location"]).Contains("/")
