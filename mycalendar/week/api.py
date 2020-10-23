@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, current_app
-from flask_user import login_required, current_user
+from flask import Blueprint, render_template, request
+from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
@@ -38,7 +38,9 @@ def handle_post(year, week):
             title=request.form["title"],
             description=request.form["description"],
             location=request.form["location"],
-            start=request.form["start_date"] + " " + request.form["start_time"],
+            start=request.form["start_date"]
+            + " "
+            + request.form["start_time"],
             end=request.form["end_date"] + " " + request.form["end_time"],
             event_type=event_type,
         )
