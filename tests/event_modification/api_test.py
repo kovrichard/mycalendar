@@ -21,7 +21,7 @@ class ApiTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         User.query.delete()
         Role.query.delete()
 
-    @logged_in_user("user")
+    @logged_in_user()
     def test_event_mod_renders_template(self, default_user):
         r = self.client.post(
             "/add-event", data={"week_num": "1", "n": "1", "m": "1"}

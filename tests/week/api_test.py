@@ -23,7 +23,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         Role.query.delete()
         Event.query.delete()
 
-    @logged_in_user("user")
+    @logged_in_user()
     def test_get_week_renders_week_template(self, default_user):
         week_num = 2
         r = self.client.get(f"/week/{week_num}")
@@ -37,7 +37,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             datetime.now().isocalendar()[1]
         )
 
-    @logged_in_user("user")
+    @logged_in_user()
     def test_get_week_post_saves_event_to_db(self, default_user):
         payload = {
             "title": "<title>",
