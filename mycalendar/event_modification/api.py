@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, current_app
+from flask import Blueprint, render_template, request
 from flask_user import login_required
 
 from mycalendar.db_models.event import Event
@@ -20,15 +20,17 @@ def event_mod():
     start_date = refact(week_num, m)
     start_time, end_time = refact2(n)
 
-    event = Event.query.filter_by(start=f"{start_date} {start_time}", end=f"{start_date} {end_time}").first()
+    event = Event.query.filter_by(
+        start=f"{start_date} {start_time}", end=f"{start_date} {end_time}"
+    ).first()
 
     return render_template(
         "event-modification.html",
         year_number=2020,
         week_num=request.form["week_num"],
-        title = event.title if event else "",
-        description = event.description if event else "",
-        location = event.location if event else "",
+        title=event.title if event else "",
+        description=event.description if event else "",
+        location=event.location if event else "",
         start_date=event.start.date() if event else start_date,
         start_time=event.start.time() if event else start_time,
         end_date=event.end.date() if event else start_date,
