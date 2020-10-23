@@ -7,7 +7,7 @@
             {% with week_number= week_number-1 %}
                 {% include 'week-button.html' %}
             {% endwith %}
-            <h2 class="col-auto">Week - {{ week_number }}</h2>
+            <h2 class="col-auto">Week - {{ week_number }}, {{ year_number }}</h2>
             {% with week_number=week_number+1 %}
                 {% include 'week-button.html' %}
             {% endwith %}

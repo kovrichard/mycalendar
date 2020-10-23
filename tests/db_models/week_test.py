@@ -22,27 +22,18 @@ class WeekTest(DbMixin, AppTestCase):
             end="2020-10-19 01:00:00",
         )
         db.session.add(event)
-        db.session.add(Week(week_num=1, events=[event]))
+        db.session.add(Week(year=2020, week_num=1, events=[event]))
         db.session.commit()
 
         AssertThat(
             len(Week.query.filter_by(week_num=1).first().events)
         ).IsEqualTo(1)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].event_type
-        ).IsEqualTo(event.event_type)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].title
-        ).IsEqualTo(event.title)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].description
-        ).IsEqualTo(event.description)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].location
-        ).IsEqualTo(event.location)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].start
-        ).IsEqualTo(event.start)
-        AssertThat(
-            Week.query.filter_by(week_num=1).first().events[0].end
-        ).IsEqualTo(event.end)
+
+        queried_week_event = Week.query.filter_by(week_num=1).first().events[0]
+
+        AssertThat(queried_week_event.event_type).IsEqualTo(event.event_type)
+        AssertThat(queried_week_event.title).IsEqualTo(event.title)
+        AssertThat(queried_week_event.description).IsEqualTo(event.description)
+        AssertThat(queried_week_event.location).IsEqualTo(event.location)
+        AssertThat(queried_week_event.start).IsEqualTo(event.start)
+        AssertThat(queried_week_event.end).IsEqualTo(event.end)

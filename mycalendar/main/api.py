@@ -9,6 +9,4 @@ main_bp = Blueprint("main", __name__, template_folder="templates")
 def get_main():
     now = datetime.now().isocalendar()
 
-    return redirect(
-        url_for("week.get_week", year=now[0], week=now[1]), 302
-    )
+    return redirect(url_for("week.get_week", year=now[0], week=now[1]), 302)

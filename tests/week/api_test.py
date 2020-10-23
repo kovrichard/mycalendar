@@ -6,6 +6,7 @@ from mycalendar.db_models.event import Event
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
+from mycalendar.db_models.week import Week
 from tests import (
     AppTestCase,
     DbMixin,
@@ -13,6 +14,9 @@ from tests import (
     TestClientMixin,
     logged_in_user,
 )
+
+YEAR = 2020
+WEEK = 2
 
 
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
@@ -25,16 +29,37 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
     @logged_in_user()
     def test_get_week_renders_week_template(self, default_user):
-        year = 2020
-        week = 2
-
-        r = self.client.get(f"/{year}/{week}")
+        r = self.client.get(f"/{YEAR}/{WEEK}")
 
         template, context = self.rendered_templates[0]
 
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("week.html")
-        AssertThat(context["week_number"]).IsEqualTo(week)
+        AssertThat(context["year_number"]).IsEqualTo(YEAR)
+        AssertThat(context["week_number"]).IsEqualTo(WEEK)
+
+    @logged_in_user()
+    def test_get_week_get_persists_week_into_db(self, default_user):
+        r = self.client.get(f"/{YEAR}/{WEEK}")
+
+        week = Week.query.filter_by(year=YEAR, week_num=WEEK).first()
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(week.year).IsEqualTo(YEAR)
+        AssertThat(week.week_num).IsEqualTo(WEEK)
+
+    @logged_in_user()
+    def test_get_week_get_does_not_save_already_existing_event_again(
+        self, default_user
+    ):
+        r = self.client.get(f"/{YEAR}/{WEEK}")
+        r2 = self.client.get(f"/{YEAR}/{WEEK}")
+
+        weeks = Week.query.filter_by(year=YEAR, week_num=WEEK).all()
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(r2.status_code).IsEqualTo(200)
+        AssertThat(len(weeks)).IsEqualTo(1)
 
     @logged_in_user()
     def test_get_week_post_saves_event_to_db(self, default_user):
@@ -49,11 +74,11 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "business_hour": 1,
         }
 
-        r = self.client.post("/2020/2", data=payload)
-
-        event = Event.query.filter_by(title="<title>").first()
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=payload)
 
         AssertThat(r.status_code).IsEqualTo(200)
+        event = Event.query.filter_by(title="<title>").first()
+
         AssertThat(event.title).IsEqualTo(payload["title"])
         AssertThat(event.description).IsEqualTo(payload["description"])
         AssertThat(event.location).IsEqualTo(payload["location"])
@@ -66,3 +91,8 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             datetime.strptime(end_string, "%Y-%m-%d %H:%M")
         )
         AssertThat(event.event_type).IsEqualTo(payload["business_hour"])
+
+        week = Week.query.filter_by(year=YEAR, week_num=WEEK).first()
+
+        AssertThat(len(week.events)).IsEqualTo(1)
+        AssertThat(week.events[0].title).IsEqualTo(payload["title"])
