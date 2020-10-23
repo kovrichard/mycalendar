@@ -3,6 +3,9 @@ from . import db
 
 class Event(db.Model):
     __tablename__ = "events"
+    __table_args__ = (
+        db.UniqueConstraint("start", "end", name="unique_start_end"),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     event_type = db.Column(db.Integer, nullable=False, server_default="0")
@@ -15,7 +18,7 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def __repr__(self):
-        return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d')>" % (
+        return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d', user_id='%d')>" % (
             self.id,
             self.event_type,
             self.title,
@@ -24,4 +27,5 @@ class Event(db.Model):
             self.start,
             self.end,
             self.week_id,
+            self.user_id,
         )
