@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import jwt
 
+
 class UserAccess:
     def __init__(self, secret):
         self.secret = secret
@@ -16,18 +17,18 @@ class UserAccess:
             self.secret,
             algorithm="HS256",
         ).decode()
-    
+
     def decode(self, token):
         try:
             decoded_token = jwt.decode(
-            token,
-            self.secret,
-            algorithm="HS256",
-            options={"require_iat": True, "require_exp": True},
-        )
+                token,
+                self.secret,
+                algorithm="HS256",
+                options={"require_iat": True, "require_exp": True},
+            )
         except jwt.DecodeError:
             return None
         except jwt.ExpiredSignatureError:
             return None
-        
+
         return decoded_token["user_id"]

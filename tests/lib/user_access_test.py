@@ -1,12 +1,12 @@
+import unittest
+from datetime import timedelta
+
 from truth.truth import AssertThat
 
 from mycalendar.lib.user_access import UserAccess
 
-from datetime import timedelta
-
-import unittest
-
 USER_ID = 3
+
 
 class UserAccessTest(unittest.TestCase):
     def setUp(self):
@@ -22,7 +22,9 @@ class UserAccessTest(unittest.TestCase):
         AssertThat(user_id).IsEqualTo(USER_ID)
 
     def test_decode_denies_access_for_invalid_secret(self):
-        token = UserAccess("DIFFERENT_SECRET").generate(USER_ID, self.validity_period)
+        token = UserAccess("DIFFERENT_SECRET").generate(
+            USER_ID, self.validity_period
+        )
 
         AssertThat(self.user_access.decode(token)).IsNone()
 

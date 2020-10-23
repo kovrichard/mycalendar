@@ -14,7 +14,9 @@ from tests import (
 )
 
 
-class EventModificationTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
+class EventModificationTest(
+    TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase
+):
     def setUp(self):
         super().setUp()
         UserRoles.query.delete()
