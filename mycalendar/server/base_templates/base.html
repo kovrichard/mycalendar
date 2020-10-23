@@ -5,21 +5,39 @@
     <link rel="stylesheet" href="{{ url_for("static", filename = "bootstrap.min.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename = "main.css") }}">
 </head>
-<body class="h-100">
-    <div class="container text-center h-100">
-        <div class="row mb-5">
-            <div class="col">
-                <div>
-                    {% block content %}{% endblock %}
-                </div>
+<body>
+    <div id="content-wrap" class="container text-center h-100">
+        <nav class="navbar fixed-top navbar-dark navbar-expand bg-dark">
+            <a class="navbar-brand" href="#">Calendar</a>
+            <div class="navbar-collapse">
+                {% if current_user.is_authenticated %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('main.get_main') }}">Current week</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ url_for("user.edit_user_profile", week_num = current_week) }}>Share</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ url_for("user.edit_user_profile", week_num = current_week) }}>{{ current_user.username }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ url_for("user.logout") }}>Logout</a>
+                    </li>
+                </ul>
+                {% endif %}
             </div>
-        </div>
-        <div class="row fixed-bottom mb-5 d-flex justify-content-center">
-            <div class="row-cols-10">
-                <footer id="footer">
-                    &copy; Copyright {{ current_year }} by Máté & Ricsi</a>.
-                </footer>
+        </nav>
+        <main>
+            <div class="container">
+                {% block content %}{% endblock %}
             </div>
+        </main>
     </div>
+    <footer id="footer" class="text-center w-100">
+        &copy; Copyright {{ current_year }} by Máté & Ricsi</a>.
+    </footer>
 </body>
 </html>
