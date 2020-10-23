@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from truth.truth import AssertThat
 
 from mycalendar.db_models.role import Role
