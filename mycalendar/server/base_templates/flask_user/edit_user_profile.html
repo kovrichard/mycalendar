@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+<h1>{%trans%}User profile{%endtrans%}</h1>
+
+<form action="" method="POST" class="form" role="form">
+    {{ form.hidden_tag() }}
+    <div class="form-group justify-content-center">
+        <label for="title">Username</label>
+        <input type="text" name="title" class="form-control" id="title" value={{ current_user.username }} disabled>
+    </div>
+    {% for field in form %}
+        {% if not field.flags.hidden %}
+            {% if field.type=='SubmitField' %}
+                {{ render_submit_field(field, tabindex=loop.index*10) }}
+            {% else %}
+                {{ render_field(field, tabindex=loop.index*10) }}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</form>
+
+{% endblock %}
