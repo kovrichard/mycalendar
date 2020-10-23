@@ -34,20 +34,27 @@ def handle_post(year, week):
     event_type = 1 if "business_hour" in request.form else 0
 
     if current_week := Week.query.filter_by(year=year, week_num=week).first():
-        event = Event(
-            title=request.form["title"],
-            description=request.form["description"],
-            location=request.form["location"],
-            start=request.form["start_date"]
-            + " "
-            + request.form["start_time"],
-            end=request.form["end_date"] + " " + request.form["end_time"],
-            event_type=event_type,
-        )
+        if event := Event.query.filter_by(
+            start=f"{request.form['start_date']} {request.form['start_time']}",
+            end=f"{request.form['end_date']} {request.form['end_time']}",
+        ).first():
+            event.title = request.form["title"]
+            event.description = request.form["description"]
+            event.location = request.form["location"]
+            event.type = event_type
+        else:
+            event = Event(
+                title=request.form["title"],
+                description=request.form["description"],
+                location=request.form["location"],
+                start=f"{request.form['start_date']} {request.form['start_time']}",
+                end=f"{request.form['end_date']} {request.form['end_time']}",
+                event_type=event_type,
+            )
+            db.session.add(event)
 
-        db.session.add(event)
-        current_week.events.append(event)
-        current_user.events.append(event)
+            current_week.events.append(event)
+            current_user.events.append(event)
 
         db.session.commit()
 
