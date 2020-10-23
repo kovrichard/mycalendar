@@ -6,7 +6,7 @@ from truth.truth import AssertThat
 from mycalendar.server.factory import create_app
 
 
-class TestFactory(TestCase):
+class FactoryTest(TestCase):
     def test_create_app_sets_current_year(self):
         app = create_app()
 

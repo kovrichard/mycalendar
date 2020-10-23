@@ -12,7 +12,7 @@ from tests import (
 )
 
 
-class ApiTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
+class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
         super().setUp()
         UserRoles.query.delete()
