@@ -11,7 +11,6 @@ week_bp = Blueprint("week", __name__, template_folder="templates")
 
 @week_bp.route("/<int:week_num>", methods=["GET", "POST"])
 @login_required
-# @roles_required(["user", "admin"])
 def get_week(week_num):
     if request.method == "GET":
         return render_template(

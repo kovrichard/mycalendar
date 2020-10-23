@@ -10,7 +10,6 @@ event_mod_bp = Blueprint(
 
 @event_mod_bp.route("/", strict_slashes=False, methods=["POST"])
 @login_required
-# @roles_required(["user", "admin"])
 def event_mod():
     week_num = request.form["week_num"]
     n = request.form["n"]
