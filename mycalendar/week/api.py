@@ -41,7 +41,7 @@ def handle_post(year, week):
             event.title = request.form["title"]
             event.description = request.form["description"]
             event.location = request.form["location"]
-            event.type = event_type
+            event.event_type = event_type
         else:
             event = Event(
                 title=request.form["title"],

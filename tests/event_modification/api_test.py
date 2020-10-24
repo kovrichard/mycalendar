@@ -45,6 +45,7 @@ class EventModificationTest(
     @logged_in_user()
     def test_event_mod_loads_already_defined_event(self, default_user):
         event = Event(
+            event_type=1,
             title="<title>",
             description="<desc>",
             location="<loc>",
@@ -61,6 +62,9 @@ class EventModificationTest(
         AssertThat(r.status_code).IsEqualTo(200)
         template, context = self.rendered_templates[0]
 
+        AssertThat(context["event_type"]).IsEqualTo(
+            "checked" if event.event_type == 1 else ""
+        )
         AssertThat(context["title"]).IsEqualTo(event.title)
         AssertThat(context["description"]).IsEqualTo(event.description)
         AssertThat(context["location"]).IsEqualTo(event.location)

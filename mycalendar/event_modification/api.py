@@ -24,6 +24,11 @@ def event_mod():
         start=f"{start_date} {start_time}", end=f"{start_date} {end_time}"
     ).first()
 
+    if event and event.event_type == 1:
+        event_type = "checked"
+    else:
+        event_type = ""
+
     return render_template(
         "event-modification.html",
         year_number=2020,
@@ -35,6 +40,7 @@ def event_mod():
         start_time=event.start.time() if event else start_time,
         end_date=event.end.date() if event else start_date,
         end_time=event.end.time() if event else end_time,
+        event_type=event_type,
     )
 
 
