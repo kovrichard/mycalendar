@@ -37,6 +37,7 @@ def handle_post(year, week):
         if event := Event.query.filter_by(
             start=f"{request.form['start_date']} {request.form['start_time']}",
             end=f"{request.form['end_date']} {request.form['end_time']}",
+            user_id=current_user.id,
         ).first():
             event.title = request.form["title"]
             event.description = request.form["description"]

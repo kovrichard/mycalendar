@@ -4,7 +4,9 @@ from . import db
 class Event(db.Model):
     __tablename__ = "events"
     __table_args__ = (
-        db.UniqueConstraint("start", "end", name="unique_start_end"),
+        db.UniqueConstraint(
+            "start", "end", "user_id", name="unique_start_end_user_id"
+        ),
     )
 
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +28,6 @@ class Event(db.Model):
             self.location,
             self.start,
             self.end,
-            self.week_id,
-            self.user_id,
+            self.week_id or -1,
+            self.user_id or -1,
         )

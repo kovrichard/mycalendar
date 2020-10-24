@@ -42,33 +42,64 @@ class EventModificationTest(
         AssertThat(context["start_time"]).IsEqualTo("01:00")
         AssertThat(context["end_time"]).IsEqualTo("02:00")
 
+    def test_event_mod_loads_already_defined_event(self):
+        with self.logged_in_user() as user:
+            event = Event(
+                event_type=1,
+                title="<title>",
+                description="<desc>",
+                location="<loc>",
+                start="2020-10-19 00:00:00",
+                end="2020-10-19 01:00:00",
+                user_id=user.id,
+            )
+
+            db.session.add(event)
+            db.session.commit()
+
+            r = self.client.post(
+                "/add-event", data={"week_num": "43", "n": "0", "m": "0"}
+            )
+
+            AssertThat(r.status_code).IsEqualTo(200)
+            template, context = self.rendered_templates[0]
+
+            AssertThat(context["event_type"]).IsEqualTo(
+                "checked" if event.event_type == 1 else ""
+            )
+            AssertThat(context["title"]).IsEqualTo(event.title)
+            AssertThat(context["description"]).IsEqualTo(event.description)
+            AssertThat(context["location"]).IsEqualTo(event.location)
+            AssertThat(context["start_date"]).IsEqualTo(event.start.date())
+            AssertThat(context["start_time"]).IsEqualTo(event.start.time())
+            AssertThat(context["end_date"]).IsEqualTo(event.end.date())
+            AssertThat(context["end_time"]).IsEqualTo(event.end.time())
+
     @logged_in_user()
-    def test_event_mod_loads_already_defined_event(self, default_user):
+    def test_event_modification_does_not_render_events_of_other_users(
+        self, default_user
+    ):
+        user2 = User(username="username", password="password")
+        db.session.add(user2)
+
         event = Event(
             event_type=1,
             title="<title>",
             description="<desc>",
             location="<loc>",
-            start="2020-10-19 00:00:00",
-            end="2020-10-19 01:00:00",
+            start="2020-10-20 00:00:00",
+            end="2020-10-20 01:00:00",
+            user_id=user2.id,
         )
+
         db.session.add(event)
         db.session.commit()
 
         r = self.client.post(
-            "/add-event", data={"week_num": "43", "n": "0", "m": "0"}
+            "/add-event", data={"week_num": "43", "n": "0", "m": "1"}
         )
 
         AssertThat(r.status_code).IsEqualTo(200)
         template, context = self.rendered_templates[0]
 
-        AssertThat(context["event_type"]).IsEqualTo(
-            "checked" if event.event_type == 1 else ""
-        )
-        AssertThat(context["title"]).IsEqualTo(event.title)
-        AssertThat(context["description"]).IsEqualTo(event.description)
-        AssertThat(context["location"]).IsEqualTo(event.location)
-        AssertThat(context["start_date"]).IsEqualTo(event.start.date())
-        AssertThat(context["start_time"]).IsEqualTo(event.start.time())
-        AssertThat(context["end_date"]).IsEqualTo(event.end.date())
-        AssertThat(context["end_time"]).IsEqualTo(event.end.time())
+        AssertThat(context["title"]).IsEqualTo("")

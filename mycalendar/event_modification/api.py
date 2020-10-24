@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, render_template, request
-from flask_user import login_required
+from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
 
@@ -21,7 +21,9 @@ def event_mod():
     start_time, end_time = refact2(n)
 
     event = Event.query.filter_by(
-        start=f"{start_date} {start_time}", end=f"{start_date} {end_time}"
+        start=f"{start_date} {start_time}",
+        end=f"{start_date} {end_time}",
+        user_id=current_user.id,
     ).first()
 
     if event and event.event_type == 1:
