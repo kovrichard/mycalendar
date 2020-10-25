@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 def calculate_days_of_week(year, week):
     day_of_week = []
     for i in range(1, 8):
@@ -11,5 +12,5 @@ def calculate_days_of_week(year, week):
                 .strftime("%A"),
             }
         )
-    
+
     return day_of_week
