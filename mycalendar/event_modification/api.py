@@ -13,12 +13,13 @@ event_mod_bp = Blueprint(
 @event_mod_bp.route("/", strict_slashes=False, methods=["POST"])
 @login_required
 def event_mod():
-    week_num = request.form["week_num"]
-    n = request.form["n"]
-    m = request.form["m"]
+    year = request.form["year"]
+    week = request.form["week"]
+    hour = request.form["hour"]
+    day = request.form["day"]
 
-    start_date = refact(week_num, m)
-    start_time, end_time = refact2(n)
+    start_date = isocalendar_to_normal_date(year, week, day)
+    start_time, end_time = hour_number_to_24_hours_format(hour)
 
     event = Event.query.filter_by(
         start=f"{start_date} {start_time}",
@@ -33,8 +34,8 @@ def event_mod():
 
     return render_template(
         "event-modification.html",
-        year_number=2020,
-        week_num=request.form["week_num"],
+        year_number=year,
+        week_num=week,
         title=event.title if event else "",
         description=event.description if event else "",
         location=event.location if event else "",
@@ -46,14 +47,14 @@ def event_mod():
     )
 
 
-def refact(week_num, m):
-    return datetime.fromisocalendar(2020, int(week_num), int(m) + 1).strftime(
-        "%Y-%m-%d"
-    )
+def isocalendar_to_normal_date(year, week, day):
+    return datetime.fromisocalendar(
+        int(year), int(week), int(day) + 1
+    ).strftime("%Y-%m-%d")
 
 
-def refact2(n):
-    start = "0" + n + ":00" if len(n) < 2 else n + ":00"
-    tmp = str(int(n) + 1)
-    end = "0" + tmp + ":00" if len(tmp) < 2 else tmp + ":00"
+def hour_number_to_24_hours_format(hour):
+    start = ("0" + hour if len(hour) < 2 else hour) + ":00"
+    tmp = str(int(hour) + 1)
+    end = ("0" + tmp if len(tmp) < 2 else tmp) + ":00"
     return start, end

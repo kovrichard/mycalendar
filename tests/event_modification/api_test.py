@@ -29,7 +29,8 @@ class EventModificationTest(
     @logged_in_user()
     def test_event_mod_renders_template(self, default_user):
         r = self.client.post(
-            "/add-event", data={"week_num": "1", "n": "1", "m": "1"}
+            "/add-event",
+            data={"year": "2020", "week": "1", "hour": "1", "day": "1"},
         )
 
         template, context = self.rendered_templates[0]
@@ -58,7 +59,8 @@ class EventModificationTest(
             db.session.commit()
 
             r = self.client.post(
-                "/add-event", data={"week_num": "43", "n": "0", "m": "0"}
+                "/add-event",
+                data={"year": "2020", "week": "43", "hour": "0", "day": "0"},
             )
 
             AssertThat(r.status_code).IsEqualTo(200)
@@ -96,7 +98,8 @@ class EventModificationTest(
         db.session.commit()
 
         r = self.client.post(
-            "/add-event", data={"week_num": "43", "n": "0", "m": "1"}
+            "/add-event",
+            data={"year": "2020", "week": "43", "hour": "0", "day": "1"},
         )
 
         AssertThat(r.status_code).IsEqualTo(200)

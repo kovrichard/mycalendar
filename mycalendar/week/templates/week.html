@@ -31,16 +31,17 @@
             </tr>
         </thead>
         <tbody>
-            {% for n in range(24) %}
+            {% for hour in range(24) %}
                 <tr>
-                    <th scope="row" class="tw-4">{{ n }}:00</th>
-                    {% for m in range(7) %}
-                    <td id="btn-{{ n }}{{ m }}"class="tw-10 p-0">
+                    <th scope="row" class="tw-4">{{ hour }}:00</th>
+                    {% for day in range(7) %}
+                    <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
                         <form method="post" action="{{ url_for('event_modification.event_mod') }}">
-                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ n }}{{ m }}" style="height:3rem"/>
-                            <input value={{ week_number }} name="week_num" hidden/>
-                            <input value={{ n }} name="n" hidden/>
-                            <input value={{ m }} name="m" hidden/>
+                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ hour }}{{ day }}" style="height:3rem"/>
+                            <input value={{ year_number }} name="year" hidden/>
+                            <input value={{ week_number }} name="week" hidden/>
+                            <input value={{ hour }} name="hour" hidden/>
+                            <input value={{ day }} name="day" hidden/>
                         </form>
                     </td>
                     {% endfor %}
