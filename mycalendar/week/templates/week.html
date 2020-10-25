@@ -17,14 +17,17 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th scope="col">Hour</th>
-                <th scope="col">Monday</th>
-                <th scope="col">Tuesday</th>
-                <th scope="col">Wednesday</th>
-                <th scope="col">Thursday</th>
-                <th scope="col">Friday</th>
-                <th scope="col">Saturday</th>
-                <th scope="col">Sunday</th>
+                <th scope="col" class="align-middle table-fix-head">Hour</th>
+                {% for day in day_of_week %}
+                <th scope="col" class="table-fix-head">
+                    <div>
+                        {{ day.date }}
+                    </div>
+                    <div>
+                        {{ day.name }}
+                    </div>
+                </th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>

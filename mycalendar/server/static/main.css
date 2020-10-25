@@ -28,3 +28,14 @@
 .week-btn {
     background-color: gray;
 }
+
+.table-fix-head {
+    position: sticky;
+    top: 3rem;
+    background-color: white;
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+}

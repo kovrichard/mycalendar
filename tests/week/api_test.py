@@ -49,6 +49,10 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(template.name).IsEqualTo("week.html")
         AssertThat(context["year_number"]).IsEqualTo(YEAR)
         AssertThat(context["week_number"]).IsEqualTo(WEEK)
+        
+        for i in range(1, 8):
+            AssertThat(context["day_of_week"][i - 1]["date"]).IsEqualTo(datetime.fromisocalendar(YEAR, WEEK, i).date())
+            AssertThat(context["day_of_week"][i - 1]["name"]).IsEqualTo(datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%A"))
 
     @logged_in_user()
     def test_get_week_get_persists_week_into_db(self, default_user):
