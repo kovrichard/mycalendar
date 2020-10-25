@@ -1,12 +1,13 @@
-from datetime import datetime
-
 from flask import Blueprint, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
 from mycalendar.db_models.week import Week
-from mycalendar.lib.calculate_week import calculate_days_of_week
+from mycalendar.lib.datetime_calculator import (
+    calculate_days_of_week,
+    calculate_different_year,
+)
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
@@ -70,22 +71,3 @@ def handle_post(year, week):
         db.session.commit()
 
     return render_template("week.html", year_number=year, week_number=week)
-
-
-def calculate_different_year(year, week):
-    if week < 1:
-        year -= 1
-        week = 53 if __has_53_weeks(year) else 52
-    elif (week == 53 and not __has_53_weeks(year)) or (53 < week):
-        year += 1
-        week = 1
-
-    return year, week
-
-
-def __has_53_weeks(year):
-    try:
-        datetime.fromisocalendar(year, 53, 1)
-        return True
-    except:
-        return False

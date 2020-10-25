@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
+from mycalendar.lib.datetime_calculator import hour_number_to_24_hours_format
 
 event_mod_bp = Blueprint(
     "event_modification", __name__, template_folder="templates"
@@ -18,8 +19,11 @@ def event_mod():
     hour = request.form["hour"]
     day = request.form["day"]
 
-    start_date = isocalendar_to_normal_date(year, week, day)
-    start_time, end_time = hour_number_to_24_hours_format(hour)
+    start_date = datetime.fromisocalendar(
+        int(year), int(week), int(day) + 1
+    ).strftime("%Y-%m-%d")
+    start_time = hour_number_to_24_hours_format(hour)
+    end_time = hour_number_to_24_hours_format(str(int(hour) + 1))
 
     event = Event.query.filter_by(
         start=f"{start_date} {start_time}",
@@ -45,16 +49,3 @@ def event_mod():
         end_time=event.end.time() if event else end_time,
         event_type=event_type,
     )
-
-
-def isocalendar_to_normal_date(year, week, day):
-    return datetime.fromisocalendar(
-        int(year), int(week), int(day) + 1
-    ).strftime("%Y-%m-%d")
-
-
-def hour_number_to_24_hours_format(hour):
-    start = ("0" + hour if len(hour) < 2 else hour) + ":00"
-    tmp = str(int(hour) + 1)
-    end = ("0" + tmp if len(tmp) < 2 else tmp) + ":00"
-    return start, end

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Blueprint, redirect, url_for
 
-from mycalendar.lib.calculate_week import calculate_days_of_week
+from mycalendar.lib.datetime_calculator import calculate_days_of_week
 
 main_bp = Blueprint("main", __name__, template_folder="templates")
 

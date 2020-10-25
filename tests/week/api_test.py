@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from ddt import data, ddt, unpack
 from truth.truth import AssertThat
 
 from mycalendar.db_models.event import Event
@@ -31,7 +30,6 @@ TEST_EVENT = {
 }
 
 
-@ddt
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
         super().setUp()
@@ -59,26 +57,6 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             AssertThat(context["days_of_week"][i - 1]["name"]).IsEqualTo(
                 datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%A")
             )
-
-    @data(
-        (2020, 0),
-        (2020, 52),
-        (2020, 53),
-        (2020, 54),
-        (2021, 0),
-        (2021, 52),
-        (2021, 53),
-        (2021, 54),
-        (datetime.now().isocalendar()[0], datetime.now().isocalendar()[1]),
-    )
-    @unpack
-    @logged_in_user()
-    def test_get_week_handles_anniversaries_correctly(
-        self, year, week, default_user
-    ):
-        r = self.client.get(f"/{year}/{week}")
-
-        AssertThat(r.status_code).IsEqualTo(200)
 
     @logged_in_user()
     def test_get_week_get_persists_week_into_db(self, default_user):
