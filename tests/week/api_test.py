@@ -164,6 +164,4 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         template, context = self.rendered_templates[0]
 
-        print(context)
-
         AssertThat(r.data).Contains(TEST_EVENT["title"].encode())
