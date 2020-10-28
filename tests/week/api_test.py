@@ -27,8 +27,20 @@ TEST_EVENT = {
     "end_date": "2020-10-20",
     "end_time": "01:00",
     "business_hour": 1,
+    "action": "Save",
 }
 
+TEST_DELETE_EVENT = {
+    "title": "<title>",
+    "description": "<description>",
+    "location": "<location>",
+    "start_date": "2020-10-20",
+    "start_time": "00:00",
+    "end_date": "2020-10-20",
+    "end_time": "01:00",
+    "business_hour": 1,
+    "action": "Delete",
+}
 
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
@@ -93,15 +105,11 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             AssertThat(event.title).IsEqualTo(TEST_EVENT["title"])
             AssertThat(event.description).IsEqualTo(TEST_EVENT["description"])
             AssertThat(event.location).IsEqualTo(TEST_EVENT["location"])
-            start_string = (
-                f"{TEST_EVENT['start_date']} {TEST_EVENT['start_time']}"
-            )
             AssertThat(event.start).IsEqualTo(
-                datetime.strptime(start_string, "%Y-%m-%d %H:%M")
+                datetime.strptime(f"{TEST_EVENT['start_date']} {TEST_EVENT['start_time']}", "%Y-%m-%d %H:%M")
             )
-            end_string = f"{TEST_EVENT['end_date']} {TEST_EVENT['end_time']}"
             AssertThat(event.end).IsEqualTo(
-                datetime.strptime(end_string, "%Y-%m-%d %H:%M")
+                datetime.strptime(f"{TEST_EVENT['end_date']} {TEST_EVENT['end_time']}", "%Y-%m-%d %H:%M")
             )
             AssertThat(event.event_type).IsEqualTo(TEST_EVENT["business_hour"])
 
@@ -111,3 +119,13 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             AssertThat(week.events[0].title).IsEqualTo(TEST_EVENT["title"])
 
             AssertThat(week.events[0].user_id).IsEqualTo(user.id)
+
+    @logged_in_user()
+    def test_get_week_post_does_not_save_event_on_delete(self, default_user):
+        self.client.get(f"/{YEAR}/{WEEK}")
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_DELETE_EVENT)
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        event = Event.query.filter_by(title="<title>").first()
+
+        AssertThat(event).IsEqualTo(None)

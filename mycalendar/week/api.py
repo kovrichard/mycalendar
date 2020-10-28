@@ -45,29 +45,43 @@ def handle_post(year, week):
     event_type = 1 if "business_hour" in request.form else 0
 
     if current_week := Week.query.filter_by(year=year, week_num=week).first():
-        if event := Event.query.filter_by(
+        event = Event.query.filter_by(
             start=f"{request.form['start_date']} {request.form['start_time']}",
             end=f"{request.form['end_date']} {request.form['end_time']}",
             user_id=current_user.id,
-        ).first():
-            event.title = request.form["title"]
-            event.description = request.form["description"]
-            event.location = request.form["location"]
-            event.event_type = event_type
-        else:
-            event = Event(
-                title=request.form["title"],
-                description=request.form["description"],
-                location=request.form["location"],
-                start=f"{request.form['start_date']} {request.form['start_time']}",
-                end=f"{request.form['end_date']} {request.form['end_time']}",
-                event_type=event_type,
-            )
-            db.session.add(event)
+        ).first()
 
-            current_week.events.append(event)
-            current_user.events.append(event)
+        if request.form["action"] == "Save":
+            if event:
+                __modify_event(event, event_type)
+            else:
+                __insert_new_event(current_week, event_type)
+        elif event:
+            Event.query.filter_by(start=event.start, end=event.end, user_id=event.user_id).delete()
 
         db.session.commit()
 
-    return render_template("week.html", year_number=year, week_number=week)
+    days_of_week = calculate_days_of_week(year, week)
+
+    return render_template("week.html", year_number=year, week_number=week, days_of_week=days_of_week)
+
+def __modify_event(event, event_type):
+    event.title = request.form["title"]
+    event.description = request.form["description"]
+    event.location = request.form["location"]
+    event.event_type = event_type
+
+def __insert_new_event(current_week, event_type):
+    event = Event(
+        title=request.form["title"],
+        description=request.form["description"],
+        location=request.form["location"],
+        start=f"{request.form['start_date']} {request.form['start_time']}",
+        end=f"{request.form['end_date']} {request.form['end_time']}",
+        event_type=event_type,
+    )
+    db.session.add(event)
+
+    current_week.events.append(event)
+    current_user.events.append(event)
+    
