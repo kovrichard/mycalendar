@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, current_app, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
@@ -22,12 +22,19 @@ def event_mod():
     start_date = datetime.fromisocalendar(
         int(year), int(week), int(day) + 1
     ).strftime("%Y-%m-%d")
+    end_date = datetime.fromisocalendar(int(year), int(week), int(day) + 1)
     start_time = hour_number_to_24_hours_format(hour)
     end_time = hour_number_to_24_hours_format(str(int(hour) + 1))
 
+    if int(hour) == 23:
+        end_date += timedelta(days=1)
+    end_date = end_date.strftime("%Y-%m-%d")
+
+    current_app.logger.info(end_date)
+
     event = Event.query.filter_by(
         start=f"{start_date} {start_time}",
-        end=f"{start_date} {end_time}",
+        end=f"{end_date} {end_time}",
         user_id=current_user.id,
     ).first()
 
@@ -45,7 +52,7 @@ def event_mod():
         location=event.location if event else "",
         start_date=event.start.date() if event else start_date,
         start_time=event.start.time() if event else start_time,
-        end_date=event.end.date() if event else start_date,
+        end_date=event.end.date() if event else end_date,
         end_time=event.end.time() if event else end_time,
         event_type=event_type,
     )
