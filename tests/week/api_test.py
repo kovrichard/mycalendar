@@ -42,6 +42,7 @@ TEST_DELETE_EVENT = {
     "action": "Delete",
 }
 
+
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
         super().setUp()
@@ -125,10 +126,16 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             AssertThat(event.description).IsEqualTo(TEST_EVENT["description"])
             AssertThat(event.location).IsEqualTo(TEST_EVENT["location"])
             AssertThat(event.start).IsEqualTo(
-                datetime.strptime(f"{TEST_EVENT['start_date']} {TEST_EVENT['start_time']}", "%Y-%m-%d %H:%M")
+                datetime.strptime(
+                    f"{TEST_EVENT['start_date']} {TEST_EVENT['start_time']}",
+                    "%Y-%m-%d %H:%M",
+                )
             )
             AssertThat(event.end).IsEqualTo(
-                datetime.strptime(f"{TEST_EVENT['end_date']} {TEST_EVENT['end_time']}", "%Y-%m-%d %H:%M")
+                datetime.strptime(
+                    f"{TEST_EVENT['end_date']} {TEST_EVENT['end_time']}",
+                    "%Y-%m-%d %H:%M",
+                )
             )
             AssertThat(event.event_type).IsEqualTo(TEST_EVENT["business_hour"])
 

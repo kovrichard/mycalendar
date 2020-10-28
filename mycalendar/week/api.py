@@ -57,19 +57,28 @@ def handle_post(year, week):
             else:
                 __insert_new_event(current_week, event_type)
         elif event:
-            Event.query.filter_by(start=event.start, end=event.end, user_id=event.user_id).delete()
+            Event.query.filter_by(
+                start=event.start, end=event.end, user_id=event.user_id
+            ).delete()
 
         db.session.commit()
 
     days_of_week = calculate_days_of_week(year, week)
 
-    return render_template("week.html", year_number=year, week_number=week, days_of_week=days_of_week)
+    return render_template(
+        "week.html",
+        year_number=year,
+        week_number=week,
+        days_of_week=days_of_week,
+    )
+
 
 def __modify_event(event, event_type):
     event.title = request.form["title"]
     event.description = request.form["description"]
     event.location = request.form["location"]
     event.event_type = event_type
+
 
 def __insert_new_event(current_week, event_type):
     event = Event(
@@ -84,4 +93,3 @@ def __insert_new_event(current_week, event_type):
 
     current_week.events.append(event)
     current_user.events.append(event)
-    
