@@ -80,6 +80,7 @@ class DateTimeCalculatorTest(unittest.TestCase):
         ("21", "21:00"),
         ("22", "22:00"),
         ("23", "23:00"),
+        ("24", "00:00"),
     )
     @unpack
     def test_hour_number_to_24_hours_format_transforms_correctly(
