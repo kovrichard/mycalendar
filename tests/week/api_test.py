@@ -71,6 +71,25 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             )
 
     @logged_in_user()
+    def test_get_week_post_renders_week_template(self, default_user):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(template.name).IsEqualTo("week.html")
+        AssertThat(context["year_number"]).IsEqualTo(YEAR)
+        AssertThat(context["week_number"]).IsEqualTo(WEEK)
+
+        for i in range(1, 8):
+            AssertThat(context["days_of_week"][i - 1]["date"]).IsEqualTo(
+                datetime.fromisocalendar(YEAR, WEEK, i).date()
+            )
+            AssertThat(context["days_of_week"][i - 1]["name"]).IsEqualTo(
+                datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%A")
+            )
+
+    @logged_in_user()
     def test_get_week_get_persists_week_into_db(self, default_user):
         r = self.client.get(f"/{YEAR}/{WEEK}")
 
