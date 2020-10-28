@@ -114,6 +114,7 @@ def __refactor(events):
         item["location"] = e.location
         item["day"] = e.start.date().isocalendar()[2] - 1
         item["hour"] = e.start.time().hour
+        item["type"] = "active-event"
 
         tmp.append(item)
 
