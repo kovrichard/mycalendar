@@ -2,6 +2,7 @@ from datetime import datetime
 
 from truth.truth import AssertThat
 
+from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
@@ -16,12 +17,12 @@ from tests import (
 )
 
 YEAR = 2020
-WEEK = 2
+WEEK = 43
 
 TEST_EVENT = {
-    "title": "<title>",
-    "description": "<description>",
-    "location": "<location>",
+    "title": "test_title",
+    "description": "test_description",
+    "location": "test_location",
     "start_date": "2020-10-20",
     "start_time": "00:00",
     "end_date": "2020-10-20",
@@ -31,9 +32,9 @@ TEST_EVENT = {
 }
 
 TEST_DELETE_EVENT = {
-    "title": "<title>",
-    "description": "<description>",
-    "location": "<location>",
+    "title": "test_title",
+    "description": "test_description",
+    "location": "test_location",
     "start_date": "2020-10-20",
     "start_time": "00:00",
     "end_date": "2020-10-20",
@@ -51,6 +52,10 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         UserRoles.query.delete()
         User.query.delete()
         Role.query.delete()
+
+        week = Week(year=YEAR, week_num=WEEK)
+        db.session.add(week)
+        db.session.commit()
 
     @logged_in_user()
     def test_get_week_renders_week_template(self, default_user):
@@ -101,7 +106,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(week.week_num).IsEqualTo(WEEK)
 
     @logged_in_user()
-    def test_get_week_get_does_not_save_already_existing_event_again(
+    def test_get_week_get_does_not_save_already_existing_week_again(
         self, default_user
     ):
         r = self.client.get(f"/{YEAR}/{WEEK}")
@@ -115,12 +120,10 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
     def test_get_week_post_saves_event_to_db(self):
         with self.logged_in_user() as user:
-            self.client.get(f"/{YEAR}/{WEEK}")
-
             r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
 
             AssertThat(r.status_code).IsEqualTo(200)
-            event = Event.query.filter_by(title="<title>").first()
+            event = Event.query.filter_by(title=TEST_EVENT["title"]).first()
 
             AssertThat(event.title).IsEqualTo(TEST_EVENT["title"])
             AssertThat(event.description).IsEqualTo(TEST_EVENT["description"])
@@ -148,10 +151,19 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
     @logged_in_user()
     def test_get_week_post_does_not_save_event_on_delete(self, default_user):
-        self.client.get(f"/{YEAR}/{WEEK}")
         r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_DELETE_EVENT)
 
         AssertThat(r.status_code).IsEqualTo(200)
         event = Event.query.filter_by(title="<title>").first()
 
         AssertThat(event).IsEqualTo(None)
+
+    @logged_in_user()
+    def test_get_week_shows_saved_events(self, default_user):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        print(context)
+
+        AssertThat(r.data).Contains(TEST_EVENT["title"].encode())

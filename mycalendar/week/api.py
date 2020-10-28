@@ -27,17 +27,22 @@ def handle_get(year, week):
     tmp = Week.query.filter_by(year=year, week_num=week).first()
 
     if tmp is None:
-        new_week = Week(year=year, week_num=week)
-        db.session.add(new_week)
+        tmp = Week(year=year, week_num=week)
+        db.session.add(tmp)
         db.session.commit()
 
     days_of_week = calculate_days_of_week(year, week)
+
+    events = Event.query.filter_by(
+        week_id=tmp.id, user_id=current_user.id
+    ).all()
 
     return render_template(
         "week.html",
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,
+        events=__refactor(events),
     )
 
 
@@ -65,11 +70,16 @@ def handle_post(year, week):
 
     days_of_week = calculate_days_of_week(year, week)
 
+    events = Event.query.filter_by(
+        week_id=current_week.id, user_id=current_user.id
+    ).all()
+
     return render_template(
         "week.html",
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,
+        events=__refactor(events),
     )
 
 
@@ -93,3 +103,18 @@ def __insert_new_event(current_week, event_type):
 
     current_week.events.append(event)
     current_user.events.append(event)
+
+
+def __refactor(events):
+    tmp = []
+
+    for e in events:
+        item = {}
+        item["title"] = e.title
+        item["location"] = e.location
+        item["day"] = e.start.date().isocalendar()[2] - 1
+        item["hour"] = e.start.time().hour
+
+        tmp.append(item)
+
+    return tmp

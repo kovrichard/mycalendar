@@ -37,7 +37,11 @@
                     {% for day in range(7) %}
                     <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
                         <form method="post" action="{{ url_for('event_modification.event_mod') }}">
-                            <input type="submit" value="" class="w-100 btn event-btn" name="btn-{{ hour }}{{ day }}" style="height:3rem"/>
+                            {% set current_event = {} %}
+                            {% for event in events if event.day == day and event.hour == hour %}
+                                {% if current_event.update(event) %}{% endif %}
+                            {% endfor %}
+                            <input type="submit" value="{{ current_event.title }}" class="w-100 btn event-btn" name="btn-{{ hour }}{{ day }}" style="height:3rem"/>
                             <input value={{ year_number }} name="year" hidden/>
                             <input value={{ week_number }} name="week" hidden/>
                             <input value={{ hour }} name="hour" hidden/>
