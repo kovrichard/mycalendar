@@ -1,5 +1,5 @@
 # mycalendar
-This a project app for the BME MSc class called "Software Architectures(https://www.aut.bme.hu/Course/VIAUMA06)" 
+This a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)" 
 
 ## Installation & Usage
 ###### There are various installation and usage methods. Here is one of them. 
