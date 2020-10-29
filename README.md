@@ -1,5 +1,19 @@
 # mycalendar
-This a project app for the BME MSc class called "Software architectures" 
+This a project app for the BME MSc class called "Software Architectures(https://www.aut.bme.hu/Course/VIAUMA06)" 
+
+## Installation & Usage
+###### There are various installation and usage methods. Here is one of them. 
+#### Windows 10 
+  1. Download and install [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
+  2. Download [Build Tools for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) and under `C++ build tools` install only `MSVC v... -VS 2019 C++ ... build tools`. (This contains the Cross Tools Command Prompt for VS 2019.)
+  3. Download (and extract) or clone the `mycalendar` repository.
+  4. Run the downloaded `Docker Desktop` program. 
+  5. Run `Cross Tools Command Prompt for VS 2019` program and `cd` into the local repository folder. Then give to the following commands:
+     * `docker network create szoftarch`
+     * `nmake build`
+     * `nmake start`
+     * `nmake migrate`
+  6. Open any browser and in the URL field type: `localhost`.
 
 # prerequisites for development
 - [Docker](https://docs.docker.com/engine/install/)
