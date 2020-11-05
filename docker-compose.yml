@@ -7,6 +7,8 @@ services:
       DB_URL: postgres://db_user:db_pw@db/calendar_db
       TEST_DB_URL: postgres://test_db_user:test_db_pw@db/calendar_test_db
       SECRET_KEY: thirty-two-byte-or-more-long-secret-key
+      CALENDAR_URL: localhost
+      SHARING_TOKEN_SECRET: dev-sharing-token-secret
     build: ./
     image: mycalendar
     working_dir: /usr/src/app
