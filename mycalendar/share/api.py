@@ -21,7 +21,9 @@ def share():
 def get_share_link():
     user_id = current_user.id
     expiration = datetime.strptime(request.args.get("expiration"), "%Y-%m-%d")
-    share_content = request.args.get("share-content")
+    share_content = (
+        True if request.args.get("share-content") == "true" else False
+    )
     now = datetime.now().isocalendar()
 
     return {

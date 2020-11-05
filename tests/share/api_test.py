@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import current_app
 from truth.truth import AssertThat
@@ -36,21 +36,21 @@ class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(template.name).IsEqualTo("share.html")
 
     @logged_in_user()
-    def test_get_share_link_create_shareable_link_with_correct_user_id(
+    def test_get_share_link_creates_shareable_link_correctly(
         self, default_user
     ):
         r = self.client.get(
             "/share/get-link",
             query_string={
-                "expiration": "2020-11-12",
-                "share_content": True,
+                "expiration": (datetime.now() + timedelta(days=7)).strftime(
+                    "%Y-%m-%d"
+                ),
+                "share-content": "true",
             },
         )
 
-        now = datetime.now().isocalendar()
-
         token = re.search(
-            f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/(.*)",
+            f"{current_app.config['CALENDAR_URL']}/2020/45/shared-calendar/(.*)",
             r.json["token"],
         ).group(1)
         decoded_token = UserAccess(
@@ -58,3 +58,4 @@ class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         ).decode(token)
 
         AssertThat(decoded_token["user_id"]).IsEqualTo(default_user.id)
+        AssertThat(decoded_token["share_content"]).IsTrue()
