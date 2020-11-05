@@ -25,17 +25,11 @@ def get_week(year, week):
 
 
 def handle_get(year, week):
-    tmp = Week.query.filter_by(year=year, week_num=week).first()
-
-    if tmp is None:
-        tmp = Week(year=year, week_num=week)
-        db.session.add(tmp)
-        db.session.commit()
-
+    current_week = __persist_week_to_db(year, week)
     days_of_week = calculate_days_of_week(year, week)
 
     events = Event.query.filter_by(
-        week_id=tmp.id, user_id=current_user.id
+        week_id=current_week.id, user_id=current_user.id
     ).all()
 
     return render_template(
@@ -82,6 +76,17 @@ def handle_post(year, week):
         days_of_week=days_of_week,
         events=__refactor(events),
     )
+
+
+def __persist_week_to_db(year, week):
+    tmp = Week.query.filter_by(year=year, week_num=week).first()
+
+    if tmp is None:
+        tmp = Week(year=year, week_num=week)
+        db.session.add(tmp)
+        db.session.commit()
+
+    return tmp
 
 
 def __modify_event(event, event_type):
