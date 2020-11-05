@@ -18,8 +18,8 @@ class UserAccessTest(unittest.TestCase):
         AssertThat(self.token).IsNotNone()
 
     def test_decode_decodes_user_access_token(self):
-        user_id = self.user_access.decode(self.token)
-        AssertThat(user_id).IsEqualTo(USER_ID)
+        decoded_token = self.user_access.decode(self.token)
+        AssertThat(decoded_token["user_id"]).IsEqualTo(USER_ID)
 
     def test_decode_denies_access_for_invalid_secret(self):
         token = UserAccess("DIFFERENT_SECRET").generate(
@@ -36,3 +36,9 @@ class UserAccessTest(unittest.TestCase):
     def test_generate_raises_error_if_no_expiration_is_set(self):
         with self.assertRaises(TypeError):
             self.user_access.generate(USER_ID)
+
+    def test_generate_generates_sharing_into_token(self):
+        token = self.user_access.generate(USER_ID, self.validity_period, False)
+        decoded_token = self.user_access.decode(token)
+
+        AssertThat(decoded_token["share_all"]).IsFalse()
