@@ -3,6 +3,7 @@ from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
+from mycalendar.db_models.user import User
 from mycalendar.db_models.week import Week
 from mycalendar.lib.datetime_calculator import (
     calculate_days_of_week,
@@ -144,13 +145,29 @@ def shared_calendar(year, week, token):
     year, week = calculate_different_year(year, week)
 
     if request.method == "GET":
-        return __handle_shared_get(year, week)
+        return __handle_shared_get(year, week, decoded_token["user_id"], token)
     else:
         return __handle_shared_post(year, week)
 
 
-def __handle_shared_get(year, week):
-    return "OK", 200
+def __handle_shared_get(year, week, shared_user_id, token):
+    current_week = __persist_week_to_db(year, week)
+    days_of_week = calculate_days_of_week(year, week)
+
+    events = Event.query.filter_by(
+        week_id=current_week.id, user_id=shared_user_id
+    ).all()
+
+    return render_template(
+        "week.html",
+        year_number=year,
+        week_number=week,
+        days_of_week=days_of_week,
+        events=__refactor(events),
+        shared_calendar=True,
+        shared_user=User.query.filter_by(id=shared_user_id).first(),
+        token=token,
+    )
 
 
 def __handle_shared_post(year, week):
