@@ -7,13 +7,13 @@
 </head>
 <body>
     <div id="content-wrap" class="container text-center h-100">
-        <nav class="navbar fixed-top navbar-dark navbar-expand bg-dark">
-            <a class="navbar-brand" href="#">Calendar</a>
+        <nav class="navbar fixed-top navbar-expand">
+            <a class="navbar-brand">Calendar</a>
             <div class="navbar-collapse">
                 {% if current_user.is_authenticated %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('main.get_main') }}">Current week</a>
+                        <a class="nav-link-left" href="{{ url_for('main.get_main') }}">Current week</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

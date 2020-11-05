@@ -60,7 +60,6 @@
     vertical-align: sub;
 }
 
-
 .nav-link-left:hover{
     color:black;
     text-decoration: none;
@@ -69,12 +68,17 @@
 
 .nav-link-left:active{
     color:white;
-    text-decoration: none;
-    
+    text-decoration: none;  
 }
 
 .nav-link, .nav-link:hover{
     color: black;
+    font-weight: bold;
+}
+
+.nav-link:active{
+    color:white;
+    text-decoration: none;  
 }
 
 .alert{
