@@ -1,1 +1,47 @@
 {% extends "base.html" %}
+{% block title %}Calendar Sharing{% endblock %}
+
+{% block content %}
+    <h1>Share your calendar with others</h1>
+    
+    <form method="post">
+        <div class="form-group row justify-content-center pt-5">
+            <label for="expiration" class="col-1">Expiration time</label>
+            <input type="date" name="expiration" class="form-control col-2 mr-2" id="expiration" value={{ expiration }} required>
+        </div>
+        <div class="custom-control custom-switch pt-3">
+            <input class="custom-control-input" type="checkbox" name="business_hour" id="shareContent">
+            <label class="custom-control-label" for="shareContent">
+                Share content
+            </label>
+        </div>
+
+
+        <button id="getShareLink" type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#shareToken">
+                Generate Shareable Link
+        </button>
+
+        <div class="modal fade" id="shareToken" tabindex="-1" role="dialog" aria-labelledby="shareTokenTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Generated Link</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="token" type="text" class="form-control"></input>
+            </div>
+            
+            <div class="modal-footer">
+                <div class="alert alert-success" role="alert" >
+                    Copied to the clipboard!
+                </div>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </form>
+{% endblock %}
