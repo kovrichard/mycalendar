@@ -41,4 +41,4 @@ class UserAccessTest(unittest.TestCase):
         token = self.user_access.generate(USER_ID, self.validity_period, False)
         decoded_token = self.user_access.decode(token)
 
-        AssertThat(decoded_token["share_all"]).IsFalse()
+        AssertThat(decoded_token["share_content"]).IsFalse()

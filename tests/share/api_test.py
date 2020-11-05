@@ -43,7 +43,7 @@ class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "/share/get-link",
             query_string={
                 "expiration": "2020-11-12",
-                "share-content": True,
+                "share_content": True,
             },
         )
 

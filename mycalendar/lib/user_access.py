@@ -7,11 +7,13 @@ class UserAccess:
     def __init__(self, secret):
         self.secret = secret
 
-    def generate(self, user_id, validity_period: timedelta, share_all=False):
+    def generate(
+        self, user_id, validity_period: timedelta, share_content=False
+    ):
         return jwt.encode(
             {
                 "user_id": user_id,
-                "share_all": share_all,
+                "share_content": share_content,
                 "iat": datetime.utcnow(),
                 "exp": datetime.utcnow() + validity_period,
             },

@@ -21,9 +21,9 @@ def share():
 def get_share_link():
     user_id = current_user.id
     expiration = datetime.strptime(request.args.get("expiration"), "%Y-%m-%d")
-    share_all = request.args.get("share-content")
+    share_content = request.args.get("share-content")
     now = datetime.now().isocalendar()
 
     return {
-        "token": f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{UserAccess(current_app.config['SHARING_TOKEN_SECRET']).generate(user_id, expiration - datetime.now(), share_all)}"
+        "token": f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{UserAccess(current_app.config['SHARING_TOKEN_SECRET']).generate(user_id, expiration - datetime.now(), share_content)}"
     }
