@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, abort, current_app, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
@@ -8,6 +8,7 @@ from mycalendar.lib.datetime_calculator import (
     calculate_days_of_week,
     calculate_different_year,
 )
+from mycalendar.lib.user_access import UserAccess
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
@@ -113,9 +114,30 @@ def __refactor(events):
         item["title"] = e.title
         item["location"] = e.location
         item["day"] = e.start.date().isocalendar()[2] - 1
-        item["hour"] = e.start.time().hour
+        item["hour"] = [
+            h for h in range(e.start.time().hour, e.end.time().hour)
+        ]
         item["type"] = "active-event"
 
         tmp.append(item)
 
     return tmp
+
+
+@week_bp.route(
+    "/<int:year>/<int:week>/shared-calendar/<string:token>",
+    methods=["GET", "POST"],
+)
+def shared_calendar(year, week, token):
+    decoded_token = UserAccess(
+        current_app.config["SHARING_TOKEN_SECRET"]
+    ).decode(token)
+
+    if not decoded_token:
+        abort(401)
+
+    return {
+        "user_id": decoded_token["user_id"],
+        "expiration": decoded_token["exp"],
+        "share_content": decoded_token["share_content"],
+    }, 200

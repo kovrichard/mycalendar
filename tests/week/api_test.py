@@ -169,3 +169,8 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         template, context = self.rendered_templates[0]
 
         AssertThat(r.data).Contains(TEST_EVENT["title"].encode())
+
+    def test_shared_calendar_denies_access_with_wrong_token(self):
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/<wrong-token>")
+
+        AssertThat(r.status_code).IsEqualTo(401)
