@@ -141,8 +141,17 @@ def shared_calendar(year, week, token):
     if not decoded_token:
         abort(401)
 
-    return {
-        "user_id": decoded_token["user_id"],
-        "expiration": decoded_token["exp"],
-        "share_content": decoded_token["share_content"],
-    }, 200
+    year, week = calculate_different_year(year, week)
+
+    if request.method == "GET":
+        return __handle_shared_get(year, week)
+    else:
+        return __handle_shared_post(year, week)
+
+
+def __handle_shared_get(year, week):
+    return "OK", 200
+
+
+def __handle_shared_post(year, week):
+    return "OK", 200
