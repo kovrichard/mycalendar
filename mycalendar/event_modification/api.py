@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
@@ -29,8 +29,6 @@ def event_mod():
     if int(hour) == 23:
         end_date += timedelta(days=1)
     end_date = end_date.strftime("%Y-%m-%d")
-
-    current_app.logger.info(end_date)
 
     event = Event.query.filter_by(
         start=f"{start_date} {start_time}",
