@@ -9,19 +9,11 @@
     <div class="container">
         <div class="row justify-content-center">
             {% with week_number=week_number-1, text="<" %}
-                {%if shared_calendar %}
-                    {% include 'shared-week-button.html' %}
-                {% else %}
-                    {% include 'week-button.html' %}
-                {% endif %}
+                {% include 'shared-week-button.html' if shared_calendar else 'week-button.html' %}
             {% endwith %}
             <h2 class="col-auto">Week - {{ week_number }}, {{ year_number }}</h2>
             {% with week_number=week_number+1, text=">" %}
-                {%if shared_calendar %}
-                    {% include 'shared-week-button.html' %}
-                {% else %}
-                    {% include 'week-button.html' %}
-                {% endif %}
+                {% include 'shared-week-button.html' if shared_calendar else 'week-button.html' %}
             {% endwith %}
         </div>
     </div>
