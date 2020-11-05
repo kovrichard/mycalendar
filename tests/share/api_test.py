@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from flask import current_app
 from truth.truth import AssertThat
@@ -46,8 +47,11 @@ class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             },
         )
 
+        now = datetime.now().isocalendar()
+
         token = re.search(
-            f"{current_app.config['CALENDAR_URL']}/(.*)", r.json["token"]
+            f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/(.*)",
+            r.json["token"],
         ).group(1)
         decoded_token = UserAccess(
             current_app.config["SHARING_TOKEN_SECRET"]
