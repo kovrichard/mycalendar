@@ -2,7 +2,7 @@
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import Query, sessionmaker
 
-# from mycalendar.server.config import DB_URL
+# from mycalendar.server.config import DATABASE_URL
 
 # Base = declarative_base()
 
@@ -17,7 +17,7 @@ class GetOrQuery(BaseQuery):
 db = SQLAlchemy(query_class=GetOrQuery)
 
 
-# engine = create_engine(DB_URL)
+# engine = create_engine(DATABASE_URL)
 # Session = sessionmaker()
 # Session.configure(bind=engine, query_cls=GetOrQuery)
 # session = Session()

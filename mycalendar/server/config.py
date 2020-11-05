@@ -1,6 +1,6 @@
 import os
 
-DB_URL = os.environ.get("DB_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 

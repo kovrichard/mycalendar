@@ -31,7 +31,7 @@ def create_app(config=None):
 
 def __init_db(app):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_DATABASE_URI"] = app.config["DB_URL"]
+    app.config["SQLALCHEMY_DATABASE_URI"] = app.config["DATABASE_URL"]
 
     from mycalendar.db_models import init_db
 

@@ -9,8 +9,9 @@ on:
     branches: [ master ]
 
 env:
+  FLASK_ENV: production
   DB_HOST: localhost
-  DB_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
+  DATABASE_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
   SECRET_KEY: thirty-two-byte-or-more-long-secret-key
   CALENDAR_URL: localhost
   SHARING_TOKEN_SECRET: dev-sharing-token-secret

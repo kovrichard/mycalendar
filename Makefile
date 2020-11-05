@@ -10,9 +10,9 @@ compose_config=-f docker-compose.yml
 
 # \
 !ifndef 0 # \
-test_env="DB_URL=$$TEST_DB_URL" # \
+test_env="DATABASE_URL=$$TEST_DATABASE_URL" # \
 !else
-test_env=DB_URL=\$$TEST_DB_URL
+test_env=DATABASE_URL=\$$TEST_DATABASE_URL
 # \
 !endif
 
