@@ -20,12 +20,14 @@ class DateTimeCalculatorTest(unittest.TestCase):
 
         for i in range(1, 8):
             AssertThat(days_of_week[i - 1]["date"]).IsEqualTo(
-                datetime.fromisocalendar(now[0], now[1], i).date()
+                datetime.fromisocalendar(now[0], now[1], i)
+                .date()
+                .strftime("(%b. %-d)")
             )
             AssertThat(days_of_week[i - 1]["name"]).IsEqualTo(
                 datetime.fromisocalendar(now[0], now[1], i)
                 .date()
-                .strftime("%A")
+                .strftime("%a")
             )
 
     @data(

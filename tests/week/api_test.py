@@ -70,10 +70,12 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         for i in range(1, 8):
             AssertThat(context["days_of_week"][i - 1]["date"]).IsEqualTo(
-                datetime.fromisocalendar(YEAR, WEEK, i).date()
+                datetime.fromisocalendar(YEAR, WEEK, i)
+                .date()
+                .strftime("(%b. %-d)")
             )
             AssertThat(context["days_of_week"][i - 1]["name"]).IsEqualTo(
-                datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%A")
+                datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%a")
             )
 
     @logged_in_user()
@@ -89,10 +91,12 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         for i in range(1, 8):
             AssertThat(context["days_of_week"][i - 1]["date"]).IsEqualTo(
-                datetime.fromisocalendar(YEAR, WEEK, i).date()
+                datetime.fromisocalendar(YEAR, WEEK, i)
+                .date()
+                .strftime("(%b. %-d)")
             )
             AssertThat(context["days_of_week"][i - 1]["name"]).IsEqualTo(
-                datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%A")
+                datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%a")
             )
 
     @logged_in_user()
