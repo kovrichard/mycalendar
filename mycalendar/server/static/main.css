@@ -32,7 +32,7 @@
 .table-fix-head {
     position: sticky;
     top: 3rem;
-    background-color: white;
+    background-color: rgb(76, 190, 72);
 }
 
 .table {
@@ -42,4 +42,41 @@
 
 .active-event {
     background-color: gray;
+}
+
+.navbar{
+    background-color: rgb(5, 138, 0);
+}
+
+.navbar-brand, .navbar-brand:hover{
+    color: black;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.nav-link-left{
+    color:black;
+    font-size: large;
+    vertical-align: sub;
+}
+
+
+.nav-link-left:hover{
+    color:black;
+    text-decoration: none;
+}
+
+
+.nav-link-left:active{
+    color:white;
+    text-decoration: none;
+    
+}
+
+.nav-link, .nav-link:hover{
+    color: black;
+}
+
+.alert{
+    display: none;
 }
