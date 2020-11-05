@@ -5,7 +5,7 @@ description = "Calendar"
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8.3"
+python = "3.8.3"
 flask = "^1.1.2"
 alembic = "^1.4.3"
 psycopg2 = "^2.8.6"
