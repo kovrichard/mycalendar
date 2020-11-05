@@ -6,10 +6,10 @@ def calculate_days_of_week(year, week):
     for i in range(1, 8):
         day_of_week.append(
             {
-                "date": datetime.fromisocalendar(year, week, i).date(),
+                "date": datetime.fromisocalendar(year, week, i).date().strftime("(%b. %-d)"),
                 "name": datetime.fromisocalendar(year, week, i)
                 .date()
-                .strftime("%A"),
+                .strftime("%a"),
             }
         )
 
