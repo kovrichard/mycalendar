@@ -145,17 +145,17 @@ def shared_calendar(year, week, token):
     year, week = calculate_different_year(year, week)
 
     if request.method == "GET":
-        return __handle_shared_get(year, week, decoded_token["user_id"], token)
+        return __handle_shared_get(year, week, decoded_token, token)
     else:
         return __handle_shared_post(year, week)
 
 
-def __handle_shared_get(year, week, shared_user_id, token):
+def __handle_shared_get(year, week, decoded_token, token):
     current_week = __persist_week_to_db(year, week)
     days_of_week = calculate_days_of_week(year, week)
 
     events = Event.query.filter_by(
-        week_id=current_week.id, user_id=shared_user_id
+        week_id=current_week.id, user_id=decoded_token["user_id"]
     ).all()
 
     return render_template(
@@ -165,7 +165,8 @@ def __handle_shared_get(year, week, shared_user_id, token):
         days_of_week=days_of_week,
         events=__refactor(events),
         shared_calendar=True,
-        shared_user=User.query.filter_by(id=shared_user_id).first(),
+        share_content=decoded_token["share_content"],
+        shared_user=User.query.filter_by(id=decoded_token["user_id"]).first(),
         token=token,
     )
 

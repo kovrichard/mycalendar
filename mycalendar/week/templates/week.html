@@ -46,7 +46,8 @@
                                 {% if current_event.update(event) %}{% endif %}
                             {% endfor %}
                             {% if shared_calendar and current_event.type != "" or not shared_calendar %}
-                            <input type="submit" value="{{ current_event.title }}" class="w-100 btn event-btn bh-1 {{ current_event.type }}" name="btn-{{ hour }}-{{ day }}"/>
+                            {% set disabled = "disabled" if shared_calendar and not share_content else "" %}
+                            <input type="submit" value="{{ current_event.title }}" class="w-100 btn event-btn bh-1 {{ current_event.type }}" name="btn-{{ hour }}-{{ day }}" {{ disabled }}/>
                             <input value={{ year_number }} name="year" hidden/>
                             <input value={{ week_number }} name="week" hidden/>
                             <input value={{ hour }} name="hour" hidden/>

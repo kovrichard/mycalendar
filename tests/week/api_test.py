@@ -229,3 +229,35 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         template, context = self.rendered_templates[0]
 
         AssertThat(r.data).DoesNotContain(b"btn-4-5")
+
+    @logged_in_user()
+    def test_shared_calendar_share_content_enables_viewing_events(
+        self, default_user
+    ):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(default_user.id, timedelta(days=1), True)
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+
+        AssertThat(r.data).DoesNotContain(b"disabled")
+
+    @logged_in_user()
+    def test_shared_calendar_not_sharing_content_disables_viewing_events(
+        self, default_user
+    ):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(default_user.id, timedelta(days=1), False)
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+
+        AssertThat(r.data).Contains(b"disabled")
