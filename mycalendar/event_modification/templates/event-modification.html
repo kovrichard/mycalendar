@@ -43,15 +43,15 @@
                 Business hour
             </label>
         </div>
+
+        {% if checked == "checked" %}
+        <div class="form-group row justify-content-center">
+        <input type="text" name="guest-name" class="form-control col-4" id="title" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ guest_name }}">
+        </div>
+        <input value={{ event_id }} name="event-id" hidden/>
+        {% endif %}
+
         {% if shared_calendar %}
-
-            {% if checked == "checked" %}
-            <div class="form-group row justify-content-center">
-            <input id="guest-name" type="text" name="guest-name" class="form-control col-4" id="title" placeholder="Your name here" value="{{ guest_name }}">
-            </div>
-            <input value={{ event_id }} name="event-id" hidden/>
-            {% endif %}
-
         <input type="submit" class="btn btn-primary" name="action" value="OK"/>
         {% else %}
         <input type="submit" class="btn btn-primary" name="action" value="Save"/>

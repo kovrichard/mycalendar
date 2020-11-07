@@ -101,7 +101,10 @@ def register_guest(token):
         abort(401)
 
     event_id = request.form["event-id"]
-    event = Event.query.filter_by(id=event_id).first()
+    guest_name = request.form["guest-name"]
+
+    if event := Event.query.filter_by(id=event_id).first():
+        event.guest_name = guest_name
 
     now = datetime.now().isocalendar()
     return redirect(

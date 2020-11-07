@@ -183,7 +183,7 @@ class EventModificationTest(
         template, context = self.rendered_templates[0]
 
         AssertThat(r.data).Contains(b'checked id="businesshour"')
-        AssertThat(r.data).DoesNotContain(b'placeholder="Your name here"')
+        AssertThat(r.data).Contains(b'placeholder="Guest name here"')
 
     def test_shared_event_view_renders_guest_registration(self):
         user = User(username="user", password="password")
@@ -232,7 +232,8 @@ class EventModificationTest(
         ).generate(user.id, timedelta(days=1))
 
         r = self.client.post(
-            f"/add-event/register-guest/{token}", data={"event-id": 1}
+            f"/add-event/register-guest/{token}",
+            data={"event-id": 1, "guest-name": ""},
         )
 
         now = datetime.now().isocalendar()
@@ -241,3 +242,28 @@ class EventModificationTest(
         AssertThat(r.headers["Location"]).IsEqualTo(
             f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{token}"
         )
+
+    def test_register_guest_saves_guest_to_event(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+
+        event = Event(
+            title="test_title",
+            start="2020-11-07 06:00:00",
+            end="2020-11-07 07:00:00",
+        )
+        db.session.add(event)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        guest_name = "Test Name"
+
+        r = self.client.post(
+            f"/add-event/register-guest/{token}",
+            data={"event-id": event.id, "guest-name": guest_name},
+        )
+
+        AssertThat(event.guest_name).IsEqualTo(guest_name)
