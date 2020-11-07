@@ -11,6 +11,7 @@ from flask import (
 )
 from flask_user import current_user, login_required
 
+from mycalendar.db_models import db
 from mycalendar.db_models.event import Event
 from mycalendar.db_models.user import User
 from mycalendar.lib.datetime_calculator import hour_number_to_24_hours_format
@@ -86,6 +87,9 @@ def __render_view(
         shared_user_name=shared_user_name,
         token=token,
         event_id=event.id if event else "",
+        guest_name=event.guest_name
+        if event and event.guest_name != None
+        else "",
     )
 
 
@@ -105,6 +109,8 @@ def register_guest(token):
 
     if event := Event.query.filter_by(id=event_id).first():
         event.guest_name = guest_name
+        db.session.add(event)
+        db.session.commit()
 
     now = datetime.now().isocalendar()
     return redirect(

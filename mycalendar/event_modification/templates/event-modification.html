@@ -8,8 +8,8 @@
     <h1>Create new event</h1>
     {% endif %}
     
-    {% set shared = "readonly" if shared_calendar else"" %}
-    {% set shared_checkbox = "return false;" if shared_calendar else"" %}
+    {% set shared = "readonly" if shared_calendar else "" %}
+    {% set shared_checkbox = "return false;" if shared_calendar else "" %}
 
     {% if shared_calendar %}
     <form method="post" action="{{ url_for('event_modification.register_guest', token = token, event_id = event_id) }}">
@@ -38,7 +38,7 @@
 
         {% set checked = "checked" if event_type == 1 else "" %}
         <div class="form-check m-2">
-            <input class="form-check-input" type="checkbox" onclick="{{ shared_checkbox}}" name="business_hour" {{ checked }} id="businesshour" {{ shared }}>
+            <input class="form-check-input" type="checkbox" onclick="{{ shared_checkbox }}" name="business_hour" {{ checked }} id="businesshour" {{ shared }}>
             <label class="form-check-label" for="businesshour">
                 Business hour
             </label>
@@ -46,7 +46,7 @@
 
         {% if checked == "checked" %}
         <div class="form-group row justify-content-center">
-        <input type="text" name="guest-name" class="form-control col-4" id="title" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ guest_name }}">
+            <input type="text" name="guest-name" class="form-control col-4" id="title" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ guest_name }}">
         </div>
         <input value={{ event_id }} name="event-id" hidden/>
         {% endif %}
