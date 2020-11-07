@@ -32,10 +32,10 @@ def shared_event_view(token):
         User.query.filter_by(id=decoded_token["user_id"]).first().username
     )
 
-    return __render_view(decoded_token["user_id"], True, user_name)
+    return __render_view(decoded_token["user_id"], True, user_name, token=token)
 
 
-def __render_view(user_id, shared_calendar=False, shared_user_name=""):
+def __render_view(user_id, shared_calendar=False, shared_user_name="", token=""):
     year = request.form["year"]
     week = request.form["week"]
     hour = request.form["hour"]
@@ -72,4 +72,5 @@ def __render_view(user_id, shared_calendar=False, shared_user_name=""):
         event_type=event.event_type if event else "",
         shared_calendar=shared_calendar,
         shared_user_name=shared_user_name,
+        token=token,
     )
