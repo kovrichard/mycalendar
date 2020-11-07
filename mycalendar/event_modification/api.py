@@ -24,6 +24,10 @@ def shared_event_view(token):
     decoded_token = UserAccess(
         current_app.config["SHARING_TOKEN_SECRET"]
     ).decode(token)
+
+    if not decoded_token:
+        abort(401)
+
     user_name = (
         User.query.filter_by(id=decoded_token["user_id"]).first().username
     )

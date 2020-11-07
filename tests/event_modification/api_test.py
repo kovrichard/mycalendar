@@ -122,6 +122,11 @@ class EventModificationTest(
         template, context = self.rendered_templates[0]
 
         AssertThat(context["title"]).IsEqualTo("")
+    
+    def test_shared_event_view_denies_access_with_wrong_token(self):
+        r = self.client.post("/add-event/<wrong_token>")
+
+        AssertThat(r.status_code).IsEqualTo(401)
 
     def test_shared_event_view_renders_template(self):
         user = User(username="user", password="password")
