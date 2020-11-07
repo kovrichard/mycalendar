@@ -172,6 +172,14 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         AssertThat(r.data).Contains(TEST_EVENT["title"].encode())
 
+    @logged_in_user()
+    def test_get_week_event_creation_is_enabled(self, default_user):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.data).Contains(b"btn-4-5")
+
     def test_shared_calendar_denies_access_with_wrong_token(self):
         r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/<wrong-token>")
 
@@ -193,3 +201,31 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(template.name).IsEqualTo("week.html")
         AssertThat(context["shared_calendar"]).IsTrue()
         AssertThat(context["shared_user"].id).IsEqualTo(user.id)
+
+    @logged_in_user()
+    def test_shared_calendar_shows_created_events(self, default_user):
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+
+        template, context = self.rendered_templates[0]
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(default_user.id, timedelta(days=1))
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+
+        AssertThat(r.data).Contains(TEST_EVENT["title"].encode())
+
+    def test_shared_calendar_event_creation_is_disabled(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.data).DoesNotContain(b"btn-4-5")
