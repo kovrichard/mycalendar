@@ -1,8 +1,8 @@
+from datetime import datetime
+
 from truth.truth import AssertThat
 
 from tests import AppTestCase, TemplateRenderMixin, TestClientMixin
-
-from datetime import datetime
 
 
 class MainTest(TestClientMixin, TemplateRenderMixin, AppTestCase):
@@ -12,4 +12,6 @@ class MainTest(TestClientMixin, TemplateRenderMixin, AppTestCase):
         now = datetime.now().isocalendar()
 
         AssertThat(r.status_code).IsEqualTo(302)
-        AssertThat(r.headers["Location"]).Contains(f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}")
+        AssertThat(r.headers["Location"]).Contains(
+            f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}"
+        )
