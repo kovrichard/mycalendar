@@ -13,7 +13,7 @@ env:
   DB_HOST: localhost
   DATABASE_URL: postgres://test_db_user:test_db_pw@localhost:5432/calendar_test_db
   SECRET_KEY: thirty-two-byte-or-more-long-secret-key
-  CALENDAR_URL: localhost
+  CALENDAR_URL: https://szoftarch-calendar.herokuapp.com
   SHARING_TOKEN_SECRET: dev-sharing-token-secret
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
