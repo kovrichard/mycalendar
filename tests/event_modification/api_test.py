@@ -122,7 +122,7 @@ class EventModificationTest(
         template, context = self.rendered_templates[0]
 
         AssertThat(context["title"]).IsEqualTo("")
-    
+
     def test_shared_event_view_denies_access_with_wrong_token(self):
         r = self.client.post("/add-event/<wrong_token>")
 
@@ -221,4 +221,23 @@ class EventModificationTest(
         r = self.client.post("/add-event/register-guest/<wrong_token>")
 
         AssertThat(r.status_code).IsEqualTo(401)
-    
+
+    def test_register_guest_redirects_to_week_view(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        r = self.client.post(
+            f"/add-event/register-guest/{token}", data={"event-id": 1}
+        )
+
+        now = datetime.now().isocalendar()
+
+        AssertThat(r.status_code).IsEqualTo(302)
+        AssertThat(r.headers["Location"]).IsEqualTo(
+            f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{token}"
+        )

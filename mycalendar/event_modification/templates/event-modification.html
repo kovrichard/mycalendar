@@ -12,7 +12,7 @@
     {% set shared_checkbox = "return false;" if shared_calendar else"" %}
 
     {% if shared_calendar %}
-    <form method="post" action="{{ url_for('week.get_week', year=year_number, week = week_num) }}">
+    <form method="post" action="{{ url_for('event_modification.register_guest', token = token, event_id = event_id) }}">
     {% else %}
     <form method="post" action="{{ url_for('week.get_week', year=year_number, week = week_num) }}">
     {% endif %}
@@ -47,8 +47,9 @@
 
             {% if checked == "checked" %}
             <div class="form-group row justify-content-center">
-            <input id="guest-name" type="text" name="guest-name" class="form-control col-4" id="title" placeholder="Your name here" value="{{ guest_name }}" required>
+            <input id="guest-name" type="text" name="guest-name" class="form-control col-4" id="title" placeholder="Your name here" value="{{ guest_name }}">
             </div>
+            <input value={{ event_id }} name="event-id" hidden/>
             {% endif %}
 
         <input type="submit" class="btn btn-primary" name="action" value="OK"/>

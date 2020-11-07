@@ -1,6 +1,14 @@
 from datetime import datetime, timedelta
 
-from flask import Blueprint, current_app, render_template, request, abort, redirect, url_for
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
@@ -32,10 +40,14 @@ def shared_event_view(token):
         User.query.filter_by(id=decoded_token["user_id"]).first().username
     )
 
-    return __render_view(decoded_token["user_id"], True, user_name, token=token)
+    return __render_view(
+        decoded_token["user_id"], True, user_name, token=token
+    )
 
 
-def __render_view(user_id, shared_calendar=False, shared_user_name="", token=""):
+def __render_view(
+    user_id, shared_calendar=False, shared_user_name="", token=""
+):
     year = request.form["year"]
     week = request.form["week"]
     hour = request.form["hour"]
@@ -76,7 +88,10 @@ def __render_view(user_id, shared_calendar=False, shared_user_name="", token="")
         event_id=event.id if event else "",
     )
 
-@event_mod_bp.route("/register-guest/<string:token>", strict_slashes=False, methods=["POST"])
+
+@event_mod_bp.route(
+    "/register-guest/<string:token>", strict_slashes=False, methods=["POST"]
+)
 def register_guest(token):
     decoded_token = UserAccess(
         current_app.config["SHARING_TOKEN_SECRET"]
@@ -84,3 +99,12 @@ def register_guest(token):
 
     if not decoded_token:
         abort(401)
+
+    event_id = request.form["event-id"]
+    event = Event.query.filter_by(id=event_id).first()
+
+    now = datetime.now().isocalendar()
+    return redirect(
+        url_for("week.shared_calendar", year=now[0], week=now[1], token=token),
+        302,
+    )
