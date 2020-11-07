@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from flask import current_app
 from truth.truth import AssertThat
 
 from mycalendar.db_models import db
@@ -7,6 +8,7 @@ from mycalendar.db_models.event import Event
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
+from mycalendar.lib.user_access import UserAccess
 from tests import (
     AppTestCase,
     DbMixin,
@@ -104,3 +106,24 @@ class EventModificationTest(
         template, context = self.rendered_templates[0]
 
         AssertThat(context["title"]).IsEqualTo("")
+
+    def test_shared_event_view_renders_template(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        r = self.client.post(
+            f"/add-event/{token}",
+            data={"year": "2020", "week": "1", "hour": "1", "day": "1"},
+        )
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(context["shared_calendar"]).IsTrue()
+        AssertThat(context["shared_user_name"]).IsEqualTo(user.username)

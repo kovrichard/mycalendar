@@ -2,7 +2,11 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
+    {% if shared_calendar %}
+    <h1>{{ shared_user_name }}'s event</h1>
+    {% else %}
     <h1>Create new event</h1>
+    {% endif %}
     
     <form method="post" action="{{ url_for('week.get_week', year=year_number, week = week_num) }}">    
         <div class="form-group row justify-content-center">
@@ -26,7 +30,7 @@
         </div>
 
         <div class="form-check m-2">
-            {% set checked = "checked" if event_type == 1 else ""%}
+            {% set checked = "checked" if event_type == 1 else "" %}
             <input class="form-check-input" type="checkbox" name="business_hour" id="businesshour" {{ checked }}>
             <label class="form-check-label" for="businesshour">
                 Business hour
