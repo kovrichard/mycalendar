@@ -71,6 +71,7 @@ class EventModificationTest(
                 start="2020-10-19 00:00:00",
                 end="2020-10-19 01:00:00",
                 user_id=user.id,
+                guest_name="<guest>",
             )
 
             db.session.add(event)
@@ -92,6 +93,7 @@ class EventModificationTest(
             AssertThat(context["start_time"]).IsEqualTo(event.start.time())
             AssertThat(context["end_date"]).IsEqualTo(event.end.date())
             AssertThat(context["end_time"]).IsEqualTo(event.end.time())
+            AssertThat(context["guest_name"]).IsEqualTo(event.guest_name)
 
     @logged_in_user()
     def test_event_modification_does_not_render_events_of_other_users(

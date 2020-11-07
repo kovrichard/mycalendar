@@ -95,6 +95,7 @@ def __modify_event(event, event_type):
     event.description = request.form["description"]
     event.location = request.form["location"]
     event.event_type = event_type
+    event.guest_name = request.form["guest-name"] if event_type == 1 else ""
 
 
 def __insert_new_event(current_week, event_type):

@@ -46,7 +46,7 @@
 
         {% if checked == "checked" %}
         <div class="form-group row justify-content-center">
-            <input type="text" name="guest-name" class="form-control col-4" id="title" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ guest_name }}">
+            <input type="text" name="guest-name" class="form-control col-4" id="title" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ guest_name }}" {{ "readonly" if guest_name and shared_calendar else ""}}>
         </div>
         <input value={{ event_id }} name="event-id" hidden/>
         {% endif %}

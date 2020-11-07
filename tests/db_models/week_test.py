@@ -37,3 +37,4 @@ class WeekTest(DbMixin, AppTestCase):
         AssertThat(queried_week_event.location).IsEqualTo(event.location)
         AssertThat(queried_week_event.start).IsEqualTo(event.start)
         AssertThat(queried_week_event.end).IsEqualTo(event.end)
+        AssertThat(queried_week_event.guest_name).IsEqualTo(event.guest_name)
