@@ -8,6 +8,7 @@ from mycalendar.db_models.event import Event
 from mycalendar.db_models.role import Role
 from mycalendar.db_models.user import User
 from mycalendar.db_models.user_roles import UserRoles
+from mycalendar.db_models.week import Week
 from mycalendar.lib.user_access import UserAccess
 from tests import (
     AppTestCase,
@@ -24,6 +25,7 @@ class EventModificationTest(
     def setUp(self):
         super().setUp()
         Event.query.delete()
+        Week.query.delete()
         UserRoles.query.delete()
         User.query.delete()
         Role.query.delete()
@@ -44,6 +46,20 @@ class EventModificationTest(
         )
         AssertThat(context["start_time"]).IsEqualTo("01:00")
         AssertThat(context["end_time"]).IsEqualTo("02:00")
+        AssertThat(r.data).DoesNotContain(b'placeholder="Title" readonly')
+        AssertThat(r.data).DoesNotContain(
+            b'placeholder="Description" readonly'
+        )
+        AssertThat(r.data).DoesNotContain(b'placeholder="Location" readonly')
+        AssertThat(r.data).DoesNotContain(b'id="start_date" readonly')
+        AssertThat(r.data).DoesNotContain(b'id="start_time" readonly')
+        AssertThat(r.data).DoesNotContain(b'id="end_date" readonly')
+        AssertThat(r.data).DoesNotContain(b'id="end_time" readonly')
+        AssertThat(r.data).DoesNotContain(
+            b'onclick="return false;" name="business_hour"'
+        )
+        AssertThat(r.data).Contains(b'value="Save"')
+        AssertThat(r.data).Contains(b'value="Delete"')
 
     def test_event_mod_loads_already_defined_event(self):
         with self.logged_in_user() as user:
@@ -127,3 +143,71 @@ class EventModificationTest(
         AssertThat(template.name).IsEqualTo("event-modification.html")
         AssertThat(context["shared_calendar"]).IsTrue()
         AssertThat(context["shared_user_name"]).IsEqualTo(user.username)
+        AssertThat(r.data).Contains(b'placeholder="Title" readonly')
+        AssertThat(r.data).Contains(b'placeholder="Description" readonly')
+        AssertThat(r.data).Contains(b'placeholder="Location" readonly')
+        AssertThat(r.data).Contains(b'id="start_date" readonly')
+        AssertThat(r.data).Contains(b'id="start_time" readonly')
+        AssertThat(r.data).Contains(b'id="end_date" readonly')
+        AssertThat(r.data).Contains(b'id="end_time" readonly')
+        AssertThat(r.data).Contains(
+            b'onclick="return false;" name="business_hour"'
+        )
+        AssertThat(r.data).Contains(b'value="OK"')
+
+    @logged_in_user()
+    def test_event_mod_does_not_render_guest_registration(self, default_user):
+        week = Week(year=2020, week_num=2)
+        db.session.add(week)
+        event = Event(
+            event_type=1,
+            title="test_event",
+            start="2020-01-06 00:00:00",
+            end="2020-01-06 01:00:00",
+            week_id=week.id,
+            user_id=default_user.id,
+        )
+        db.session.add(event)
+        db.session.commit()
+
+        r = self.client.post(
+            "/add-event",
+            data={"year": "2020", "week": "2", "hour": "0", "day": "0"},
+        )
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.data).Contains(b'checked id="businesshour"')
+        AssertThat(r.data).DoesNotContain(b'placeholder="Your name here"')
+
+    def test_shared_event_view_renders_guest_registration(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        week = Week(year=2020, week_num=2)
+        db.session.add(week)
+        event = Event(
+            event_type=1,
+            title="test_event",
+            start="2020-01-06 00:00:00",
+            end="2020-01-06 01:00:00",
+            week_id=week.id,
+            user_id=user.id,
+        )
+        db.session.add(event)
+        db.session.commit()
+
+        r = self.client.post(
+            f"/add-event/{token}",
+            data={"year": "2020", "week": "2", "hour": "0", "day": "0"},
+        )
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.data).Contains(b'checked id="businesshour" readonly')
+        AssertThat(r.data).Contains(b'placeholder="Your name here"')
