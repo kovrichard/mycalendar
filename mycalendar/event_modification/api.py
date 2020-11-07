@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, current_app, render_template, request, abort, redirect, url_for
 from flask_user import current_user, login_required
 
 from mycalendar.db_models.event import Event
@@ -73,4 +73,14 @@ def __render_view(user_id, shared_calendar=False, shared_user_name="", token="")
         shared_calendar=shared_calendar,
         shared_user_name=shared_user_name,
         token=token,
+        event_id=event.id if event else "",
     )
+
+@event_mod_bp.route("/register-guest/<string:token>", strict_slashes=False, methods=["POST"])
+def register_guest(token):
+    decoded_token = UserAccess(
+        current_app.config["SHARING_TOKEN_SECRET"]
+    ).decode(token)
+
+    if not decoded_token:
+        abort(401)

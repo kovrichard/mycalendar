@@ -216,3 +216,9 @@ class EventModificationTest(
 
         AssertThat(r.data).Contains(b'checked id="businesshour" readonly')
         AssertThat(r.data).Contains(b'placeholder="Your name here"')
+
+    def test_register_guest_denies_access_with_wrong_token(self):
+        r = self.client.post("/add-event/register-guest/<wrong_token>")
+
+        AssertThat(r.status_code).IsEqualTo(401)
+    
