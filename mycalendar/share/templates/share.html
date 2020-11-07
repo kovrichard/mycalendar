@@ -6,7 +6,7 @@
     
     <form method="post">
         <div class="form-group row justify-content-center pt-5">
-            <label for="expiration" class="col-1">Expiration time</label>
+            <label for="expiration" class="expiration_time col-2">Expiration time:</label>
             <input type="date" name="expiration" class="form-control col-2 mr-2" id="expiration" value={{ expiration }} required>
         </div>
         <div class="custom-control custom-switch pt-3">
@@ -16,8 +16,8 @@
             </label>
         </div>
 
-
-        <button id="getShareLink" type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#shareToken">
+        <div class="mt-2"><big><big><big><big>&dArr;</big></big></big></big></div>
+        <button id="getShareLink" type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#shareToken">
                 Generate Shareable Link
         </button>
 
@@ -38,7 +38,7 @@
                         <div class="alert alert-success" role="alert">
                             Copied to the clipboard!
                         </div>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        <button id="OK_button" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>

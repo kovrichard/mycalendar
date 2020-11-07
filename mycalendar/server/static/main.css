@@ -26,7 +26,14 @@
 }
 
 .week-btn {
-    background-color: gray;
+    background-color:  rgb(76, 190, 72);
+    border-color: lightgray;
+    color: black;
+    font-weight: bold;
+}
+
+.week-btn:focus{
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
 
 .table-fix-head {
@@ -49,38 +56,112 @@
 }
 
 .navbar-brand, .navbar-brand:hover{
-    color: black;
+    color: white;
     font-size: larger;
     font-weight: bold;
 }
 
 .nav-link-left{
-    color:black;
+    color:white;
     font-size: large;
     vertical-align: sub;
 }
 
 .nav-link-left:hover{
-    color:black;
+    color:white;
     text-decoration: none;
 }
 
 
 .nav-link-left:active{
-    color:white;
+    color:rgba(255, 255, 255, 0.8);
     text-decoration: none;  
 }
 
 .nav-link, .nav-link:hover{
-    color: black;
+    color: white;
     font-weight: bold;
 }
 
 .nav-link:active{
-    color:white;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;  
 }
 
 .alert{
     display: none;
+}
+
+.form-group{
+    align-items: center;
+}
+
+.expiration_time {
+    margin-bottom: 0;
+    color:black;
+    font-size: large;
+    font-weight: bold;
+    align-items: center;
+    padding-left: 0;
+}
+
+.expiration_time:hover{
+    cursor: pointer;
+}
+
+.custom-control-label{
+    align-items: center;
+    font-style: italic;
+}
+
+.custom-control-label:hover{
+    cursor: pointer;
+}
+
+.custom-control-input:hover~.custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(179, 204, 178, 0.5) !important;
+}
+
+
+.custom-control-input:focus~.custom-control-label::before {
+    border-color: silver !important;
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 0.5) !important;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    border-color:rgb(5, 138, 0) !important;
+    background-color: rgb(5, 138, 0) !important;
+}
+
+
+.custom-control-input:not(:disabled):active~.custom-control-label::before {
+    border-color: silver !important;
+    background-color: rgba(179, 204, 178, 0.5) !important;
+    
+}
+
+#getShareLink{
+    background-color: rgb(5, 138, 0) !important;
+    border-color: rgb(5, 138, 0) !important;
+}
+
+#getShareLink:hover{
+    background-color: rgb(4, 109, 0) !important;
+}
+
+#getShareLink:focus{
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+}
+
+#OK_button{
+    background-color: rgb(5, 138, 0) !important;
+    border-color: rgb(5, 138, 0) !important;
+}
+
+#OK_button:hover{
+    background-color: rgb(4, 109, 0) !important;
+}
+
+#OK_button:focus{
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
