@@ -36,11 +36,6 @@ def event_mod():
         user_id=current_user.id,
     ).first()
 
-    if event and event.event_type == 1:
-        event_type = "checked"
-    else:
-        event_type = ""
-
     return render_template(
         "event-modification.html",
         year_number=year,
@@ -52,5 +47,5 @@ def event_mod():
         start_time=event.start.time() if event else start_time,
         end_date=event.end.date() if event else end_date,
         end_time=event.end.time() if event else end_time,
-        event_type=event_type,
+        event_type=event.event_type if event else "",
     )

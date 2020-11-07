@@ -66,9 +66,7 @@ class EventModificationTest(
             AssertThat(r.status_code).IsEqualTo(200)
             template, context = self.rendered_templates[0]
 
-            AssertThat(context["event_type"]).IsEqualTo(
-                "checked" if event.event_type == 1 else ""
-            )
+            AssertThat(context["event_type"]).IsEqualTo(event.event_type)
             AssertThat(context["title"]).IsEqualTo(event.title)
             AssertThat(context["description"]).IsEqualTo(event.description)
             AssertThat(context["location"]).IsEqualTo(event.location)
