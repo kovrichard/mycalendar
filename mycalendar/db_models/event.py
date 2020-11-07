@@ -16,11 +16,12 @@ class Event(db.Model):
     location = db.Column(db.String(255))
     start = db.Column(db.DateTime, nullable=False)
     end = db.Column(db.DateTime, nullable=False)
+    guest_name = db.Column(db.String(255))
     week_id = db.Column(db.Integer, db.ForeignKey("weeks.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def __repr__(self):
-        return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', week_id='%d', user_id='%d')>" % (
+        return "<Event(id=%d', event_type='%d', title='%s', description='%s', location='%s', start='%s', end='%s', guest_name='%s', week_id='%d', user_id='%d')>" % (
             self.id,
             self.event_type,
             self.title,
@@ -28,6 +29,7 @@ class Event(db.Model):
             self.location,
             self.start,
             self.end,
+            self.guest_name,
             self.week_id or -1,
             self.user_id or -1,
         )
