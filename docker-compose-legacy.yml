@@ -1,6 +1,8 @@
 version: '3'
 services:
   mycalendar:
+    environment:
+      CALENDAR_URL: http://192.168.99.101
     volumes:
       - /mycalendar/:/usr/src/app/
 
