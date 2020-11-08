@@ -21,3 +21,21 @@ $("#token").focus(function() {
     document.execCommand("copy");
     $('.alert').fadeIn(500).delay(2000).fadeOut(500)
 });
+
+if ($("#businesshour").length) {
+    $("#businesshour").ready(function() {
+        if ($("#businesshour")[0].checked) {
+            $('#guestname').show();
+        } else {
+            $('#guestname').hide();
+        }
+    })
+}
+
+$("#businesshour").change(function() {
+    if (this.checked) {
+        $('#guestname').show();
+    } else {
+        $('#guestname').hide();
+    }
+});

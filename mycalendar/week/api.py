@@ -106,6 +106,7 @@ def __insert_new_event(current_week, event_type):
         start=f"{request.form['start_date']} {request.form['start_time']}",
         end=f"{request.form['end_date']} {request.form['end_time']}",
         event_type=event_type,
+        guest_name=request.form["guest-name"] if event_type == 1 else "",
     )
     db.session.add(event)
 

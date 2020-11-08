@@ -13,5 +13,5 @@ class MainTest(TestClientMixin, TemplateRenderMixin, AppTestCase):
 
         AssertThat(r.status_code).IsEqualTo(302)
         AssertThat(r.headers["Location"]).Contains(
-            f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}"
+            f"http://localhost/{now[0]}/{now[1]}"
         )

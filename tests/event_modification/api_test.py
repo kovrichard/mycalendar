@@ -242,7 +242,7 @@ class EventModificationTest(
 
         AssertThat(r.status_code).IsEqualTo(302)
         AssertThat(r.headers["Location"]).IsEqualTo(
-            f"{self.app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{token}"
+            f"http://localhost/{now[0]}/{now[1]}/shared-calendar/{token}"
         )
 
     def test_register_guest_saves_guest_to_event(self):

@@ -31,6 +31,7 @@ TEST_EVENT = {
     "end_time": "01:00",
     "business_hour": 1,
     "action": "Save",
+    "guest-name": "",
 }
 
 TEST_DELETE_EVENT = {
