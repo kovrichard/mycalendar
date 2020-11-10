@@ -85,15 +85,17 @@ class EventModificationTest(
             AssertThat(r.status_code).IsEqualTo(200)
             template, context = self.rendered_templates[0]
 
-            AssertThat(context["event_type"]).IsEqualTo(event.event_type)
-            AssertThat(context["title"]).IsEqualTo(event.title)
-            AssertThat(context["description"]).IsEqualTo(event.description)
-            AssertThat(context["location"]).IsEqualTo(event.location)
+            AssertThat(context["event"].event_type).IsEqualTo(event.event_type)
+            AssertThat(context["event"].title).IsEqualTo(event.title)
+            AssertThat(context["event"].description).IsEqualTo(
+                event.description
+            )
+            AssertThat(context["event"].location).IsEqualTo(event.location)
             AssertThat(context["start_date"]).IsEqualTo(event.start.date())
             AssertThat(context["start_time"]).IsEqualTo(event.start.time())
             AssertThat(context["end_date"]).IsEqualTo(event.end.date())
             AssertThat(context["end_time"]).IsEqualTo(event.end.time())
-            AssertThat(context["guest_name"]).IsEqualTo(event.guest_name)
+            AssertThat(context["event"].guest_name).IsEqualTo(event.guest_name)
 
     @logged_in_user()
     def test_event_modification_does_not_render_events_of_other_users(
@@ -123,7 +125,7 @@ class EventModificationTest(
         AssertThat(r.status_code).IsEqualTo(200)
         template, context = self.rendered_templates[0]
 
-        AssertThat(context["title"]).IsEqualTo("")
+        AssertThat(context["event"]).IsEqualTo(None)
 
     def test_shared_event_view_denies_access_with_wrong_token(self):
         r = self.client.post("/add-event/<wrong_token>")

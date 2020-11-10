@@ -75,21 +75,14 @@ def __render_view(
         "event-modification.html",
         year_number=year,
         week_num=week,
-        title=event.title if event else "",
-        description=event.description if event else "",
-        location=event.location if event else "",
+        event=event,
         start_date=event.start.date() if event else start_date,
         start_time=event.start.time() if event else start_time,
         end_date=event.end.date() if event else end_date,
         end_time=event.end.time() if event else end_time,
-        event_type=event.event_type if event else "",
         shared_calendar=shared_calendar,
         shared_user_name=shared_user_name,
         token=token,
-        event_id=event.id if event else "",
-        guest_name=event.guest_name
-        if event and event.guest_name != None
-        else "",
     )
 
 
