@@ -123,7 +123,11 @@ def __refactor(events):
         item["location"] = e.location
         item["day"] = e.start.date().isocalendar()[2] - 1
         item["hour"] = [
-            h for h in range(e.start.time().hour, e.end.time().hour)
+            h
+            for h in range(
+                e.start.time().hour,
+                24 if e.end.time().hour == 0 else e.end.time().hour,
+            )
         ]
         item["type"] = "active-event"
 

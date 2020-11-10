@@ -51,9 +51,9 @@ class EventModificationTest(
             b'placeholder="Description" readonly'
         )
         AssertThat(r.data).DoesNotContain(b'placeholder="Location" readonly')
-        AssertThat(r.data).DoesNotContain(b'id="start_date" readonly')
+        AssertThat(r.data).Contains(b'id="start_date" readonly')
         AssertThat(r.data).DoesNotContain(b'id="start_time" readonly')
-        AssertThat(r.data).DoesNotContain(b'id="end_date" readonly')
+        AssertThat(r.data).Contains(b'id="end_date" readonly')
         AssertThat(r.data).DoesNotContain(b'id="end_time" readonly')
         AssertThat(r.data).DoesNotContain(
             b'onclick="return false;" name="business_hour"'
