@@ -54,9 +54,9 @@ def __render_view(
     day = int(request.form["day"])
     hour = int(request.form["hour"])
 
-    start_date = datetime.fromisocalendar(
-        year, week, int(day) + 1
-    ).strftime("%Y-%m-%d")
+    start_date = datetime.fromisocalendar(year, week, int(day) + 1).strftime(
+        "%Y-%m-%d"
+    )
     end_date = datetime.fromisocalendar(year, week, day + 1)
     start_time = hour_number_to_24_hours_format(str(hour))
     end_time = hour_number_to_24_hours_format(str(hour + 1))
@@ -65,10 +65,10 @@ def __render_view(
         end_date += timedelta(days=1)
     end_date = end_date.strftime("%Y-%m-%d")
 
-    event = Event.query.filter_by(
-        start=f"{start_date} {start_time}",
-        end=f"{end_date} {end_time}",
-        user_id=user_id,
+    event = Event.query.filter(
+        Event.start <= f"{start_date} {start_time}",
+        Event.end >= f"{end_date} {end_time}",
+        Event.user_id == user_id,
     ).first()
 
     return render_template(
