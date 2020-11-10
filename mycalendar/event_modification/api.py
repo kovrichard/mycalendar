@@ -49,19 +49,19 @@ def shared_event_view(token):
 def __render_view(
     user_id, shared_calendar=False, shared_user_name="", token=""
 ):
-    year = request.form["year"]
-    week = request.form["week"]
-    hour = request.form["hour"]
-    day = request.form["day"]
+    year = int(request.form["year"])
+    week = int(request.form["week"])
+    day = int(request.form["day"])
+    hour = int(request.form["hour"])
 
     start_date = datetime.fromisocalendar(
-        int(year), int(week), int(day) + 1
+        year, week, int(day) + 1
     ).strftime("%Y-%m-%d")
-    end_date = datetime.fromisocalendar(int(year), int(week), int(day) + 1)
-    start_time = hour_number_to_24_hours_format(hour)
-    end_time = hour_number_to_24_hours_format(str(int(hour) + 1))
+    end_date = datetime.fromisocalendar(year, week, day + 1)
+    start_time = hour_number_to_24_hours_format(str(hour))
+    end_time = hour_number_to_24_hours_format(str(hour + 1))
 
-    if int(hour) == 23:
+    if hour == 23:
         end_date += timedelta(days=1)
     end_date = end_date.strftime("%Y-%m-%d")
 

@@ -38,7 +38,7 @@ def handle_get(year, week):
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,
-        events=__refactor(events),
+        events=__format_for_render(events),
     )
 
 
@@ -75,7 +75,7 @@ def handle_post(year, week):
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,
-        events=__refactor(events),
+        events=__format_for_render(events),
     )
 
 
@@ -114,7 +114,7 @@ def __insert_new_event(current_week, event_type):
     current_user.events.append(event)
 
 
-def __refactor(events):
+def __format_for_render(events):
     tmp = []
 
     for e in events:
@@ -169,7 +169,7 @@ def __handle_shared_get(year, week, decoded_token, token):
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,
-        events=__refactor(events),
+        events=__format_for_render(events),
         shared_calendar=True,
         share_content=decoded_token["share_content"],
         shared_user=User.query.filter_by(id=decoded_token["user_id"]).first(),
