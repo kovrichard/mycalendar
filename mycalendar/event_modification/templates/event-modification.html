@@ -3,57 +3,8 @@
 
 {% block content %}
     {% if shared_calendar %}
-    <h1>{{ shared_user_name }}'s event</h1>
+        {% include "shared-event-modification.html" %}
     {% else %}
-    <h1>Create new event</h1>
+        {% include "logged-in-event-modification.html" %}
     {% endif %}
-    
-    {% set shared = "readonly" if shared_calendar else "" %}
-    {% set shared_checkbox = "return false;" if shared_calendar else "" %}
-
-    {% if shared_calendar %}
-    <form method="post" action="{{ url_for('event_modification.register_guest', token = token) }}">
-    {% else %}
-    <form method="post" action="{{ url_for('week.get_week', year=year_number, week = week_num) }}">
-    {% endif %}
-        <div class="form-group row justify-content-center">
-            <input id="event-title" type="text" name="title" class="form-control col-4" id="title" value="{{ event.title }}" required placeholder="Title" {{ shared }}>
-        </div>
-        <div class="form-group row justify-content-center">
-            <input type="text" name="description" class="form-control col-4" id="description" value="{{ event.description }}" placeholder="Description" {{ shared }}>
-        </div>
-        <div class="form-group row justify-content-center">
-            <input type="text" name="location" class="form-control col-4" id="location" value="{{ event.location }}" placeholder="Location" {{ shared }}>
-        </div>
-        <div class="form-group row justify-content-center">
-            <label for="start_date" class="col-1">Start</label>
-            <input type="date" name="start_date" class="form-control col-2 mr-2" value={{ start_date }} required id="start_date" readonly>
-            <input type="time" name="start_time" class="form-control col-2" value={{ start_time }} required id="start_time" {{ shared }}>
-        </div>
-        <div class="form-group row justify-content-center">
-            <label for="end_date" class="col-1">End</label>
-            <input type="date" name="end_date" class="form-control col-2 mr-2" value={{ end_date }} required id="end_date" readonly>
-            <input type="time" name="end_time" class="form-control col-2" value={{ end_time }} required id="end_time" {{ shared }}>
-        </div>
-
-        {% set checked = "checked" if event.event_type == 1 else "" %}
-        <div class="form-check m-2">
-            <input class="form-check-input" type="checkbox" onclick="{{ shared_checkbox }}" name="business_hour" {{ checked }} id="businesshour" {{ shared }}>
-            <label class="form-check-label" for="businesshour">
-                Business hour
-            </label>
-        </div>
-
-        <div class="form-group row justify-content-center">
-            <input type="text" name="guest-name" class="form-control col-4" id="guestname" placeholder="{{ "Your name here" if shared_calendar else "Guest name here" }}" value="{{ event.guest_name }}" {{ "readonly" if event.guest_name and shared_calendar else ""}}>
-        </div>
-        <input value={{ event.id }} name="event-id" hidden/>
-
-        {% if shared_calendar %}
-        <input type="submit" class="btn btn-primary" name="action" value="OK"/>
-        {% else %}
-        <input type="submit" class="btn btn-primary" name="action" value="Save"/>
-        <input type="submit" class="btn btn-primary" name="action" value="Delete" onclick="del()"/>
-        {% endif %}
-    </form>
 {% endblock %}
