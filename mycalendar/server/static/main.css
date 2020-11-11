@@ -2,7 +2,6 @@ body,html{
     overflow: hidden;
     height: 100%;
     width: 100%;
-    
 }
 
 #content-wrap {
@@ -130,7 +129,6 @@ body,html{
     box-shadow: 0 0 0 0.2rem rgba(179, 204, 178, 0.5) !important;
 }
 
-
 .custom-control-input:focus~.custom-control-label::before {
     border-color: silver !important;
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 0.5) !important;
@@ -140,7 +138,6 @@ body,html{
     border-color:rgb(5, 138, 0) !important;
     background-color: rgb(5, 138, 0) !important;
 }
-
 
 .custom-control-input:not(:disabled):active~.custom-control-label::before {
     border-color: silver !important;
@@ -189,7 +186,6 @@ body,html{
     border-width: 0.1rem;
     border-style:solid;
     border-color:gray;
-    
 }
 
 #tableBordered{
