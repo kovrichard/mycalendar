@@ -6,7 +6,7 @@
     <h1>You are viewing {{ shared_user.username }}'s calendar!</h1>
     {% endif %}
 
-    <div class="container">
+    <div id="weekBar" class="container">
         <div class="row justify-content-center">
             {% with week_number=week_number-1, text="<" %}
                 {% include 'shared-week-button.html' if shared_calendar else 'week-button.html' %}

@@ -173,7 +173,18 @@ body,html{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
 
+#weekNumber{
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+
 #scrollBar{
+    overflow-y: scroll; 
+    left: 15%;
+    right: 15%;
+    position:absolute;
+    top: 7.5rem;
+    bottom: 3rem;
     border-width: 0.1rem;
     border-style:solid;
     border-color:gray;
