@@ -2,6 +2,7 @@ body,html{
     overflow: hidden;
     height: 100%;
     width: 100%;
+    
 }
 
 #content-wrap {
@@ -174,8 +175,8 @@ body,html{
 }
 
 #weekNumber{
-    padding-left: 0rem;
-    padding-right: 0rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
 }
 
 #scrollBar{
