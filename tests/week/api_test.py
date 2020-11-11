@@ -22,6 +22,7 @@ YEAR = 2020
 WEEK = 43
 
 TEST_EVENT = {
+    "event-id": -1,
     "title": "test_title",
     "description": "test_description",
     "location": "test_location",
@@ -35,6 +36,7 @@ TEST_EVENT = {
 }
 
 TEST_DELETE_EVENT = {
+    "event-id": -1,
     "title": "test_title",
     "description": "test_description",
     "location": "test_location",

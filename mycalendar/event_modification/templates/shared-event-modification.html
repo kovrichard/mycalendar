@@ -32,7 +32,7 @@
     <div class="form-group row justify-content-center">
         <input type="text" name="guest-name" class="form-control col-4" id="guestname" placeholder="Your name here" value="{{ event.guest_name }}" {{ "readonly" if event.guest_name else ""}}>
     </div>
-    <input value={{ event.id }} name="event-id" hidden/>
+    <input value={{ event.id if event else -1 }} name="event-id" hidden/>
 
     <input type="submit" class="btn btn-primary" name="action" value="OK"/>
 </form>

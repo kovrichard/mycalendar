@@ -46,11 +46,7 @@ def handle_post(year, week):
     event_type = 1 if "business_hour" in request.form else 0
 
     if current_week := Week.query.filter_by(year=year, week_num=week).first():
-        event = Event.query.filter_by(
-            start=f"{request.form['start_date']} {request.form['start_time']}",
-            end=f"{request.form['end_date']} {request.form['end_time']}",
-            user_id=current_user.id,
-        ).first()
+        event = Event.query.filter_by(id=request.form["event-id"]).first()
 
         if request.form["action"] == "Save":
             if event:
@@ -94,6 +90,10 @@ def __modify_event(event, event_type):
     event.title = request.form["title"]
     event.description = request.form["description"]
     event.location = request.form["location"]
+    event.start = (
+        f"{request.form['start_date']} {request.form['start_time']}",
+    )
+    event.end = (f"{request.form['end_date']} {request.form['end_time']}",)
     event.event_type = event_type
     event.guest_name = request.form["guest-name"] if event_type == 1 else ""
 
