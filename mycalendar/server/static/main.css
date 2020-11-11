@@ -1,3 +1,9 @@
+body,html{
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
 #content-wrap {
     padding-top: 4rem;
     min-height: 100vh;
@@ -5,8 +11,8 @@
 }
 
 #footer {
-    height: 2.5rem;
-    margin-top: -3rem;
+    
+    margin-top: -2rem;
 }
 
 .tw-4 {
@@ -26,7 +32,7 @@
 }
 
 .week-btn {
-    background-color:  rgb(76, 190, 72);
+    background-color: rgb(76, 190, 72);
     border-color: lightgray;
     color: black;
     font-weight: bold;
@@ -38,8 +44,9 @@
 
 .table-fix-head {
     position: sticky;
-    top: 3rem;
-    background-color: rgb(76, 190, 72);
+    top: 0rem;
+    background-color:  rgb(76, 190, 72);
+    color: black;
 }
 
 .table {
@@ -164,4 +171,17 @@
 
 #OK_button:focus{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+}
+
+#scrollBar{
+    border-width: 0.1rem;
+    border-style:solid;
+    border-color:gray;
+    
+}
+
+#tableBordered{
+    margin-bottom: 0;
+    margin-top: 0;
+    border: none;
 }
