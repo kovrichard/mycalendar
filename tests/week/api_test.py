@@ -201,7 +201,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(template.name).IsEqualTo("week.html")
         AssertThat(context["shared_calendar"]).IsTrue()
-        AssertThat(context["shared_user"].id).IsEqualTo(user.id)
+        AssertThat(context["shared_user_name"]).IsEqualTo(user.username)
 
     @logged_in_user()
     def test_shared_calendar_shows_created_events(self, default_user):

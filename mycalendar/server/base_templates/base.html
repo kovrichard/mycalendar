@@ -9,8 +9,11 @@
     <div id="content-wrap" class="container text-center h-100">
         <nav class="navbar fixed-top navbar-expand">
             <a class="navbar-brand">Calendar</a>
+            {% if shared_calendar %}
+            <div id="sharedPersonView">You are viewing {{ shared_user_name }}'s calendar!</div>
+            {% endif %}
+            {% if current_user.is_authenticated %}
             <div class="navbar-collapse">
-                {% if current_user.is_authenticated %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link-left" href="{{ url_for('main.get_main') }}">Current week</a>
@@ -27,8 +30,8 @@
                         <a class="nav-link" href={{ url_for("user.logout") }}>Logout</a>
                     </li>
                 </ul>
-                {% endif %}
             </div>
+        {% endif %}
         </nav>
         <main>
             <div class="container">

@@ -172,7 +172,9 @@ def __handle_shared_get(year, week, decoded_token, token):
         events=__format_for_render(events),
         shared_calendar=True,
         share_content=decoded_token["share_content"],
-        shared_user=User.query.filter_by(id=decoded_token["user_id"]).first(),
+        shared_user_name=User.query.filter_by(id=decoded_token["user_id"])
+        .first()
+        .username,
         token=token,
     )
 
