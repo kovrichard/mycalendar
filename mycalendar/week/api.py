@@ -1,4 +1,11 @@
-from flask import Blueprint, abort, current_app, render_template, request
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    flash,
+    render_template,
+    request,
+)
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
@@ -50,9 +57,21 @@ def handle_post(year, week):
 
         if request.form["action"] == "Save":
             if event:
-                __modify_event(event, event_type)
+                new_event = __modify_event(event, event_type)
             else:
-                __insert_new_event(current_week, event_type)
+                new_event = __insert_new_event(current_week, event_type)
+
+            if __check_overlapping_events(new_event):
+                return render_template(
+                    "event-modification.html",
+                    year_number=year,
+                    week_number=week,
+                    event=new_event,
+                    start_date=request.form["start_date"],
+                    start_time=request.form["start_time"],
+                    end_date=request.form["end_date"],
+                    end_time=request.form["end_time"],
+                )
         elif event:
             Event.query.filter_by(
                 start=event.start, end=event.end, user_id=event.user_id
@@ -97,6 +116,8 @@ def __modify_event(event, event_type):
     event.event_type = event_type
     event.guest_name = request.form["guest-name"] if event_type == 1 else ""
 
+    return event
+
 
 def __insert_new_event(current_week, event_type):
     event = Event(
@@ -112,6 +133,8 @@ def __insert_new_event(current_week, event_type):
 
     current_week.events.append(event)
     current_user.events.append(event)
+
+    return event
 
 
 def __format_for_render(events):
@@ -134,6 +157,22 @@ def __format_for_render(events):
         tmp.append(item)
 
     return tmp
+
+
+def __check_overlapping_events(new_event):
+    wrong_events = Event.query.filter(
+        (Event.id != new_event.id)
+        & (
+            ((new_event.start <= Event.start) & (Event.start < new_event.end))
+            | ((new_event.start < Event.end) & (Event.end <= new_event.end))
+        )
+    ).all()
+
+    if len(wrong_events) > 0:
+        flash("Overlapping Event")
+        return True
+
+    return False
 
 
 @week_bp.route(

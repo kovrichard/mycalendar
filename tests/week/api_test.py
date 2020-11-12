@@ -168,6 +168,20 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(event).IsEqualTo(None)
 
     @logged_in_user()
+    def test_get_week_post_does_not_save_overlapping_event(self, default_user):
+        self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+        overlapping_event = TEST_EVENT
+        overlapping_event["event-id"] = -2
+        overlapping_event["end_time"] = "02:00"
+
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=overlapping_event)
+
+        template, context = self.rendered_templates[1]
+
+        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(r.data).Contains(b"Overlapping Event")
+
+    @logged_in_user()
     def test_get_week_shows_saved_events(self, default_user):
         r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
 
