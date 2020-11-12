@@ -278,3 +278,8 @@ body,html{
 #start_time, #end_time{
     margin-right: 0.5rem;
 }
+
+.text-danger{
+    font-size: large;
+    font-weight: bold;
+}

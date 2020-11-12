@@ -169,7 +169,7 @@ def __check_overlapping_events(new_event):
     ).all()
 
     if len(wrong_events) > 0:
-        flash("Overlapping Event", "danger")
+        flash("Overlapping event!", "danger")
         return True
 
     return False

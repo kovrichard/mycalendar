@@ -34,6 +34,9 @@
     </div>
     <input value={{ event.id if event else -1 }} name="event-id" hidden/>
 
+    <input id="saveButton" type="submit" class="btn btn-primary" name="action" value="Save"/>
+    <input id="delButton" type="submit" class="btn btn-primary" name="action" value="Delete" onclick="del()"/>
+
     <div class="mt-3 text-danger">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -45,7 +48,4 @@
             {% endif %}
         {% endwith %}
     </div>
-
-    <input id="saveButton" type="submit" class="btn btn-primary" name="action" value="Save"/>
-    <input id="delButton" type="submit" class="btn btn-primary" name="action" value="Delete" onclick="del()"/>
 </form>

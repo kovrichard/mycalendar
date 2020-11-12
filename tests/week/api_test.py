@@ -179,7 +179,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         template, context = self.rendered_templates[1]
 
         AssertThat(template.name).IsEqualTo("event-modification.html")
-        AssertThat(r.data).Contains(b"Overlapping Event")
+        AssertThat(r.data).Contains(b"Overlapping event!")
 
     @logged_in_user()
     def test_get_week_shows_saved_events(self, default_user):
