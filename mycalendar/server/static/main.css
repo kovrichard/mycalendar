@@ -39,9 +39,14 @@ body,html{
     font-weight: bold;
 }
 
+.week-btn:hover{
+    background-color:   rgb(5, 138, 0,0.8) !important;
+}
+
 .week-btn:focus{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
+
 
 .table-fix-head {
     position: sticky;
@@ -183,31 +188,23 @@ body,html{
     
 }
 
-#getShareLink{
+#getShareLink, #okButton, #saveButton, #delButton{
     background-color: rgb(5, 138, 0) !important;
     border-color: rgb(5, 138, 0) !important;
 }
 
-#getShareLink:hover{
+#getShareLink:hover, #okButton:hover, #saveButton:hover, #delButton:hover{
     background-color: rgb(4, 109, 0) !important;
 }
 
-#getShareLink:focus{
+#getShareLink:focus, #okButton:focus, #saveButton:focus, #delButton:focus{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
-
-#OK_button{
-    background-color: rgb(5, 138, 0) !important;
-    border-color: rgb(5, 138, 0) !important;
+/*
+#getShareLink:active, #okButton:active, #saveButton:active, #delButton:active{
+    color: rgba(255, 255, 255, 0.8);
 }
-
-#OK_button:hover{
-    background-color: rgb(4, 109, 0) !important;
-}
-
-#OK_button:focus{
-    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
-}
+*/
 
 #weekNumber{
     margin-left: -2rem;
@@ -242,4 +239,23 @@ body,html{
     font-weight: bold;
     font-style: italic;
     font-size: larger;
+}
+
+#event-title{
+    margin-top: 1rem;
+}
+
+#event-title:focus, #description:focus, #location:focus, #expiration:focus, #start_time:focus, #end_time:focus, #guestname:focus {
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+    border-color: lightgray !important;
+}
+
+#start_date:focus, #end_date:focus{
+    box-shadow: 0 0 0 0.0rem !important;
+    border-color: lightgray !important;
+}
+
+#event-title::placeholder, #description::placeholder, #location::placeholder{
+    color:silver;
+    font-style: italic;
 }
