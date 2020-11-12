@@ -2,7 +2,7 @@
 
 <form method="post" action="{{ url_for('week.get_week', year=year_number, week = week_number) }}">
     <div class="form-group row justify-content-center">
-        <input style="cursor:default" id="event-title" type="text" name="title" class="form-control col-5" value="{{ event.title }}" required placeholder="Title" autocomplete="off">
+        <input style="cursor:default" id="event-title" type="text" name="title" class="form-control col-5" value="{{ event.title }}" required placeholder="Title" autocomplete="off" autofocus>
     </div>
     <div class="form-group row justify-content-center">
         <input id="description"  type="text" name="description" class="form-control col-5" value="{{ event.description }}" placeholder="Description" autocomplete="off">
