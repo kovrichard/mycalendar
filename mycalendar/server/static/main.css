@@ -24,8 +24,16 @@ body,html{
     width: 10rem;
 }
 
+.active-event {
+    background-color: gray;
+}
+
 .event-btn:hover {
     background-color: gray;
+}
+
+.event-btn:focus{
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
 
 .bh-1 {
@@ -44,7 +52,7 @@ body,html{
 }
 
 .week-btn:focus{
-    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+    box-shadow: 0 0 0 0.1rem  rgba(179, 204, 178, 1) !important;
 }
 
 
@@ -58,10 +66,6 @@ body,html{
 .table {
     border-collapse: separate;
     border-spacing: 0;
-}
-
-.active-event {
-    background-color: gray;
 }
 
 .navbar{
@@ -159,6 +163,15 @@ body,html{
     cursor: pointer;
 }
 
+#start, #end{
+    margin-bottom: 0;
+    font-size: large;
+    font-style: italic;
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+
 .custom-control-label{
     align-items: center;
     font-style: italic;
@@ -212,6 +225,10 @@ body,html{
     margin-bottom: 0rem;
 }
 
+#weekBar{
+    padding-top: 0.3rem;
+}
+
 #scrollBar{
     overflow-y: scroll; 
     left: 15%;
@@ -253,7 +270,11 @@ body,html{
     border-color: lightgray !important;
 }
 
-#event-title::placeholder, #description::placeholder, #location::placeholder{
+#event-title::placeholder, #description::placeholder, #location::placeholder, #guestname::placeholder{
     color:silver;
     font-style: italic;
+}
+
+#start_time, #end_time{
+    margin-right: 0.5rem;
 }
