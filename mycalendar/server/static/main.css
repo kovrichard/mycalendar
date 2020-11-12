@@ -11,7 +11,8 @@ body,html{
 }
 
 #footer {
-    
+    font-size: small;
+    font-style: italic;
     margin-top: -2rem;
 }
 
@@ -68,32 +69,69 @@ body,html{
     font-weight: bold;
 }
 
-.nav-link-left{
+#navLeft{
     color:white;
     font-size: large;
     vertical-align: sub;
 }
 
-.nav-link-left:hover{
-    color:white;
+#navLeft:hover{
+    color:rgba(255, 255, 255, 0.8);
     text-decoration: none;
 }
 
 
-.nav-link-left:active{
-    color:rgba(255, 255, 255, 0.8);
+#navLeft:active{
+    color:rgba(255, 255, 255, 0.6);
     text-decoration: none;  
 }
 
-.nav-link, .nav-link:hover{
+#navRight{
     color: white;
     font-weight: bold;
+    border-radius: 0.5rem;
+    border: 0.1rem solid white;
+    margin-left: 0.5rem;
 }
 
-.nav-link:active{
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;  
+#navRight:hover{
+    color: white;
+    font-weight: bold;
+    background-color: rgb(85, 85, 85);
+    transition: background-color 0.0s linear;
 }
+
+#navRight:active{
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border: 0.1rem solid  rgba(255, 255, 255, 0.8);
+}
+
+#navRightName{
+    position: relative;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 0.1rem solid white;
+}
+
+/*
+#navRightName:hover span {
+    display:none;
+}
+*/
+
+#navRightName:hover{
+    background-color: rgb(85, 85, 85);
+    transition: 0.5s linear;
+}
+
+#navRightName:hover:before {
+    content:"Name:";
+    text-decoration: underline;
+    padding-right: 0.3rem;
+}
+   
 
 .alert{
     display: none;
