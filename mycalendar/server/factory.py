@@ -21,7 +21,8 @@ def create_app(config=None):
     app.register_blueprint(event_mod_bp, url_prefix="/add-event")
     app.register_blueprint(share_bp, url_prefix="/share")
 
-    app.jinja_env.globals["current_year"] = datetime.today().year
+    app.jinja_env.globals["current_year"] = datetime.now().isocalendar()[0]
+    app.jinja_env.globals["current_week"] = datetime.now().isocalendar()[1]
 
     __init_db(app)
     __init_user_manager(app)

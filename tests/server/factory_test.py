@@ -11,7 +11,10 @@ class FactoryTest(TestCase):
         app = create_app()
 
         AssertThat(app.jinja_env.globals["current_year"]).IsEqualTo(
-            datetime.today().year
+            datetime.now().isocalendar()[0]
+        )
+        AssertThat(app.jinja_env.globals["current_week"]).IsEqualTo(
+            datetime.now().isocalendar()[1]
         )
 
     def test_create_app_config_can_be_set_from_outside(self):

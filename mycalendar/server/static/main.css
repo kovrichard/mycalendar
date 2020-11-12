@@ -231,10 +231,8 @@ body,html{
 }
 
 #sharedPersonView{
-    position: absolute; 
     text-align: right; 
-    width:100%; 
-    padding-right: 2rem;
+    width:50%; 
     color: white;
     font-weight: bold;
     font-style: italic;

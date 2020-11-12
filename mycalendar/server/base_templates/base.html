@@ -9,16 +9,21 @@
     <div id="content-wrap" class="container text-center h-100">
         <nav class="navbar fixed-top navbar-expand">
             <a class="navbar-brand">Calendar</a>
-            {% if shared_calendar %}
-            <div id="sharedPersonView">You are viewing {{ shared_user_name }}'s calendar!</div>
-            {% endif %}
-            {% if current_user.is_authenticated %}
             <div class="navbar-collapse">
+                {% if shared_calendar %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a id="navLeft" class="nav-link-left" href="{{ url_for('week.shared_calendar', year = current_year, week = current_week, token = token) }}">Current week</a>
+                    </li>
+                </ul>
+                {% elif current_user.is_authenticated %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a id="navLeft" class="nav-link-left" href="{{ url_for('main.get_main') }}">Current week</a>
                     </li>
                 </ul>
+                {% endif %}
+                {% if current_user.is_authenticated %}
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a id="navRightName" class="nav-link"><span>{{ current_user.username }}</span></a>
@@ -30,8 +35,11 @@
                         <a id="navRight" class="nav-link" href={{ url_for("user.logout") }}>Logout</a>
                     </li>
                 </ul>
+                {% endif %}
             </div>
-        {% endif %}
+            {% if shared_calendar %}
+            <div id="sharedPersonView">You are viewing {{ shared_user_name }}'s calendar!</div>
+            {% endif %}
         </nav>
         <main>
             <div class="container">
