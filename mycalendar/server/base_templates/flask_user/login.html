@@ -56,10 +56,12 @@
                 {% endif %}
             </div>
 
+            <div style="margin-bottom:1rem;"><label style="width: 100%;">
             {# Remember me #}
             {% if user_manager.USER_ENABLE_REMEMBER_ME %}
             {{ render_checkbox_field(login_form.remember_me, tabindex=130) }}
             {% endif %}
+            </label></div>
 
             {# Submit button #}
             {{ render_submit_field(form.submit, tabindex=180) }}

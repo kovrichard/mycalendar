@@ -55,7 +55,6 @@ body,html{
     box-shadow: 0 0 0 0.1rem  rgba(179, 204, 178, 1) !important;
 }
 
-
 .table-fix-head {
     position: sticky;
     top: 0rem;
@@ -88,7 +87,6 @@ body,html{
     color:rgba(255, 255, 255, 0.8);
     text-decoration: none;
 }
-
 
 #navLeft:active{
     color:rgba(255, 255, 255, 0.6);
@@ -141,7 +139,6 @@ body,html{
     padding-right: 0.3rem;
 }
    
-
 .alert{
     display: none;
 }
@@ -170,7 +167,6 @@ body,html{
     text-align: left;
     padding-left: 1.5rem;
 }
-
 
 .custom-control-label{
     align-items: center;
@@ -213,11 +209,6 @@ body,html{
 #getShareLink:focus, #okButton:focus, #saveButton:focus, #delButton:focus{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
 }
-/*
-#getShareLink:active, #okButton:active, #saveButton:active, #delButton:active{
-    color: rgba(255, 255, 255, 0.8);
-}
-*/
 
 #weekNumber{
     margin-left: -2rem;
@@ -284,7 +275,6 @@ body,html{
     font-weight: bold;
 }
 
-
 #username:focus, #password:focus, #retype_password:focus {
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
     border-color: lightgray !important;
@@ -296,15 +286,19 @@ body,html{
     font-size: medium;
 }
 
-.btn{
+.btn-default{
     background-color: rgb(5, 138, 0) !important;
     border-color: rgb(5, 138, 0) !important;
 }
 
-.btn:hover{
+.btn-default:hover{
     background-color: rgb(4, 109, 0) !important;
 }
 
-.btn:focus{
+.btn-default:focus{
     box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+}
+
+.checkbox{
+    border-width: 3rem;
 }
