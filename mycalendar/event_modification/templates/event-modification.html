@@ -1,5 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Welcome{% endblock %}
+
+{% block title %}
+    {% if event.title==null %}
+        Event
+    {% else %}
+        Event ({{event.title}})
+    {% endif %}
+{% endblock %}
 
 {% block content %}
     {% if shared_calendar %}
