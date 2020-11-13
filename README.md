@@ -1,5 +1,5 @@
 # mycalendar
-This a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)".  
+This is a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)".  
   
 You can find this running application to click here: https://szoftarch-calendar.herokuapp.com.
 
