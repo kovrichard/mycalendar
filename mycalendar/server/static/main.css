@@ -26,6 +26,10 @@ body,html{
 
 .active-event {
     background-color: gray;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+    border-left-width: 0.7rem;
+    border-right-width: 0.7rem;
 }
 
 .event-btn:hover {
