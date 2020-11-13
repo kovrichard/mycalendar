@@ -234,6 +234,7 @@ body,html{
     border-width: 0.1rem;
     border-style:solid;
     border-color:gray;
+    background-color: white;
 }
 
 #tableBordered{
