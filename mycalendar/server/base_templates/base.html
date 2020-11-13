@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ url_for("static", filename = "bootstrap.min.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename = "main.css") }}">
 </head>
-{% set shared_background_color="rgba(5, 138, 0,0.3)" if shared_calendar else "white" %}
+{% set shared_background_color="rgba(5, 138, 0, 0.2)" if shared_calendar else "white" %}
 <body style="background-color:{{shared_background_color}}">
     <div style="transparent:0;" id="content-wrap" class="container text-center h-100">
         <nav class="navbar fixed-top navbar-expand">
