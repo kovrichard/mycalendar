@@ -302,3 +302,9 @@ body,html{
 .checkbox{
     border-width: 3rem;
 }
+
+.btn:disabled{
+    opacity: 1;
+    background-color: silver;
+    color:gray
+}
