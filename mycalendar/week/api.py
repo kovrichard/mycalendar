@@ -1,3 +1,5 @@
+import datetime
+
 from flask import (
     Blueprint,
     abort,
@@ -61,25 +63,21 @@ def handle_post(year, week):
             else:
                 new_event = __insert_new_event(current_week, event_type)
 
-            if __overlapping_events(
-                new_event
-            ) or __event_end_is_earlier_than_start(new_event):
-                return render_template(
-                    "event-modification.html",
-                    year_number=year,
-                    week_number=week,
-                    event=new_event,
-                    start_date=request.form["start_date"],
-                    start_time=request.form["start_time"],
-                    end_date=request.form["end_date"],
-                    end_time=request.form["end_time"],
-                )
-        elif event:
-            Event.query.filter_by(
-                start=event.start, end=event.end, user_id=event.user_id
-            ).delete()
+            try:
+                __check_event(new_event)
+                db.session.commit()
+            except OverlappingEventError as o:
+                db.session.rollback()
+                return __return_to_modification(year, week, new_event)
+            except EndBeforeStartError as e:
+                db.session.rollback()
+                return __return_to_modification(year, week, new_event)
+            except DifferentDayEndError as d:
+                db.session.rollback()
+                return __return_to_modification(year, week, new_event)
 
-        db.session.commit()
+        elif event:
+            __delete_event(event)
 
     days_of_week = calculate_days_of_week(year, week)
 
@@ -105,6 +103,13 @@ def __persist_week_to_db(year, week):
         db.session.commit()
 
     return tmp
+
+
+def __delete_event(event):
+    Event.query.filter_by(
+        start=event.start, end=event.end, user_id=event.user_id
+    ).delete()
+    db.session.commit()
 
 
 def __modify_event(event, event_type):
@@ -161,7 +166,25 @@ def __format_for_render(events):
     return tmp
 
 
-def __overlapping_events(new_event):
+def __check_event(new_event):
+    __overlapping_event(new_event)
+    __event_end_is_earlier_than_start(new_event)
+    __event_ends_on_different_day(new_event)
+
+
+class OverlappingEventError(Exception):
+    pass
+
+
+class EndBeforeStartError(Exception):
+    pass
+
+
+class DifferentDayEndError(Exception):
+    pass
+
+
+def __overlapping_event(new_event):
     wrong_events = Event.query.filter(
         (Event.id != new_event.id)
         & (
@@ -172,9 +195,7 @@ def __overlapping_events(new_event):
 
     if len(wrong_events) > 0:
         flash("Overlapping event!", "danger")
-        return True
-
-    return False
+        raise OverlappingEventError
 
 
 def __event_end_is_earlier_than_start(new_event):
@@ -183,13 +204,33 @@ def __event_end_is_earlier_than_start(new_event):
             "End of event cannot be earlier than (or equal to) its start!",
             "danger",
         )
-        return True
-    return False
+        raise EndBeforeStartError
+
+
+def __event_ends_on_different_day(new_event):
+    start = datetime.datetime.strptime(new_event.start, "%Y-%m-%d %H:%M")
+    end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M")
+    if (start.date() != end.date()) and (datetime.time(0, 0, 1) <= end.time()):
+        flash("Event ends on a different day!", "danger")
+        raise DifferentDayEndError
+
+
+def __return_to_modification(year, week, new_event):
+    return render_template(
+        "event-modification.html",
+        year_number=year,
+        week_number=week,
+        event=new_event,
+        start_date=request.form["start_date"],
+        start_time=request.form["start_time"],
+        end_date=request.form["end_date"],
+        end_time=request.form["end_time"],
+    )
 
 
 @week_bp.route(
     "/<int:year>/<int:week>/shared-calendar/<string:token>",
-    methods=["GET", "POST"],
+    methods=["GET"],
 )
 def shared_calendar(year, week, token):
     decoded_token = UserAccess(
@@ -201,10 +242,7 @@ def shared_calendar(year, week, token):
 
     year, week = calculate_different_year(year, week)
 
-    if request.method == "GET":
-        return __handle_shared_get(year, week, decoded_token, token)
-    else:
-        return __handle_shared_post(year, week)
+    return __handle_shared_get(year, week, decoded_token, token)
 
 
 def __handle_shared_get(year, week, decoded_token, token):
@@ -228,7 +266,3 @@ def __handle_shared_get(year, week, decoded_token, token):
         .username,
         token=token,
     )
-
-
-def __handle_shared_post(year, week):
-    return "OK", 200
