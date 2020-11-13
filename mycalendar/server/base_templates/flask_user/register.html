@@ -36,8 +36,7 @@
         {{ render_field(form.email, tabindex=220) }}
     {% endif %}
 
-    <div style="text-align: left"><label style="width: 100%;">
-    {{ render_field(form.password, tabindex=230, class="form-control registerForm") }}
+    {{ render_field(form.password, tabindex=230, class="form-control", placeholder="min. 6 length (with lowercase and uppercase letter and number)") }}
     </label></div>
 
     <div style="text-align: left"><label id="alma" style="width: 100%;">
