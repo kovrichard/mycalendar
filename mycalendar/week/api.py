@@ -61,7 +61,9 @@ def handle_post(year, week):
             else:
                 new_event = __insert_new_event(current_week, event_type)
 
-            if __check_overlapping_events(new_event):
+            if __overlapping_events(
+                new_event
+            ) or __event_end_is_earlier_than_start(new_event):
                 return render_template(
                     "event-modification.html",
                     year_number=year,
@@ -159,7 +161,7 @@ def __format_for_render(events):
     return tmp
 
 
-def __check_overlapping_events(new_event):
+def __overlapping_events(new_event):
     wrong_events = Event.query.filter(
         (Event.id != new_event.id)
         & (
@@ -172,6 +174,16 @@ def __check_overlapping_events(new_event):
         flash("Overlapping event!", "danger")
         return True
 
+    return False
+
+
+def __event_end_is_earlier_than_start(new_event):
+    if new_event.end <= new_event.start:
+        flash(
+            "End of event cannot be earlier than (or equal to) its start!",
+            "danger",
+        )
+        return True
     return False
 
 

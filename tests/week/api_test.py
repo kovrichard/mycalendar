@@ -27,9 +27,9 @@ TEST_EVENT = {
     "description": "test_description",
     "location": "test_location",
     "start_date": "2020-10-20",
-    "start_time": "00:00",
+    "start_time": "02:00",
     "end_date": "2020-10-20",
-    "end_time": "01:00",
+    "end_time": "03:00",
     "business_hour": 1,
     "action": "Save",
     "guest-name": "",
@@ -172,7 +172,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
         overlapping_event = TEST_EVENT
         overlapping_event["event-id"] = -2
-        overlapping_event["end_time"] = "02:00"
+        overlapping_event["end_time"] = "04:00"
 
         r = self.client.post(f"/{YEAR}/{WEEK}", data=overlapping_event)
 
@@ -180,6 +180,42 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         AssertThat(template.name).IsEqualTo("event-modification.html")
         AssertThat(r.data).Contains(b"Overlapping event!")
+
+    @logged_in_user()
+    def test_get_week_post_does_not_save_events_with_end_earlier_than_start(
+        self, default_user
+    ):
+        self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+        wrong_end_event = TEST_EVENT
+        wrong_end_event["event-id"] = -2
+        wrong_end_event["end_time"] = "01:00"
+
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=wrong_end_event)
+
+        template, context = self.rendered_templates[1]
+
+        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(r.data).Contains(
+            b"End of event cannot be earlier than (or equal to) its start!"
+        )
+
+    @logged_in_user()
+    def test_get_week_post_does_not_save_events_with_equal_end_and_start(
+        self, default_user
+    ):
+        self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
+        wrong_end_event = TEST_EVENT
+        wrong_end_event["event-id"] = -2
+        wrong_end_event["end_time"] = TEST_EVENT["start_time"]
+
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=wrong_end_event)
+
+        template, context = self.rendered_templates[1]
+
+        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(r.data).Contains(
+            b"End of event cannot be earlier than (or equal to) its start!"
+        )
 
     @logged_in_user()
     def test_get_week_shows_saved_events(self, default_user):
