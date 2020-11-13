@@ -19,7 +19,7 @@
             </div>
             <div>
                 {% if user_manager.USER_ENABLE_REGISTER %}
-                    <a style="font-size: small; font-style: italic; margin-left:0.2rem;" href="{{ url_for('user.login') }}" tabindex='290'>
+                    <a style="color: rgb(5, 138, 0); vertical-align:sub; font-size: small; font-style: italic; margin-left:0.3rem; margin-bottom:0.1rem;" href="{{ url_for('user.login') }}" tabindex='290'>
                         {%trans%}(Already registered? Sign in.){%endtrans%}</a>
                 {% endif %}
             </div>
