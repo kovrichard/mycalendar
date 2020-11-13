@@ -283,3 +283,16 @@ body,html{
     font-size: large;
     font-weight: bold;
 }
+
+.btn{
+    background-color: rgb(5, 138, 0) !important;
+    border-color: rgb(5, 138, 0) !important;
+}
+
+.btn:hover{
+    background-color: rgb(4, 109, 0) !important;
+}
+
+.btn:focus{
+    box-shadow: 0 0 0 0.2rem  rgba(179, 204, 178, 1) !important;
+}
