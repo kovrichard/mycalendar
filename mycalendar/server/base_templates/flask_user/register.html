@@ -24,7 +24,7 @@
                 {% endif %}
             </div>
         </div>
-        {{ field(class_='form-control', tabindex=210) }}
+        {{ field(class_='form-control', tabindex=210, placeholder="min. 3 length") }}
         {% if field.errors %}
             {% for e in field.errors %}
                 <p class="help-block">{{ e }}</p>
