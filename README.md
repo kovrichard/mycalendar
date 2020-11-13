@@ -1,5 +1,7 @@
 # mycalendar
-This a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)" 
+This a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)".  
+  
+You can find this running application to click here: https://szoftarch-calendar.herokuapp.com.
 
 ## Installation & Usage
 ###### There are various installation and usage methods. Here is one of them. 
@@ -13,7 +15,10 @@ This a project app for the BME MSc class called "[Software Architectures](https:
      * `nmake build`
      * `nmake start`
      * `nmake migrate`
-  6. Open any browser and in the URL field type: `localhost`.
+  6. (To test the code:)
+     * `nmake lint`
+     * `nmake test`
+  7. Open any browser and in the URL field type: `localhost`.
 
 # prerequisites for development
 - [Docker](https://docs.docker.com/engine/install/)
