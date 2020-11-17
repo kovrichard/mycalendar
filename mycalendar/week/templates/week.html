@@ -16,12 +16,12 @@
     </div>
     
     <div id="scrollBar">
-        <table id="tableBordered" class="table table-bordered" style="table-layout: fixed;">
+        <table id="tableBordered" class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col" class="align-middle table-fix-head" style="width:7%; padding-top: 0.5rem; padding-bottom: 0.5rem;">H</th>
+                    <th scope="col" id="hour-header" class="align-middle table-fix-head">H</th>
                     {% for day in days_of_week %}
-                    <th scope="col" class="table-fix-head" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                    <th scope="col" id="days-header" class="table-fix-head">
                         <div>
                             {{ day.name }}
                         </div>

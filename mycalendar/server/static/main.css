@@ -241,6 +241,7 @@ body,html{
     margin-bottom: 0;
     margin-top: 0;
     border: none;
+    table-layout: fixed;
 }
 
 #sharedPersonView{
@@ -253,6 +254,7 @@ body,html{
 
 #event-title{
     margin-top: 1rem;
+    cursor: default;
 }
 
 #event-title:focus, #description:focus, #location:focus, #expiration:focus, #start_time:focus, #end_time:focus, #guestname:focus {
@@ -311,4 +313,32 @@ body,html{
     opacity: 1;
     background-color: silver;
     color:gray
+}
+
+#business-hour {
+    margin-bottom: 0.5rem;
+}
+
+.larger-font {
+    font-size: larger;
+}
+
+.register-login-option {
+    color: rgb(5, 138, 0);
+    vertical-align:sub;
+    font-size: small;
+    font-style: italic;
+    margin-left:0.3rem;
+    margin-bottom:0.1rem;
+}
+
+#hour-header {
+    width:7%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#days-header {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }

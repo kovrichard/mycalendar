@@ -22,7 +22,7 @@
     </div>
 
     {% set checked = "checked" if event.event_type == 1 else "" %}
-    <div class="custom-control custom-switch pt-1" style="margin-bottom: 0.5rem;">
+    <div id="business-hour" class="custom-control custom-switch pt-1">
         <input class="custom-control-input" type="checkbox" onclick="return false;" name="business_hour" {{ checked }} id="businesshour" readonly disabled>
         <label class="custom-control-label" for="businesshour">
             Business hour
