@@ -40,7 +40,7 @@ def shared_event_view(token):
         User.query.filter_by(id=decoded_token["user_id"]).first().username
     )
 
-    return __render_view(
+    return __render_shared_view(
         decoded_token["user_id"], True, user_name, token=token
     )
 
@@ -72,6 +72,46 @@ def __render_view(
 
     return render_template(
         "event.html",
+        year_number=year,
+        week_number=week,
+        event=event,
+        start_date=event.start.date() if event else start_date,
+        start_time=event.start.time() if event else start_time,
+        end_date=event.end.date() if event else end_date,
+        end_time=event.end.time() if event else end_time,
+        shared_calendar=shared_calendar,
+        shared_user_name=shared_user_name,
+        token=token,
+    )
+
+
+def __render_shared_view(
+    user_id, shared_calendar=False, shared_user_name="", token=""
+):
+    year = int(request.form["year"])
+    week = int(request.form["week"])
+    day = int(request.form["day"])
+    hour = int(request.form["hour"])
+
+    start_date = datetime.fromisocalendar(year, week, int(day) + 1).strftime(
+        "%Y-%m-%d"
+    )
+    end_date = datetime.fromisocalendar(year, week, day + 1)
+    start_time = date_time_helper.hour_number_to_24_hours_format(str(hour))
+    end_time = date_time_helper.hour_number_to_24_hours_format(str(hour + 1))
+
+    if hour == 23:
+        end_date += timedelta(days=1)
+    end_date = end_date.strftime("%Y-%m-%d")
+
+    event = Event.query.filter(
+        Event.start <= f"{start_date} {start_time}",
+        Event.end >= f"{end_date} {end_time}",
+        Event.user_id == user_id,
+    ).first()
+
+    return render_template(
+        "shared-event.html",
         year_number=year,
         week_number=week,
         event=event,

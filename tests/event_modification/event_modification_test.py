@@ -147,7 +147,7 @@ class EventModificationTest(
         template, context = self.rendered_templates[0]
 
         AssertThat(r.status_code).IsEqualTo(200)
-        AssertThat(template.name).IsEqualTo("event.html")
+        AssertThat(template.name).IsEqualTo("shared-event.html")
         AssertThat(context["shared_calendar"]).IsTrue()
         AssertThat(context["shared_user_name"]).IsEqualTo(user.username)
         AssertThat(r.data).Contains(b'placeholder="Title" readonly')
