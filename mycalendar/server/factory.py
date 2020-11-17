@@ -2,10 +2,10 @@ from datetime import datetime
 
 from flask import Flask
 
-from mycalendar.event_modification.api import event_mod_bp
-from mycalendar.main.api import main_bp
-from mycalendar.share.api import share_bp
-from mycalendar.week.api import week_bp
+from mycalendar.event_modification.event_modfication import event_mod_bp
+from mycalendar.main.main import main_bp
+from mycalendar.share.share import share_bp
+from mycalendar.week.week import week_bp
 
 
 def create_app(config=None):
