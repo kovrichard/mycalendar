@@ -17,19 +17,17 @@ from mycalendar.db_models.db_user import User
 from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.lib.user_access import UserAccess
 
-event_mod_bp = Blueprint(
-    "event_modification", __name__, template_folder="templates"
-)
+event_bp = Blueprint("event", __name__, template_folder="templates")
 date_time_helper = DateTimeHelper()
 
 
-@event_mod_bp.route("/", strict_slashes=False, methods=["POST"])
+@event_bp.route("/", strict_slashes=False, methods=["POST"])
 @login_required
-def event_mod():
+def event():
     return __render_view(current_user.id)
 
 
-@event_mod_bp.route("/<string:token>", strict_slashes=False, methods=["POST"])
+@event_bp.route("/<string:token>", strict_slashes=False, methods=["POST"])
 def shared_event_view(token):
     decoded_token = UserAccess(
         current_app.config["SHARING_TOKEN_SECRET"]
@@ -87,7 +85,7 @@ def __render_view(
     )
 
 
-@event_mod_bp.route(
+@event_bp.route(
     "/register-guest/<string:token>", strict_slashes=False, methods=["POST"]
 )
 def register_guest(token):

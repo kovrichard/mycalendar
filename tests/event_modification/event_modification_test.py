@@ -31,7 +31,7 @@ class EventModificationTest(
         Role.query.delete()
 
     @logged_in_user()
-    def test_event_mod_renders_template(self, default_user):
+    def test_event_renders_template(self, default_user):
         r = self.client.post(
             "/add-event",
             data={"year": "2020", "week": "1", "hour": "1", "day": "1"},
@@ -61,7 +61,7 @@ class EventModificationTest(
         AssertThat(r.data).Contains(b'value="Save"')
         AssertThat(r.data).Contains(b'value="Delete"')
 
-    def test_event_mod_loads_already_defined_event(self):
+    def test_event_loads_already_defined_event(self):
         with self.logged_in_user() as user:
             event = Event(
                 event_type=1,
@@ -98,9 +98,7 @@ class EventModificationTest(
             AssertThat(context["event"].guest_name).IsEqualTo(event.guest_name)
 
     @logged_in_user()
-    def test_event_modification_does_not_render_events_of_other_users(
-        self, default_user
-    ):
+    def test_event_does_not_render_events_of_other_users(self, default_user):
         user2 = User(username="username", password="password")
         db.session.add(user2)
 
@@ -165,7 +163,7 @@ class EventModificationTest(
         AssertThat(r.data).Contains(b'value="OK"')
 
     @logged_in_user()
-    def test_event_mod_does_not_render_guest_registration(self, default_user):
+    def test_event_does_not_render_guest_registration(self, default_user):
         week = Week(year=2020, week_num=2)
         db.session.add(week)
         event = Event(

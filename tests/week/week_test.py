@@ -295,7 +295,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.data).Contains(b"btn-4-5")
 
     @logged_in_user()
-    def test_get_week_event_modification_is_enabled(self, default_user):
+    def test_get_week_event_is_enabled(self, default_user):
         week = self.__insert_week()
         event = self.__insert_event(default_user.id, week.id)
         new_title = "another_title"
