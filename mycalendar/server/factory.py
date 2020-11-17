@@ -43,7 +43,7 @@ def __init_user_manager(app):
     from flask_sqlalchemy import SQLAlchemy
     from flask_user import UserManager
 
-    from mycalendar.db_models.user import User
+    from mycalendar.db_models.db_user import User
 
     user_manager = UserManager(app, SQLAlchemy(app), User)
 

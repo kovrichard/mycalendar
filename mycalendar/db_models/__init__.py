@@ -24,11 +24,11 @@ db = SQLAlchemy(query_class=GetOrQuery)
 
 
 def import_models():
-    from .event import Event
-    from .role import Role
-    from .user import User
-    from .user_roles import UserRoles
-    from .week import Week
+    from .db_event import Event
+    from .db_role import Role
+    from .db_user import User
+    from .db_user_roles import UserRoles
+    from .db_week import Week
 
 
 def init_db(app):

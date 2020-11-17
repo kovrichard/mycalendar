@@ -1,7 +1,7 @@
 from truth.truth import AssertThat
 
 from mycalendar.db_models import db
-from mycalendar.db_models.role import Role
+from mycalendar.db_models.db_role import Role
 from tests import AppTestCase, DbMixin
 
 

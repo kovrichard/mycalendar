@@ -1,8 +1,8 @@
 from truth.truth import AssertThat
 
 from mycalendar.db_models import db
-from mycalendar.db_models.event import Event
-from mycalendar.db_models.week import Week
+from mycalendar.db_models.db_event import Event
+from mycalendar.db_models.db_week import Week
 from tests import AppTestCase, DbMixin
 
 

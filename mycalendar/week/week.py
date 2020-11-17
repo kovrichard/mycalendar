@@ -11,9 +11,9 @@ from flask import (
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
-from mycalendar.db_models.event import Event
-from mycalendar.db_models.user import User
-from mycalendar.db_models.week import Week
+from mycalendar.db_models.db_event import Event
+from mycalendar.db_models.db_user import User
+from mycalendar.db_models.db_week import Week
 from mycalendar.lib.datetime_calculator import (
     calculate_days_of_week,
     calculate_different_year,

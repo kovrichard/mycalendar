@@ -6,9 +6,9 @@ from functools import wraps
 from flask import template_rendered
 
 from mycalendar.db_models import db
-from mycalendar.db_models.role import Role
-from mycalendar.db_models.user import User
-from mycalendar.db_models.user_roles import UserRoles
+from mycalendar.db_models.db_role import Role
+from mycalendar.db_models.db_user import User
+from mycalendar.db_models.db_user_roles import UserRoles
 from mycalendar.server.factory import create_app
 
 
