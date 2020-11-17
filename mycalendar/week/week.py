@@ -214,7 +214,7 @@ def __event_ends_on_different_day(new_event):
 
 def __return_to_modification(year, week, new_event):
     return render_template(
-        "event-modification.html",
+        "event.html",
         year_number=year,
         week_number=week,
         event=new_event,

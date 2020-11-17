@@ -188,7 +188,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         template, context = self.rendered_templates[0]
 
-        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(template.name).IsEqualTo("event.html")
         AssertThat(r.data).Contains(b"Overlapping event!")
 
     @logged_in_user()
@@ -215,7 +215,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         template, context = self.rendered_templates[0]
 
-        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(template.name).IsEqualTo("event.html")
         AssertThat(r.data).Contains(
             b"End of event cannot be earlier than (or equal to) its start!"
         )
@@ -244,7 +244,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         template, context = self.rendered_templates[0]
 
-        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(template.name).IsEqualTo("event.html")
         AssertThat(r.data).Contains(
             b"End of event cannot be earlier than (or equal to) its start!"
         )
@@ -273,7 +273,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         template, context = self.rendered_templates[0]
 
-        AssertThat(template.name).IsEqualTo("event-modification.html")
+        AssertThat(template.name).IsEqualTo("event.html")
         AssertThat(r.data).Contains(b"Event ends on a different day!")
 
     @logged_in_user()

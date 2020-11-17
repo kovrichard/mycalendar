@@ -71,7 +71,7 @@ def __render_view(
     ).first()
 
     return render_template(
-        "event-modification.html",
+        "event.html",
         year_number=year,
         week_number=week,
         event=event,

@@ -10,8 +10,8 @@
 
 {% block content %}
     {% if shared_calendar %}
-        {% include "shared-event-modification.html" %}
+        {% include "shared-event.html" %}
     {% else %}
-        {% include "logged-in-event-modification.html" %}
+        {% include "logged-in-event.html" %}
     {% endif %}
 {% endblock %}
