@@ -27,9 +27,9 @@ TEST_EVENT = {
     "description": "test_description",
     "location": "test_location",
     "start_date": "2020-10-20",
-    "start_time": "02:00",
+    "start_time": "02:00:00",
     "end_date": "2020-10-20",
-    "end_time": "03:00",
+    "end_time": "03:00:00",
     "business_hour": 1,
     "action": "Save",
     "guest-name": "",
@@ -41,9 +41,9 @@ TEST_DELETE_EVENT = {
     "description": "test_description",
     "location": "test_location",
     "start_date": "2020-10-20",
-    "start_time": "00:00",
+    "start_time": "00:00:00",
     "end_date": "2020-10-20",
-    "end_time": "01:00",
+    "end_time": "01:00:00",
     "business_hour": 1,
     "action": "Delete",
 }
@@ -137,13 +137,13 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(event.start).IsEqualTo(
             datetime.strptime(
                 f"{TEST_EVENT['start_date']} {TEST_EVENT['start_time']}",
-                "%Y-%m-%d %H:%M",
+                "%Y-%m-%d %H:%M:%S",
             )
         )
         AssertThat(event.end).IsEqualTo(
             datetime.strptime(
                 f"{TEST_EVENT['end_date']} {TEST_EVENT['end_time']}",
-                "%Y-%m-%d %H:%M",
+                "%Y-%m-%d %H:%M:%S",
             )
         )
         AssertThat(event.event_type).IsEqualTo(TEST_EVENT["business_hour"])
@@ -170,8 +170,19 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         week = self.__insert_week()
         self.__insert_event(default_user.id, week.id)
 
-        overlapping_event = TEST_EVENT
-        overlapping_event["end_time"] = "04:00"
+        overlapping_event = {
+            "event-id": -1,
+            "title": "test_title",
+            "description": "test_description",
+            "location": "test_location",
+            "start_date": "2020-10-20",
+            "start_time": "02:00:00",
+            "end_date": "2020-10-20",
+            "end_time": "04:00:00",
+            "business_hour": 1,
+            "action": "Save",
+            "guest-name": "",
+        }
 
         r = self.client.post(f"/{YEAR}/{WEEK}", data=overlapping_event)
 
@@ -192,9 +203,9 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "description": "test_description",
             "location": "test_location",
             "start_date": "2020-10-20",
-            "start_time": "02:00",
+            "start_time": "02:00:00",
             "end_date": "2020-10-20",
-            "end_time": "01:00",
+            "end_time": "01:00:00",
             "business_hour": 1,
             "action": "Save",
             "guest-name": "",
@@ -221,9 +232,9 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "description": "test_description",
             "location": "test_location",
             "start_date": "2020-10-20",
-            "start_time": "02:00",
+            "start_time": "02:00:00",
             "end_date": "2020-10-20",
-            "end_time": "02:00",
+            "end_time": "02:00:00",
             "business_hour": 1,
             "action": "Save",
             "guest-name": "",
@@ -250,9 +261,9 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "description": "test_description",
             "location": "test_location",
             "start_date": "2020-10-20",
-            "start_time": "02:00",
+            "start_time": "02:00:00",
             "end_date": "2020-10-21",
-            "end_time": "01:00",
+            "end_time": "01:00:00",
             "business_hour": 1,
             "action": "Save",
             "guest-name": "",
@@ -282,6 +293,28 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         template, context = self.rendered_templates[0]
 
         AssertThat(r.data).Contains(b"btn-4-5")
+
+    @logged_in_user()
+    def test_get_week_event_modification_is_enabled(self, default_user):
+        week = self.__insert_week()
+        event = self.__insert_event(default_user.id, week.id)
+        new_title = "another_title"
+        modified_event = {
+            "event-id": event.id,
+            "title": new_title,
+            "description": event.description,
+            "location": event.location,
+            "start_date": event.start.date(),
+            "start_time": event.start.time(),
+            "end_date": event.end.date(),
+            "end_time": event.end.time(),
+            "business_hour": event.event_type,
+            "action": "Save",
+            "guest-name": "",
+        }
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=modified_event)
+
+        AssertThat(r.data).Contains(new_title.encode())
 
     def test_shared_calendar_denies_access_with_wrong_token(self):
         r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/<wrong-token>")
@@ -373,9 +406,9 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         description="test_description",
         location="test_location",
         start_date="2020-10-20",
-        start_time="02:00",
+        start_time="02:00:00",
         end_date="2020-10-20",
-        end_time="03:00",
+        end_time="03:00:00",
         guest_name="",
     ):
         event = Event(

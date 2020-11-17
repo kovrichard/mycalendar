@@ -38,5 +38,5 @@ def __has_53_weeks(year):
 
 
 def hour_number_to_24_hours_format(hour):
-    tmp = ("0" + hour if len(hour) < 2 else hour) + ":00"
-    return "00:00" if tmp == "24:00" else tmp
+    tmp = "0" + hour if len(hour) < 2 else hour
+    return "00:00:00" if tmp == "24" else tmp + ":00:00"

@@ -44,8 +44,8 @@ class EventModificationTest(
         AssertThat(context["start_date"]).IsEqualTo(
             datetime.fromisocalendar(2020, 1, 2).strftime("%Y-%m-%d")
         )
-        AssertThat(context["start_time"]).IsEqualTo("01:00")
-        AssertThat(context["end_time"]).IsEqualTo("02:00")
+        AssertThat(context["start_time"]).IsEqualTo("01:00:00")
+        AssertThat(context["end_time"]).IsEqualTo("02:00:00")
         AssertThat(r.data).DoesNotContain(b'placeholder="Title" readonly')
         AssertThat(r.data).DoesNotContain(
             b'placeholder="Description" readonly'

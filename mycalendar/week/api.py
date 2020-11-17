@@ -116,10 +116,8 @@ def __modify_event(event, event_type):
     event.title = request.form["title"]
     event.description = request.form["description"]
     event.location = request.form["location"]
-    event.start = (
-        f"{request.form['start_date']} {request.form['start_time']}",
-    )
-    event.end = (f"{request.form['end_date']} {request.form['end_time']}",)
+    event.start = f"{request.form['start_date']} {request.form['start_time']}"
+    event.end = f"{request.form['end_date']} {request.form['end_time']}"
     event.event_type = event_type
     event.guest_name = request.form["guest-name"] if event_type == 1 else ""
 
@@ -208,8 +206,8 @@ def __event_end_is_earlier_than_start(new_event):
 
 
 def __event_ends_on_different_day(new_event):
-    start = datetime.datetime.strptime(new_event.start, "%Y-%m-%d %H:%M")
-    end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M")
+    start = datetime.datetime.strptime(new_event.start, "%Y-%m-%d %H:%M:%S")
+    end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M:%S")
     if (start.date() != end.date()) and (datetime.time(0, 0, 1) <= end.time()):
         flash("Event ends on a different day!", "danger")
         raise DifferentDayEndError
