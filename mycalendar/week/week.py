@@ -1,21 +1,12 @@
 import datetime
 
-from flask import (
-    Blueprint,
-    abort,
-    current_app,
-    flash,
-    render_template,
-    request,
-)
+from flask import Blueprint, flash, render_template, request
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
-from mycalendar.db_models.db_user import User
 from mycalendar.db_models.db_week import Week
 from mycalendar.lib.datetime_helper import DateTimeHelper
-from mycalendar.lib.user_access import UserAccess
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
@@ -222,44 +213,4 @@ def __return_to_modification(year, week, new_event):
         start_time=request.form["start_time"],
         end_date=request.form["end_date"],
         end_time=request.form["end_time"],
-    )
-
-
-@week_bp.route(
-    "/<int:year>/<int:week>/shared-calendar/<string:token>",
-    methods=["GET"],
-)
-def shared_calendar(year, week, token):
-    decoded_token = UserAccess(
-        current_app.config["SHARING_TOKEN_SECRET"]
-    ).decode(token)
-
-    if not decoded_token:
-        abort(401)
-
-    year, week = date_time_helper.calculate_different_year(year, week)
-
-    return __handle_shared_get(year, week, decoded_token, token)
-
-
-def __handle_shared_get(year, week, decoded_token, token):
-    current_week = __persist_week_to_db(year, week)
-    days_of_week = date_time_helper.calculate_days_of_week(year, week)
-
-    events = Event.query.filter_by(
-        week_id=current_week.id, user_id=decoded_token["user_id"]
-    ).all()
-
-    return render_template(
-        "week.html",
-        year_number=year,
-        week_number=week,
-        days_of_week=days_of_week,
-        events=__format_for_render(events),
-        shared_calendar=True,
-        share_content=decoded_token["share_content"],
-        shared_user_name=User.query.filter_by(id=decoded_token["user_id"])
-        .first()
-        .username,
-        token=token,
     )

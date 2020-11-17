@@ -12,6 +12,9 @@ from mycalendar.db_models.db_week import Week
 from mycalendar.lib.user_access import UserAccess
 from tests import AppTestCase, DbMixin, TemplateRenderMixin, TestClientMixin
 
+YEAR = 2020
+WEEK = 43
+
 
 class SharedViewTest(
     TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase
@@ -142,3 +145,39 @@ class SharedViewTest(
         )
 
         AssertThat(event.guest_name).IsEqualTo(guest_name)
+
+    def test_shared_calendar_denies_access_with_wrong_token(self):
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/<wrong-token>")
+
+        AssertThat(r.status_code).IsEqualTo(401)
+
+    def test_shared_calendar_renders_template(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(template.name).IsEqualTo("week.html")
+        AssertThat(context["shared_calendar"]).IsTrue()
+        AssertThat(context["shared_user_name"]).IsEqualTo(user.username)
+
+    def test_shared_calendar_event_creation_is_disabled(self):
+        user = User(username="user", password="password")
+        db.session.add(user)
+        db.session.commit()
+
+        token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).generate(user.id, timedelta(days=1))
+
+        r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
+        template, context = self.rendered_templates[0]
+
+        AssertThat(r.data).DoesNotContain(b"btn-4-5")

@@ -39,7 +39,7 @@
                         {% for day in range(7) %}
                         <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
                             {% if shared_calendar %}
-                            <form method="post" action="{{ url_for('shared_event.shared_event_view', token = token) }}">
+                            <form method="post" action="{{ url_for('shared_view.shared_event_view', token = token) }}">
                             {% else %}
                             <form method="post" action="{{ url_for('event.event') }}">
                             {% endif %}
