@@ -4,19 +4,21 @@ from datetime import datetime
 from ddt import data, ddt, unpack
 from truth.truth import AssertThat
 
-from mycalendar.lib.datetime_calculator import (
-    calculate_days_of_week,
-    calculate_different_year,
-    hour_number_to_24_hours_format,
-)
+from mycalendar.lib.datetime_helper import DateTimeHelper
 
 
 @ddt
-class DateTimeCalculatorTest(unittest.TestCase):
+class DateTimeHelperTest(unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        self.date_time_helper = DateTimeHelper()
+
     def test_calculate_days_of_week_calculates_weekdays_correctly(self):
         now = datetime.now().isocalendar()
 
-        days_of_week = calculate_days_of_week(now[0], now[1])
+        days_of_week = self.date_time_helper.calculate_days_of_week(
+            now[0], now[1]
+        )
 
         for i in range(1, 8):
             AssertThat(days_of_week[i - 1]["date"]).IsEqualTo(
@@ -52,7 +54,10 @@ class DateTimeCalculatorTest(unittest.TestCase):
     def test_calculate_different_year_handles_anniversaries_correctly(
         self, year, week, expected_year, expected_week
     ):
-        calculated_year, calculated_week = calculate_different_year(year, week)
+        (
+            calculated_year,
+            calculated_week,
+        ) = self.date_time_helper.calculate_different_year(year, week)
 
         AssertThat(calculated_year).IsEqualTo(expected_year)
         AssertThat(calculated_week).IsEqualTo(expected_week)
@@ -88,6 +93,8 @@ class DateTimeCalculatorTest(unittest.TestCase):
     def test_hour_number_to_24_hours_format_transforms_correctly(
         self, hour, expected_hour
     ):
-        calculated_hour = hour_number_to_24_hours_format(hour)
+        calculated_hour = self.date_time_helper.hour_number_to_24_hours_format(
+            hour
+        )
 
         AssertThat(calculated_hour).IsEqualTo(expected_hour)

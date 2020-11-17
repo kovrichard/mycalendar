@@ -14,19 +14,18 @@ from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_user import User
 from mycalendar.db_models.db_week import Week
-from mycalendar.lib.datetime_calculator import (
-    calculate_days_of_week,
-    calculate_different_year,
-)
+from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.lib.user_access import UserAccess
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
+
+date_time_helper = DateTimeHelper()
 
 
 @week_bp.route("/<int:year>/<int:week>", methods=["GET", "POST"])
 @login_required
 def get_week(year, week):
-    year, week = calculate_different_year(year, week)
+    year, week = date_time_helper.calculate_different_year(year, week)
 
     if request.method == "GET":
         return handle_get(year, week)
@@ -36,7 +35,7 @@ def get_week(year, week):
 
 def handle_get(year, week):
     current_week = __persist_week_to_db(year, week)
-    days_of_week = calculate_days_of_week(year, week)
+    days_of_week = date_time_helper.calculate_days_of_week(year, week)
 
     events = Event.query.filter_by(
         week_id=current_week.id, user_id=current_user.id
@@ -79,7 +78,7 @@ def handle_post(year, week):
         elif event:
             __delete_event(event)
 
-    days_of_week = calculate_days_of_week(year, week)
+    days_of_week = date_time_helper.calculate_days_of_week(year, week)
 
     events = Event.query.filter_by(
         week_id=current_week.id, user_id=current_user.id
@@ -238,14 +237,14 @@ def shared_calendar(year, week, token):
     if not decoded_token:
         abort(401)
 
-    year, week = calculate_different_year(year, week)
+    year, week = date_time_helper.calculate_different_year(year, week)
 
     return __handle_shared_get(year, week, decoded_token, token)
 
 
 def __handle_shared_get(year, week, decoded_token, token):
     current_week = __persist_week_to_db(year, week)
-    days_of_week = calculate_days_of_week(year, week)
+    days_of_week = date_time_helper.calculate_days_of_week(year, week)
 
     events = Event.query.filter_by(
         week_id=current_week.id, user_id=decoded_token["user_id"]

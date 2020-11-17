@@ -14,12 +14,13 @@ from flask_user import current_user, login_required
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_user import User
-from mycalendar.lib.datetime_calculator import hour_number_to_24_hours_format
+from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.lib.user_access import UserAccess
 
 event_mod_bp = Blueprint(
     "event_modification", __name__, template_folder="templates"
 )
+date_time_helper = DateTimeHelper()
 
 
 @event_mod_bp.route("/", strict_slashes=False, methods=["POST"])
@@ -58,8 +59,8 @@ def __render_view(
         "%Y-%m-%d"
     )
     end_date = datetime.fromisocalendar(year, week, day + 1)
-    start_time = hour_number_to_24_hours_format(str(hour))
-    end_time = hour_number_to_24_hours_format(str(hour + 1))
+    start_time = date_time_helper.hour_number_to_24_hours_format(str(hour))
+    end_time = date_time_helper.hour_number_to_24_hours_format(str(hour + 1))
 
     if hour == 23:
         end_date += timedelta(days=1)
