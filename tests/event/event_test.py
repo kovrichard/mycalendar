@@ -126,7 +126,7 @@ class EventModificationTest(
         AssertThat(context["event"]).IsEqualTo(None)
 
     def test_shared_event_view_denies_access_with_wrong_token(self):
-        r = self.client.post("/add-event/<wrong_token>")
+        r = self.client.post("/shared-event/<wrong_token>")
 
         AssertThat(r.status_code).IsEqualTo(401)
 
@@ -140,7 +140,7 @@ class EventModificationTest(
         ).generate(user.id, timedelta(days=1))
 
         r = self.client.post(
-            f"/add-event/{token}",
+            f"/shared-event/{token}",
             data={"year": "2020", "week": "1", "hour": "1", "day": "1"},
         )
 
@@ -209,7 +209,7 @@ class EventModificationTest(
         db.session.commit()
 
         r = self.client.post(
-            f"/add-event/{token}",
+            f"/shared-event/{token}",
             data={"year": "2020", "week": "2", "hour": "0", "day": "0"},
         )
 
@@ -219,7 +219,7 @@ class EventModificationTest(
         AssertThat(r.data).Contains(b'placeholder="Your name here"')
 
     def test_register_guest_denies_access_with_wrong_token(self):
-        r = self.client.post("/add-event/register-guest/<wrong_token>")
+        r = self.client.post("/register-guest/<wrong_token>")
 
         AssertThat(r.status_code).IsEqualTo(401)
 
@@ -233,7 +233,7 @@ class EventModificationTest(
         ).generate(user.id, timedelta(days=1))
 
         r = self.client.post(
-            f"/add-event/register-guest/{token}",
+            f"/register-guest/{token}",
             data={"event-id": 1, "guest-name": ""},
         )
 
@@ -263,7 +263,7 @@ class EventModificationTest(
         guest_name = "Test Name"
 
         r = self.client.post(
-            f"/add-event/register-guest/{token}",
+            f"/register-guest/{token}",
             data={"event-id": event.id, "guest-name": guest_name},
         )
 
