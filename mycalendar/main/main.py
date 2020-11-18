@@ -17,7 +17,7 @@ def get_main():
 
     return redirect(
         url_for(
-            "week.get_week",
+            "week.week",
             year=now[0],
             week=now[1],
             days_of_week=days_of_week,

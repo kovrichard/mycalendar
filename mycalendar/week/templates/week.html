@@ -5,11 +5,11 @@
        
     <div id="weekBar" class="container">
         <div class="row justify-content-center">
-            <form action="{{ url_for('week.get_week', year = year_number, week = week_number-1) }}" class="col col-2">
+            <form action="{{ url_for('week.week', year = year_number, week = week_number-1) }}" class="col col-2">
                 <input type="submit" value="<" class="btn week-btn">
             </form>
             <h2 id="weekNumber" class="col-auto">Week - {{ week_number }}, {{ year_number }}</h2>
-            <form action="{{ url_for('week.get_week', year = year_number, week = week_number+1) }}" class="col col-2">
+            <form action="{{ url_for('week.week', year = year_number, week = week_number+1) }}" class="col col-2">
                 <input type="submit" value=">" class="btn week-btn">
             </form>
         </div>
