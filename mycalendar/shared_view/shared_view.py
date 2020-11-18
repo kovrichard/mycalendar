@@ -75,35 +75,33 @@ class SharedEventView(MethodView):
         )
 
 
-@shared_view_bp.route(
-    "/register-guest/<string:token>", strict_slashes=False, methods=["POST"]
-)
-def register_guest(token):
-    decoded_token = UserAccess(
-        current_app.config["SHARING_TOKEN_SECRET"]
-    ).decode(token)
+class RegisterGuest(MethodView):
+    def post(self, token):
+        decoded_token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).decode(token)
 
-    if not decoded_token:
-        abort(401)
+        if not decoded_token:
+            abort(401)
 
-    event_id = request.form["event-id"]
-    guest_name = request.form["guest-name"]
+        event_id = request.form["event-id"]
+        guest_name = request.form["guest-name"]
 
-    if event := Event.query.filter_by(id=event_id).first():
-        event.guest_name = guest_name
-        db.session.add(event)
-        db.session.commit()
+        if event := Event.query.filter_by(id=event_id).first():
+            event.guest_name = guest_name
+            db.session.add(event)
+            db.session.commit()
 
-    now = datetime.now().isocalendar()
-    return redirect(
-        url_for(
-            "shared_view.week",
-            year=now[0],
-            week=now[1],
-            token=token,
-        ),
-        302,
-    )
+        now = datetime.now().isocalendar()
+        return redirect(
+            url_for(
+                "shared_view.week",
+                year=now[0],
+                week=now[1],
+                token=token,
+            ),
+            302,
+        )
 
 
 class SharedWeekView(MethodView):
@@ -181,4 +179,11 @@ shared_view_bp.add_url_rule(
     "/<int:year>/<int:week>/shared-calendar/<string:token>",
     view_func=SharedWeekView.as_view("week"),
     methods=["GET"],
+)
+
+shared_view_bp.add_url_rule(
+    "/register-guest/<string:token>",
+    strict_slashes=False,
+    view_func=RegisterGuest.as_view("register_guest"),
+    methods=["POST"],
 )
