@@ -280,6 +280,33 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.data).Contains(b"Event ends on a different day!")
 
     @logged_in_user()
+    def test_get_week_event_insertion_handles_wrongly_formatted_time(
+        self, default_user
+    ):
+        self.__insert_week()
+
+        wrong_time_event = {
+            "event-id": -1,
+            "title": "test_title",
+            "description": "test_description",
+            "location": "test_location",
+            "start_date": "2020-10-20",
+            "start_time": "02:00",
+            "end_date": "2020-10-20",
+            "end_time": "03:00",
+            "business_hour": 1,
+            "action": "Save",
+            "guest-name": "",
+        }
+
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=wrong_time_event)
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(template.name).IsEqualTo("week.html")
+        AssertThat(r.data).Contains(wrong_time_event["title"].encode())
+
+    @logged_in_user()
     def test_get_week_post_shows_saved_events(self, default_user):
         self.__insert_week()
         r = self.client.post(f"/{YEAR}/{WEEK}", data=TEST_EVENT)
@@ -318,6 +345,32 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         r = self.client.post(f"/{YEAR}/{WEEK}", data=modified_event)
 
         AssertThat(r.data).Contains(new_title.encode())
+
+    @logged_in_user()
+    def test_get_week_event_modification_handles_wrongly_formatted_time(
+        self, default_user
+    ):
+        week = self.__insert_week()
+        event = self.__insert_event(default_user.id, week.id)
+        modified_event = {
+            "event-id": event.id,
+            "title": event.title,
+            "description": event.description,
+            "location": event.location,
+            "start_date": event.start.date(),
+            "start_time": "02:00",
+            "end_date": event.end.date(),
+            "end_time": "03:00",
+            "business_hour": event.event_type,
+            "action": "Save",
+            "guest-name": "",
+        }
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=modified_event)
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(template.name).IsEqualTo("week.html")
+        AssertThat(r.data).Contains(modified_event["title"].encode())
 
     @logged_in_user()
     def test_shared_calendar_shows_created_events(self, default_user):

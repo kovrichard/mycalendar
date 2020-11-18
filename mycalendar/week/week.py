@@ -96,13 +96,14 @@ class WeekView(MethodView):
         db.session.commit()
 
     def __modify_event(self, event, event_type):
+        start_time = self.__format_time(request.form["start_time"])
+        end_time = self.__format_time(request.form["end_time"])
+
         event.title = request.form["title"]
         event.description = request.form["description"]
         event.location = request.form["location"]
-        event.start = (
-            f"{request.form['start_date']} {request.form['start_time']}"
-        )
-        event.end = f"{request.form['end_date']} {request.form['end_time']}"
+        event.start = f"{request.form['start_date']} {start_time}"
+        event.end = f"{request.form['end_date']} {end_time}"
         event.event_type = event_type
         event.guest_name = (
             request.form["guest-name"] if event_type == 1 else ""
@@ -111,12 +112,15 @@ class WeekView(MethodView):
         return event
 
     def __insert_new_event(self, current_week, event_type):
+        start_time = self.__format_time(request.form["start_time"])
+        end_time = self.__format_time(request.form["end_time"])
+
         event = Event(
             title=request.form["title"],
             description=request.form["description"],
             location=request.form["location"],
-            start=f"{request.form['start_date']} {request.form['start_time']}",
-            end=f"{request.form['end_date']} {request.form['end_time']}",
+            start=f"{request.form['start_date']} {start_time}",
+            end=f"{request.form['end_date']} {end_time}",
             event_type=event_type,
             guest_name=request.form["guest-name"] if event_type == 1 else "",
         )
@@ -126,6 +130,13 @@ class WeekView(MethodView):
         current_user.events.append(event)
 
         return event
+
+    def __format_time(self, time_string):
+        try:
+            datetime.datetime.strptime(time_string, "%H:%M:%S")
+            return time_string
+        except ValueError:
+            return f"{time_string}:00"
 
     def __format_for_render(self, events):
         tmp = []
