@@ -31,7 +31,7 @@ class EventModificationTest(
     @logged_in_user()
     def test_event_renders_template(self, default_user):
         r = self.client.post(
-            "/add-event",
+            "/event",
             data={"year": "2020", "week": "1", "hour": "1", "day": "1"},
         )
 
@@ -76,7 +76,7 @@ class EventModificationTest(
         db.session.commit()
 
         r = self.client.post(
-            "/add-event",
+            "/event",
             data={"year": "2020", "week": "43", "hour": "0", "day": "0"},
         )
 
@@ -112,7 +112,7 @@ class EventModificationTest(
         db.session.commit()
 
         r = self.client.post(
-            "/add-event",
+            "/event",
             data={"year": "2020", "week": "43", "hour": "0", "day": "1"},
         )
 
@@ -137,7 +137,7 @@ class EventModificationTest(
         db.session.commit()
 
         r = self.client.post(
-            "/add-event",
+            "/event",
             data={"year": "2020", "week": "2", "hour": "0", "day": "0"},
         )
 

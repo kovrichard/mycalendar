@@ -19,7 +19,7 @@ def create_app(config=None):
 
     app.register_blueprint(main_bp, url_prefix="/")
     app.register_blueprint(week_bp, url_prefix="/")
-    app.register_blueprint(event_bp, url_prefix="/add-event")
+    app.register_blueprint(event_bp, url_prefix="/event")
     app.register_blueprint(share_bp, url_prefix="/share")
     app.register_blueprint(shared_view_bp, url_prefix="")
 

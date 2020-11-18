@@ -33,5 +33,8 @@ def get_share_link():
 
 
 share_bp.add_url_rule(
-    "/", strict_slashes=False, view_func=ShareAPI.as_view("share")
+    "/",
+    strict_slashes=False,
+    view_func=ShareAPI.as_view("share"),
+    methods=["GET"],
 )
