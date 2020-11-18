@@ -22,4 +22,6 @@ class MainView(MethodView):
         )
 
 
-main_bp.add_url_rule("/", view_func=MainView.as_view("main"), methods=["GET"])
+main_bp.add_url_rule(
+    "/", view_func=MainView.as_view("main_view"), methods=["GET"]
+)

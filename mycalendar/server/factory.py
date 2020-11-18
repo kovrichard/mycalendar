@@ -4,7 +4,7 @@ from flask import Flask
 
 from mycalendar.event.event_view import event_bp
 from mycalendar.main.main_view import main_bp
-from mycalendar.share.share import share_bp
+from mycalendar.share.share_view import share_bp
 from mycalendar.shared_view.shared_view import shared_view_bp
 from mycalendar.week.week import week_bp
 

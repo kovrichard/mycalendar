@@ -39,6 +39,6 @@ class EventView(MethodView):
 event_bp.add_url_rule(
     "/",
     strict_slashes=False,
-    view_func=EventView.as_view("event"),
+    view_func=EventView.as_view("event_view"),
     methods=["POST"],
 )

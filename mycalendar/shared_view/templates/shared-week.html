@@ -41,7 +41,7 @@
                             {% if shared_calendar %}
                             <form method="post" action="{{ url_for('shared_view.event', token = token) }}">
                             {% else %}
-                            <form method="post" action="{{ url_for('event.event') }}">
+                            <form method="post" action="{{ url_for('event.event_view') }}">
                             {% endif %}
                                 {% set current_event = { "type": "" } %}
                                 {% for event in events if event.day == day and hour in event.hour %}
