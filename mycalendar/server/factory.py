@@ -4,6 +4,7 @@ from flask import Flask
 
 from mycalendar.event.event_view import event_bp
 from mycalendar.main.main_view import main_bp
+from mycalendar.share.share_link_creator import share_link_bp
 from mycalendar.share.share_view import share_bp
 from mycalendar.shared_view.shared_view import shared_view_bp
 from mycalendar.week.week import week_bp
@@ -21,6 +22,7 @@ def create_app(config=None):
     app.register_blueprint(week_bp, url_prefix="/")
     app.register_blueprint(event_bp, url_prefix="/event")
     app.register_blueprint(share_bp, url_prefix="/share")
+    app.register_blueprint(share_link_bp, url_prefix="/get-share-link")
     app.register_blueprint(shared_view_bp, url_prefix="")
 
     app.jinja_env.globals["current_year"] = datetime.now().isocalendar()[0]

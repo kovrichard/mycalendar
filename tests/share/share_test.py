@@ -40,7 +40,7 @@ class ShareTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         self, default_user
     ):
         r = self.client.get(
-            "/share/get-link",
+            "/get-share-link",
             query_string={
                 "expiration": (datetime.now() + timedelta(days=7)).strftime(
                     "%Y-%m-%d"

@@ -6,7 +6,7 @@ function del() {
 }
 
 $("#getShareLink").click(function() {
-    data = $.getJSON("/share/get-link",
+    data = $.getJSON("/get-share-link",
     {
         "expiration": $("#expiration").val(),
         "share-content": $("#shareContent")[0].checked
