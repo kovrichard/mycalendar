@@ -1,27 +1,22 @@
-from datetime import datetime
-
 from flask import Blueprint, redirect, url_for
 from flask.views import MethodView
 
-from mycalendar.lib.datetime_helper import DateTimeHelper
+from .main_controller import MainController
 
 main_bp = Blueprint("main", __name__, template_folder="templates")
 
-date_time_helper = DateTimeHelper()
-
 
 class MainView(MethodView):
+    def __init__(self):
+        self.__main_controller = MainController()
+
     def get(self):
-        now = datetime.now().isocalendar()
-
-        days_of_week = date_time_helper.calculate_days_of_week(now[0], now[1])
-
         return redirect(
             url_for(
                 "week.week",
-                year=now[0],
-                week=now[1],
-                days_of_week=days_of_week,
+                year=self.__main_controller.get_current_year(),
+                week=self.__main_controller.get_current_week(),
+                days_of_week=self.__main_controller.get_days_of_week(),
             ),
             302,
         )
