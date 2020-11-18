@@ -17,24 +17,39 @@ class ShareView(MethodView):
         )
 
 
-@share_bp.route("/get-link", strict_slashes=False, methods=["GET"])
-@login_required
-def get_share_link():
-    user_id = current_user.id
-    expiration = datetime.strptime(request.args.get("expiration"), "%Y-%m-%d")
-    share_content = (
-        True if request.args.get("share-content") == "true" else False
-    )
-    now = datetime.now().isocalendar()
+class ShareLink(MethodView):
+    @login_required
+    def get(self):
+        user_id = current_user.id
+        expiration = datetime.strptime(
+            request.args.get("expiration"), "%Y-%m-%d"
+        )
+        share_content = (
+            True if request.args.get("share-content") == "true" else False
+        )
 
-    return {
-        "token": f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{UserAccess(current_app.config['SHARING_TOKEN_SECRET']).generate(user_id, expiration - datetime.now(), share_content)}"
-    }
+        return self.__create_shareable_token(
+            user_id, expiration, share_content
+        )
+
+    def __create_shareable_token(user_id, expiration, share_content):
+        now = datetime.now().isocalendar()
+
+        return {
+            "token": f"{current_app.config['CALENDAR_URL']}/{now[0]}/{now[1]}/shared-calendar/{UserAccess(current_app.config['SHARING_TOKEN_SECRET']).generate(user_id, expiration - datetime.now(), share_content)}"
+        }
 
 
 share_bp.add_url_rule(
     "/",
     strict_slashes=False,
     view_func=ShareView.as_view("share"),
+    methods=["GET"],
+)
+
+share_bp.add_url_rule(
+    "/get-link",
+    strict_slashes=False,
+    view_func=ShareLink.as_view("sharelink"),
     methods=["GET"],
 )
