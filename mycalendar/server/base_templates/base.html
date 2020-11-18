@@ -14,7 +14,7 @@
                 {% if current_user.is_authenticated %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a id="navLeft" class="nav-link-left" href="{{ url_for('main.get_main') }}">Current week</a>
+                        <a id="navLeft" class="nav-link-left" href="{{ url_for('main.main') }}">Current week</a>
                     </li>
                 </ul>
                 {% elif shared_calendar %}
