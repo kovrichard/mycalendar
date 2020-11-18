@@ -9,6 +9,7 @@ from flask import (
     request,
     url_for,
 )
+from flask.views import MethodView
 
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
@@ -23,55 +24,55 @@ shared_view_bp = Blueprint(
 date_time_helper = DateTimeHelper()
 
 
-@shared_view_bp.route(
-    "/shared-event/<string:token>", strict_slashes=False, methods=["POST"]
-)
-def shared_event_view(token):
-    decoded_token = UserAccess(
-        current_app.config["SHARING_TOKEN_SECRET"]
-    ).decode(token)
+class SharedEventView(MethodView):
+    def post(self, token):
+        decoded_token = UserAccess(
+            current_app.config["SHARING_TOKEN_SECRET"]
+        ).decode(token)
 
-    if not decoded_token:
-        abort(401)
+        if not decoded_token:
+            abort(401)
 
-    user_name = (
-        User.query.filter_by(id=decoded_token["user_id"]).first().username
-    )
+        user_name = (
+            User.query.filter_by(id=decoded_token["user_id"]).first().username
+        )
 
-    year = int(request.form["year"])
-    week = int(request.form["week"])
-    day = int(request.form["day"])
-    hour = int(request.form["hour"])
+        year = int(request.form["year"])
+        week = int(request.form["week"])
+        day = int(request.form["day"])
+        hour = int(request.form["hour"])
 
-    start_date = datetime.fromisocalendar(year, week, int(day) + 1).strftime(
-        "%Y-%m-%d"
-    )
-    end_date = datetime.fromisocalendar(year, week, day + 1)
-    start_time = date_time_helper.hour_number_to_24_hours_format(str(hour))
-    end_time = date_time_helper.hour_number_to_24_hours_format(str(hour + 1))
+        start_date = datetime.fromisocalendar(
+            year, week, int(day) + 1
+        ).strftime("%Y-%m-%d")
+        end_date = datetime.fromisocalendar(year, week, day + 1)
+        start_time = date_time_helper.hour_number_to_24_hours_format(str(hour))
+        end_time = date_time_helper.hour_number_to_24_hours_format(
+            str(hour + 1)
+        )
 
-    if hour == 23:
-        end_date += timedelta(days=1)
-    end_date = end_date.strftime("%Y-%m-%d")
+        if hour == 23:
+            end_date += timedelta(days=1)
+        end_date = end_date.strftime("%Y-%m-%d")
 
-    event = Event.query.filter(
-        Event.start <= f"{start_date} {start_time}",
-        Event.end >= f"{end_date} {end_time}",
-        Event.user_id == decoded_token["user_id"],
-    ).first()
+        event = Event.query.filter(
+            Event.start <= f"{start_date} {start_time}",
+            Event.end >= f"{end_date} {end_time}",
+            Event.user_id == decoded_token["user_id"],
+        ).first()
 
-    return render_template(
-        "shared-event.html",
-        year_number=year,
-        week_number=week,
-        event=event,
-        start_date=event.start.date() if event else start_date,
-        start_time=event.start.time() if event else start_time,
-        end_date=event.end.date() if event else end_date,
-        end_time=event.end.time() if event else end_time,
-        shared_user_name=user_name,
-        token=token,
-    )
+        return render_template(
+            "shared-event.html",
+            year_number=year,
+            week_number=week,
+            event=event,
+            start_date=event.start.date() if event else start_date,
+            start_time=event.start.time() if event else start_time,
+            end_date=event.end.date() if event else end_date,
+            end_time=event.end.time() if event else end_time,
+            shared_user_name=user_name,
+            token=token,
+        )
 
 
 @shared_view_bp.route(
@@ -119,10 +120,6 @@ def shared_calendar(year, week, token):
 
     year, week = date_time_helper.calculate_different_year(year, week)
 
-    return __handle_shared_get(year, week, decoded_token, token)
-
-
-def __handle_shared_get(year, week, decoded_token, token):
     current_week = __persist_week_to_db(year, week)
     days_of_week = date_time_helper.calculate_days_of_week(year, week)
 
@@ -176,3 +173,11 @@ def __format_for_render(events):
         tmp.append(item)
 
     return tmp
+
+
+shared_view_bp.add_url_rule(
+    "/shared-event/<string:token>",
+    strict_slashes=False,
+    view_func=SharedEventView.as_view("shared_view"),
+    methods=["POST"],
+)

@@ -32,7 +32,7 @@ class ShareLink(MethodView):
             user_id, expiration, share_content
         )
 
-    def __create_shareable_token(user_id, expiration, share_content):
+    def __create_shareable_token(self, user_id, expiration, share_content):
         now = datetime.now().isocalendar()
 
         return {
