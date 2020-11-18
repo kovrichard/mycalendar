@@ -5,11 +5,11 @@
        
     <div id="weekBar" class="container">
         <div class="row justify-content-center">
-            <form action="{{ url_for('shared_view.shared_calendar', year = year_number, week = week_number-1, token = token) }}" class="col col-2">
+            <form action="{{ url_for('shared_view.week', year = year_number, week = week_number-1, token = token) }}" class="col col-2">
                 <input type="submit" value="<" class="btn week-btn">
             </form>
             <h2 id="weekNumber" class="col-auto">Week - {{ week_number }}, {{ year_number }}</h2>
-            <form action="{{ url_for('shared_view.shared_calendar', year = year_number, week = week_number+1, token = token) }}" class="col col-2">
+            <form action="{{ url_for('shared_view.week', year = year_number, week = week_number+1, token = token) }}" class="col col-2">
                 <input type="submit" value=">" class="btn week-btn">
             </form>    
         </div>
@@ -39,7 +39,7 @@
                         {% for day in range(7) %}
                         <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
                             {% if shared_calendar %}
-                            <form method="post" action="{{ url_for('shared_view.shared_view', token = token) }}">
+                            <form method="post" action="{{ url_for('shared_view.event', token = token) }}">
                             {% else %}
                             <form method="post" action="{{ url_for('event.event') }}">
                             {% endif %}

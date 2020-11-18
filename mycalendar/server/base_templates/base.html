@@ -20,7 +20,7 @@
                 {% elif shared_calendar %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a id="navLeft" class="nav-link-left" href="{{ url_for('shared_view.shared_calendar', year = current_year, week = current_week, token = token) }}">Current week</a>
+                        <a id="navLeft" class="nav-link-left" href="{{ url_for('shared_view.week', year = current_year, week = current_week, token = token) }}">Current week</a>
                     </li>
                 </ul>
                 {% endif %}
