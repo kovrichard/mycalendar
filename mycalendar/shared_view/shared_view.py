@@ -131,7 +131,7 @@ def __handle_shared_get(year, week, decoded_token, token):
     ).all()
 
     return render_template(
-        "week.html",
+        "shared-week.html",
         year_number=year,
         week_number=week,
         days_of_week=days_of_week,

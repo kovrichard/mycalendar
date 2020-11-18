@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+       
+    <div id="weekBar" class="container">
+        <div class="row justify-content-center">
+            {% with week_number=week_number-1, text="<" %}
+                {% include 'shared-week-button.html' if shared_calendar else 'week-button.html' %}
+            {% endwith %}
+            <h2 id="weekNumber" class="col-auto">Week - {{ week_number }}, {{ year_number }}</h2>
+            {% with week_number=week_number+1, text=">" %}
+                {% include 'shared-week-button.html' if shared_calendar else 'week-button.html' %}
+            {% endwith %}
+        </div>
+    </div>
+    
+    <div id="scrollBar">
+        <table id="tableBordered" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col" id="hour-header" class="align-middle table-fix-head">H</th>
+                    {% for day in days_of_week %}
+                    <th scope="col" id="days-header" class="table-fix-head">
+                        <div>
+                            {{ day.name }}
+                        </div>
+                        <div>
+                            {{ day.date }}
+                        </div>
+                    </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for hour in range(24) %}
+                    <tr>
+                        <th scope="row" class="tw-4">{{ hour }}:00</th>
+                        {% for day in range(7) %}
+                        <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
+                            {% if shared_calendar %}
+                            <form method="post" action="{{ url_for('shared_view.shared_event_view', token = token) }}">
+                            {% else %}
+                            <form method="post" action="{{ url_for('event.event') }}">
+                            {% endif %}
+                                {% set current_event = { "type": "" } %}
+                                {% for event in events if event.day == day and hour in event.hour %}
+                                    {% if current_event.update(event) %}{% endif %}
+                                {% endfor %}
+                                {% if shared_calendar and current_event.type != "" or not shared_calendar %}
+                                {% set disabled = "disabled" if shared_calendar and not share_content else "" %}
+                                <input type="submit" value="{{ current_event.title }}" class="w-100 btn event-btn bh-1 {{ current_event.type }}" name="btn-{{ hour }}-{{ day }}" {{ disabled }}/>
+                                <input value={{ year_number }} name="year" hidden/>
+                                <input value={{ week_number }} name="week" hidden/>
+                                <input value={{ hour }} name="hour" hidden/>
+                                <input value={{ day }} name="day" hidden/>
+                                {% endif %}
+                            </form>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+{% endblock %}
