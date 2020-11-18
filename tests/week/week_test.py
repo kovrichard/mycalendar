@@ -78,7 +78,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             AssertThat(context["days_of_week"][i - 1]["name"]).IsEqualTo(
                 datetime.fromisocalendar(YEAR, WEEK, i).date().strftime("%a")
             )
-        
+
         AssertThat(r.data).Contains(b'value="<"')
         AssertThat(r.data).Contains(b'value=">"')
 
