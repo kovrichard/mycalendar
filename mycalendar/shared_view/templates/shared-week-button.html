@@ -1,5 +1,0 @@
-{% block button %}
-    <form action="{{ url_for('shared_view.shared_calendar', year = year_number, week = week_number, token = token) }}" class="col col-2">
-        <input type="submit" value="{{ text }}" class="btn week-btn">
-    </form>
-{% endblock %}

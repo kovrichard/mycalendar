@@ -168,6 +168,9 @@ class SharedViewTest(
         AssertThat(context["shared_calendar"]).IsTrue()
         AssertThat(context["shared_user_name"]).IsEqualTo(user.username)
 
+        AssertThat(r.data).Contains(b'value="<"')
+        AssertThat(r.data).Contains(b'value=">"')
+
     def test_shared_calendar_event_creation_is_disabled(self):
         user = User(username="user", password="password")
         db.session.add(user)
