@@ -11,7 +11,7 @@ event_bp = Blueprint("event", __name__, template_folder="templates")
 date_time_helper = DateTimeHelper()
 
 
-class EventAPI(MethodView):
+class EventView(MethodView):
     @login_required
     def post(self):
         year = int(request.form["year"])
@@ -53,6 +53,6 @@ class EventAPI(MethodView):
 event_bp.add_url_rule(
     "/",
     strict_slashes=False,
-    view_func=EventAPI.as_view("event"),
+    view_func=EventView.as_view("event"),
     methods=["POST"],
 )

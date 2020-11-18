@@ -9,7 +9,7 @@ from mycalendar.lib.user_access import UserAccess
 share_bp = Blueprint("share", __name__, template_folder="templates")
 
 
-class ShareAPI(MethodView):
+class ShareView(MethodView):
     @login_required
     def get(self):
         return render_template(
@@ -35,6 +35,6 @@ def get_share_link():
 share_bp.add_url_rule(
     "/",
     strict_slashes=False,
-    view_func=ShareAPI.as_view("share"),
+    view_func=ShareView.as_view("share"),
     methods=["GET"],
 )

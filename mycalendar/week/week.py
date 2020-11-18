@@ -14,7 +14,7 @@ week_bp = Blueprint("week", __name__, template_folder="templates")
 date_time_helper = DateTimeHelper()
 
 
-class WeekAPI(MethodView):
+class WeekView(MethodView):
     @login_required
     def get(self, year, week):
         current_week = self.__persist_week_to_db(year, week)
@@ -218,6 +218,6 @@ class DifferentDayEndError(Exception):
 
 week_bp.add_url_rule(
     "/<int:year>/<int:week>",
-    view_func=WeekAPI.as_view("week"),
+    view_func=WeekView.as_view("week"),
     methods=["GET", "POST"],
 )

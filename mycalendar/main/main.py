@@ -10,7 +10,7 @@ main_bp = Blueprint("main", __name__, template_folder="templates")
 date_time_helper = DateTimeHelper()
 
 
-class MainAPI(MethodView):
+class MainView(MethodView):
     def get(self):
         now = datetime.now().isocalendar()
 
@@ -27,4 +27,4 @@ class MainAPI(MethodView):
         )
 
 
-main_bp.add_url_rule("/", view_func=MainAPI.as_view("main"), methods=["GET"])
+main_bp.add_url_rule("/", view_func=MainView.as_view("main"), methods=["GET"])
