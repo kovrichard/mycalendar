@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Flask
 
-from mycalendar.event.event import event_bp
+from mycalendar.event.event_view import event_bp
 from mycalendar.main.main import main_bp
 from mycalendar.share.share import share_bp
 from mycalendar.shared_view.shared_view import shared_view_bp
