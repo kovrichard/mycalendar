@@ -46,35 +46,33 @@ class WeekView(MethodView):
 
         event_type = self.__week_controller.get_event_type_from_request()
 
-        if current_week := Week.query.filter_by(
-            year=year, week_num=week
-        ).first():
-            event = Event.query.filter_by(id=request.form["event-id"]).first()
+        current_week = self.__week_controller.get_current_week()
+        event = Event.query.filter_by(id=request.form["event-id"]).first()
 
-            if request.form["action"] == "Save":
-                if event:
-                    new_event = self.__week_controller.modify_event(
-                        event, event_type
-                    )
-                else:
-                    new_event = self.__week_controller.insert_new_event(
-                        current_week, event_type
-                    )
-
-                try:
-                    self.__check_event(new_event)
-                    db.session.commit()
-                except OverlappingEventError as o:
-                    db.session.rollback()
-                    return self.__return_to_modification(year, week, new_event)
-                except EndBeforeStartError as e:
-                    db.session.rollback()
-                    return self.__return_to_modification(year, week, new_event)
-                except DifferentDayEndError as d:
-                    db.session.rollback()
-                    return self.__return_to_modification(year, week, new_event)
+        if request.form["action"] == "Save":
+            if event:
+                new_event = self.__week_controller.modify_event(
+                    event, event_type
+                )
             else:
-                self.__week_controller.delete_event(event)
+                new_event = self.__week_controller.insert_new_event(
+                    current_week, event_type
+                )
+
+            try:
+                self.__check_event(new_event)
+                db.session.commit()
+            except OverlappingEventError as o:
+                db.session.rollback()
+                return self.__return_to_modification(year, week, new_event)
+            except EndBeforeStartError as e:
+                db.session.rollback()
+                return self.__return_to_modification(year, week, new_event)
+            except DifferentDayEndError as d:
+                db.session.rollback()
+                return self.__return_to_modification(year, week, new_event)
+        else:
+            self.__week_controller.delete_event(event)
 
         days_of_week = self.__week_controller.get_days_of_week()
         events = self.__week_controller.get_formatted_events()
