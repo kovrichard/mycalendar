@@ -77,6 +77,18 @@ class WeekController:
             tmp.append(item)
 
         return tmp
+    
+    def save_event(self, event):
+        if event:
+            new_event = self.modify_event(
+                event, self.get_event_type_from_request()
+            )
+        else:
+            new_event = self.insert_new_event(
+                self.get_current_week(), self.get_event_type_from_request()
+            )
+        return new_event
+    
 
     def insert_new_event(self, current_week, event_type):
         start_time = self.__format_time(self.__request.form["start_time"])

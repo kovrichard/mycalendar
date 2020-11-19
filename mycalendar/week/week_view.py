@@ -53,14 +53,7 @@ class WeekView(MethodView):
         event = Event.query.filter_by(id=request.form["event-id"]).first()
 
         if request.form["action"] == "Save":
-            if event:
-                new_event = self.__week_controller.modify_event(
-                    event, event_type
-                )
-            else:
-                new_event = self.__week_controller.insert_new_event(
-                    current_week, event_type
-                )
+            new_event = self.__week_controller.save_event(event)
 
             try:
                 self.__week_controller.check_event(new_event)
