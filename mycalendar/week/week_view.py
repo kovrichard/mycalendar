@@ -71,9 +71,8 @@ class WeekView(MethodView):
                 except DifferentDayEndError as d:
                     db.session.rollback()
                     return self.__return_to_modification(year, week, new_event)
-
-            elif event:
-                self.__delete_event(event)
+            else:
+                self.__week_controller.delete_event(event)
 
         days_of_week = self.__week_controller.get_days_of_week()
         events = self.__week_controller.get_formatted_events()
@@ -85,12 +84,6 @@ class WeekView(MethodView):
             days_of_week=days_of_week,
             events=events,
         )
-
-    def __delete_event(self, event):
-        Event.query.filter_by(
-            start=event.start, end=event.end, user_id=event.user_id
-        ).delete()
-        db.session.commit()
 
     def __modify_event(self, event, event_type):
         start_time = self.__format_time(request.form["start_time"])

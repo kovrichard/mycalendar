@@ -72,3 +72,10 @@ class WeekController:
             tmp.append(item)
 
         return tmp
+
+    def delete_event(self, event):
+        if event:
+            Event.query.filter_by(
+                start=event.start, end=event.end, user_id=event.user_id
+            ).delete()
+            db.session.commit()
