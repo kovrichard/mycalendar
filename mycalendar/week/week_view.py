@@ -1,14 +1,17 @@
-import datetime
-
 from flask import Blueprint, flash, render_template, request
 from flask.views import MethodView
 from flask_user import current_user, login_required
 
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
-from mycalendar.db_models.db_week import Week
 from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.week.week_controller import WeekController
+
+from .week_controller import (
+    DifferentDayEndError,
+    EndBeforeStartError,
+    OverlappingEventError,
+)
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
@@ -60,15 +63,21 @@ class WeekView(MethodView):
                 )
 
             try:
-                self.__check_event(new_event)
+                self.__week_controller.check_event(new_event)
                 db.session.commit()
             except OverlappingEventError as o:
+                flash("Overlapping event!", "danger")
                 db.session.rollback()
                 return self.__return_to_modification(year, week, new_event)
             except EndBeforeStartError as e:
+                flash(
+                    "End of event cannot be earlier than (or equal to) its start!",
+                    "danger",
+                )
                 db.session.rollback()
                 return self.__return_to_modification(year, week, new_event)
             except DifferentDayEndError as d:
+                flash("Event ends on a different day!", "danger")
                 db.session.rollback()
                 return self.__return_to_modification(year, week, new_event)
         else:
@@ -85,49 +94,6 @@ class WeekView(MethodView):
             events=events,
         )
 
-    def __check_event(self, new_event):
-        self.__overlapping_event(new_event)
-        self.__event_end_is_earlier_than_start(new_event)
-        self.__event_ends_on_different_day(new_event)
-
-    def __overlapping_event(self, new_event):
-        wrong_events = Event.query.filter(
-            (Event.id != new_event.id)
-            & (
-                (
-                    (new_event.start <= Event.start)
-                    & (Event.start < new_event.end)
-                )
-                | (
-                    (new_event.start < Event.end)
-                    & (Event.end <= new_event.end)
-                )
-            )
-        ).all()
-
-        if len(wrong_events) > 0:
-            flash("Overlapping event!", "danger")
-            raise OverlappingEventError
-
-    def __event_end_is_earlier_than_start(self, new_event):
-        if new_event.end <= new_event.start:
-            flash(
-                "End of event cannot be earlier than (or equal to) its start!",
-                "danger",
-            )
-            raise EndBeforeStartError
-
-    def __event_ends_on_different_day(self, new_event):
-        start = datetime.datetime.strptime(
-            new_event.start, "%Y-%m-%d %H:%M:%S"
-        )
-        end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M:%S")
-        if (start.date() != end.date()) and (
-            datetime.time(0, 0, 1) <= end.time()
-        ):
-            flash("Event ends on a different day!", "danger")
-            raise DifferentDayEndError
-
     def __return_to_modification(self, year, week, new_event):
         return render_template(
             "event.html",
@@ -139,18 +105,6 @@ class WeekView(MethodView):
             end_date=request.form["end_date"],
             end_time=request.form["end_time"],
         )
-
-
-class OverlappingEventError(Exception):
-    pass
-
-
-class EndBeforeStartError(Exception):
-    pass
-
-
-class DifferentDayEndError(Exception):
-    pass
 
 
 week_bp.add_url_rule(

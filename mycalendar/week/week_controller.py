@@ -89,7 +89,9 @@ class WeekController:
             start=f"{self.__request.form['start_date']} {start_time}",
             end=f"{self.__request.form['end_date']} {end_time}",
             event_type=event_type,
-            guest_name=self.__request.form["guest-name"] if event_type == 1 else "",
+            guest_name=self.__request.form["guest-name"]
+            if event_type == 1
+            else "",
         )
         db.session.add(event)
 
@@ -127,3 +129,53 @@ class WeekController:
             return time_string
         except ValueError:
             return f"{time_string}:00"
+
+    def check_event(self, new_event):
+        self.__overlapping_event(new_event)
+        self.__event_end_is_earlier_than_start(new_event)
+        self.__event_ends_on_different_day(new_event)
+
+    def __overlapping_event(self, new_event):
+        wrong_events = Event.query.filter(
+            (Event.id != new_event.id)
+            & (
+                (
+                    (new_event.start <= Event.start)
+                    & (Event.start < new_event.end)
+                )
+                | (
+                    (new_event.start < Event.end)
+                    & (Event.end <= new_event.end)
+                )
+            )
+        ).all()
+
+        if len(wrong_events) > 0:
+            raise OverlappingEventError
+
+    def __event_end_is_earlier_than_start(self, new_event):
+        if new_event.end <= new_event.start:
+
+            raise EndBeforeStartError
+
+    def __event_ends_on_different_day(self, new_event):
+        start = datetime.datetime.strptime(
+            new_event.start, "%Y-%m-%d %H:%M:%S"
+        )
+        end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M:%S")
+        if (start.date() != end.date()) and (
+            datetime.time(0, 0, 1) <= end.time()
+        ):
+            raise DifferentDayEndError
+
+
+class OverlappingEventError(Exception):
+    pass
+
+
+class EndBeforeStartError(Exception):
+    pass
+
+
+class DifferentDayEndError(Exception):
+    pass
