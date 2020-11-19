@@ -13,6 +13,7 @@ class WeekController:
         self.__week = ""
         self.__year = ""
         self.__request = ""
+        self.new_event = ""
 
     def set_current_user(self, current_user):
         self.__current_user = current_user
@@ -31,6 +32,9 @@ class WeekController:
         return Week.query.filter_by(
             year=self.__year, week_num=self.__week
         ).first()
+
+    def get_new_event(self):
+        return self.new_event
 
     def get_days_of_week(self):
         return self.__date_time_helper.calculate_days_of_week(
@@ -77,7 +81,30 @@ class WeekController:
             tmp.append(item)
 
         return tmp
-    
+
+    def handle_post_request(self):
+        event = Event.query.filter_by(
+            id=self.__request.form["event-id"]
+        ).first()
+
+        if self.__request.form["action"] == "Save":
+            self.new_event = self.save_event(event)
+
+            try:
+                self.check_event(self.new_event)
+                db.session.commit()
+            except OverlappingEventError:
+                db.session.rollback()
+                raise
+            except EndBeforeStartError:
+                db.session.rollback()
+                raise
+            except DifferentDayEndError:
+                db.session.rollback()
+                raise
+        else:
+            self.delete_event(event)
+
     def save_event(self, event):
         if event:
             new_event = self.modify_event(
@@ -88,7 +115,6 @@ class WeekController:
                 self.get_current_week(), self.get_event_type_from_request()
             )
         return new_event
-    
 
     def insert_new_event(self, current_week, event_type):
         start_time = self.__format_time(self.__request.form["start_time"])
