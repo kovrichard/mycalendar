@@ -10,6 +10,7 @@ class WeekController:
         self.__current_user = ""
         self.__week = ""
         self.__year = ""
+        self.__request = ""
 
     def set_current_user(self, current_user):
         self.__current_user = current_user
@@ -20,6 +21,9 @@ class WeekController:
     def set_week(self, week):
         self.__week = week
         self.__persist_week_to_db()
+
+    def set_request(self, request):
+        self.__request = request
 
     def get_current_week(self):
         return Week.query.filter_by(

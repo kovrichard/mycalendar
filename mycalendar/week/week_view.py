@@ -39,6 +39,11 @@ class WeekView(MethodView):
 
     @login_required
     def post(self, year, week):
+        self.__week_controller.set_current_user(current_user)
+        self.__week_controller.set_year(year)
+        self.__week_controller.set_week(week)
+        self.__week_controller.set_request(request)
+
         event_type = 1 if "business_hour" in request.form else 0
 
         if current_week := Week.query.filter_by(
@@ -70,18 +75,15 @@ class WeekView(MethodView):
             elif event:
                 self.__delete_event(event)
 
-        days_of_week = date_time_helper.calculate_days_of_week(year, week)
-
-        events = Event.query.filter_by(
-            week_id=current_week.id, user_id=current_user.id
-        ).all()
+        days_of_week = self.__week_controller.get_days_of_week()
+        events = self.__week_controller.get_formatted_events()
 
         return render_template(
             "week.html",
             year_number=year,
             week_number=week,
             days_of_week=days_of_week,
-            events=self.__format_for_render(events),
+            events=events,
         )
 
     def __delete_event(self, event):
