@@ -7,7 +7,7 @@ from mycalendar.main.main_view import main_bp
 from mycalendar.share.share_link_creator import share_link_bp
 from mycalendar.share.share_view import share_bp
 from mycalendar.shared_view.shared_view import shared_view_bp
-from mycalendar.week.week import week_bp
+from mycalendar.week.week_view import week_bp
 
 
 def create_app(config=None):

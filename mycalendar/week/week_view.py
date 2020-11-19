@@ -8,6 +8,7 @@ from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_week import Week
 from mycalendar.lib.datetime_helper import DateTimeHelper
+from mycalendar.week.week_controller import WeekController
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
 
@@ -15,21 +16,25 @@ date_time_helper = DateTimeHelper()
 
 
 class WeekView(MethodView):
+    def __init__(self):
+        self.__week_controller = WeekController()
+
     @login_required
     def get(self, year, week):
-        current_week = self.__persist_week_to_db(year, week)
-        days_of_week = date_time_helper.calculate_days_of_week(year, week)
+        self.__week_controller.set_current_user(current_user)
+        self.__week_controller.set_year(year)
+        self.__week_controller.set_week(week)
 
-        events = Event.query.filter_by(
-            week_id=current_week.id, user_id=current_user.id
-        ).all()
+        current_week = self.__week_controller.get_current_week()
+        days_of_week = self.__week_controller.get_days_of_week()
+        events = self.__week_controller.get_formatted_events()
 
         return render_template(
             "week.html",
             year_number=year,
             week_number=week,
             days_of_week=days_of_week,
-            events=self.__format_for_render(events),
+            events=events,
         )
 
     @login_required
@@ -78,16 +83,6 @@ class WeekView(MethodView):
             days_of_week=days_of_week,
             events=self.__format_for_render(events),
         )
-
-    def __persist_week_to_db(self, year, week):
-        tmp = Week.query.filter_by(year=year, week_num=week).first()
-
-        if tmp is None:
-            tmp = Week(year=year, week_num=week)
-            db.session.add(tmp)
-            db.session.commit()
-
-        return tmp
 
     def __delete_event(self, event):
         Event.query.filter_by(
