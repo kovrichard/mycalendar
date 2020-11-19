@@ -53,7 +53,9 @@ class WeekView(MethodView):
 
             if request.form["action"] == "Save":
                 if event:
-                    new_event = self.__modify_event(event, event_type)
+                    new_event = self.__week_controller.modify_event(
+                        event, event_type
+                    )
                 else:
                     new_event = self.__insert_new_event(
                         current_week, event_type

@@ -1,3 +1,5 @@
+import datetime
+
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_week import Week
@@ -76,9 +78,32 @@ class WeekController:
 
         return tmp
 
+    def modify_event(self, event, event_type):
+        start_time = self.__format_time(self.__request.form["start_time"])
+        end_time = self.__format_time(self.__request.form["end_time"])
+
+        event.title = self.__request.form["title"]
+        event.description = self.__request.form["description"]
+        event.location = self.__request.form["location"]
+        event.start = f"{self.__request.form['start_date']} {start_time}"
+        event.end = f"{self.__request.form['end_date']} {end_time}"
+        event.event_type = event_type
+        event.guest_name = (
+            self.__request.form["guest-name"] if event_type == 1 else ""
+        )
+
+        return event
+
     def delete_event(self, event):
         if event:
             Event.query.filter_by(
                 start=event.start, end=event.end, user_id=event.user_id
             ).delete()
             db.session.commit()
+
+    def __format_time(self, time_string):
+        try:
+            datetime.datetime.strptime(time_string, "%H:%M:%S")
+            return time_string
+        except ValueError:
+            return f"{time_string}:00"
