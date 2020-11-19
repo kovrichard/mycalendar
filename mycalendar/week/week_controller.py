@@ -78,6 +78,26 @@ class WeekController:
 
         return tmp
 
+    def insert_new_event(self, current_week, event_type):
+        start_time = self.__format_time(self.__request.form["start_time"])
+        end_time = self.__format_time(self.__request.form["end_time"])
+
+        event = Event(
+            title=self.__request.form["title"],
+            description=self.__request.form["description"],
+            location=self.__request.form["location"],
+            start=f"{self.__request.form['start_date']} {start_time}",
+            end=f"{self.__request.form['end_date']} {end_time}",
+            event_type=event_type,
+            guest_name=self.__request.form["guest-name"] if event_type == 1 else "",
+        )
+        db.session.add(event)
+
+        current_week.events.append(event)
+        self.__current_user.events.append(event)
+
+        return event
+
     def modify_event(self, event, event_type):
         start_time = self.__format_time(self.__request.form["start_time"])
         end_time = self.__format_time(self.__request.form["end_time"])

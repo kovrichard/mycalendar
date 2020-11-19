@@ -57,7 +57,7 @@ class WeekView(MethodView):
                         event, event_type
                     )
                 else:
-                    new_event = self.__insert_new_event(
+                    new_event = self.__week_controller.insert_new_event(
                         current_week, event_type
                     )
 
