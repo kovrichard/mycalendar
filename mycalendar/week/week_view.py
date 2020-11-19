@@ -44,7 +44,7 @@ class WeekView(MethodView):
         self.__week_controller.set_week(week)
         self.__week_controller.set_request(request)
 
-        event_type = 1 if "business_hour" in request.form else 0
+        event_type = self.__week_controller.get_event_type_from_request()
 
         if current_week := Week.query.filter_by(
             year=year, week_num=week

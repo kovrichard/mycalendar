@@ -42,6 +42,9 @@ class WeekController:
 
         return self.__format_for_render(events)
 
+    def get_event_type_from_request(self):
+        return 1 if "business_hour" in self.__request.form else 0
+
     def __persist_week_to_db(self):
         tmp = Week.query.filter_by(
             year=self.__year, week_num=self.__week
