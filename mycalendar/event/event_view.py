@@ -16,8 +16,6 @@ class EventView(MethodView):
         self.__event_controller.set_request(request)
         self.__event_controller.set_user(current_user)
 
-        year = self.__event_controller.get_year()
-        week = self.__event_controller.get_week()
         event = self.__event_controller.get_event()
         start_date = self.__event_controller.get_start_date()
         start_time = self.__event_controller.get_start_time()
@@ -26,8 +24,8 @@ class EventView(MethodView):
 
         return render_template(
             "event.html",
-            year_number=year,
-            week_number=week,
+            year_number=self.__event_controller.get_year(),
+            week_number=self.__event_controller.get_week(),
             event=event,
             start_date=event.start.date() if event else start_date,
             start_time=event.start.time() if event else start_time,

@@ -55,15 +55,12 @@ class SharedWeekView(MethodView):
         if not self.__shared_week_controller.get_decoded_token():
             abort(401)
 
-        days_of_week = self.__shared_week_controller.get_days_of_week()
-        events = self.__shared_week_controller.get_formatted_events()
-
         return render_template(
             "shared-week.html",
             year_number=self.__shared_week_controller.get_year(),
             week_number=self.__shared_week_controller.get_week(),
-            days_of_week=days_of_week,
-            events=events,
+            days_of_week=self.__shared_week_controller.get_days_of_week(),
+            events=self.__shared_week_controller.get_formatted_events(),
             shared_calendar=True,
             share_content=self.__shared_week_controller.get_share_content(),
             shared_user_name=self.__shared_week_controller.get_shared_user_name(),

@@ -25,15 +25,12 @@ class WeekView(MethodView):
         self.__week_controller.set_current_user(current_user)
         self.__week_controller.set_year_and_week(year, week)
 
-        days_of_week = self.__week_controller.get_days_of_week()
-        events = self.__week_controller.get_formatted_events()
-
         return render_template(
             "week.html",
             year_number=self.__week_controller.get_year(),
             week_number=self.__week_controller.get_week(),
-            days_of_week=days_of_week,
-            events=events,
+            days_of_week=self.__week_controller.get_days_of_week(),
+            events=self.__week_controller.get_formatted_events(),
         )
 
     @login_required
@@ -44,14 +41,13 @@ class WeekView(MethodView):
 
         try:
             self.__week_controller.handle_post_request()
-            days_of_week = self.__week_controller.get_days_of_week()
-            events = self.__week_controller.get_formatted_events()
+
             return render_template(
                 "week.html",
                 year_number=self.__week_controller.get_year(),
                 week_number=self.__week_controller.get_week(),
-                days_of_week=days_of_week,
-                events=events,
+                days_of_week=self.__week_controller.get_days_of_week(),
+                events=self.__week_controller.get_formatted_events(),
             )
         except OverlappingEventError:
             flash("Overlapping event!", "danger")
@@ -65,8 +61,8 @@ class WeekView(MethodView):
 
         return render_template(
             "event.html",
-            year_number=year,
-            week_number=week,
+            year_number=self.__week_controller.get_year(),
+            week_number=self.__week_controller.get_week(),
             event=self.__week_controller.get_new_event(),
             start_date=request.form["start_date"],
             start_time=request.form["start_time"],
