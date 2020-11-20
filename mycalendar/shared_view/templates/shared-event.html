@@ -11,7 +11,7 @@
 {% block content %}
     <h1>{{ shared_user_name }}'s event</h1>
 
-    <form method="post" action="{{ url_for('shared_view.register_guest', token = token) }}">
+    <form method="post" action="{{ url_for('register_guest.post', token = token) }}">
         <div class="form-group row justify-content-center">
             <input id="event-title" type="text" name="title" class="form-control col-5" value="{{ event.title }}" required placeholder="Title" readonly disabled>
         </div>

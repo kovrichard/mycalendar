@@ -1,17 +1,8 @@
 from datetime import datetime, timedelta
 
-from flask import (
-    Blueprint,
-    abort,
-    current_app,
-    redirect,
-    render_template,
-    request,
-    url_for,
-)
+from flask import Blueprint, abort, current_app, render_template, request
 from flask.views import MethodView
 
-from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_user import User
 from mycalendar.lib.datetime_helper import DateTimeHelper
@@ -75,35 +66,6 @@ class SharedEventView(MethodView):
         )
 
 
-class RegisterGuest(MethodView):
-    def post(self, token):
-        decoded_token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).decode(token)
-
-        if not decoded_token:
-            abort(401)
-
-        event_id = request.form["event-id"]
-        guest_name = request.form["guest-name"]
-
-        if event := Event.query.filter_by(id=event_id).first():
-            event.guest_name = guest_name
-            db.session.add(event)
-            db.session.commit()
-
-        now = datetime.now().isocalendar()
-        return redirect(
-            url_for(
-                "shared_view.week",
-                year=now[0],
-                week=now[1],
-                token=token,
-            ),
-            302,
-        )
-
-
 class SharedWeekView(MethodView):
     def __init__(self):
         self.__shared_week_controller = SharedWeekController()
@@ -142,11 +104,4 @@ shared_view_bp.add_url_rule(
     "/<int:year>/<int:week>/shared-calendar/<string:token>",
     view_func=SharedWeekView.as_view("week"),
     methods=["GET"],
-)
-
-shared_view_bp.add_url_rule(
-    "/register-guest/<string:token>",
-    strict_slashes=False,
-    view_func=RegisterGuest.as_view("register_guest"),
-    methods=["POST"],
 )
