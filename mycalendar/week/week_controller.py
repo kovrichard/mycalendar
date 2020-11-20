@@ -18,12 +18,18 @@ class WeekController:
     def set_current_user(self, current_user):
         self.__current_user = current_user
 
-    def set_year(self, year):
-        self.__year = year
+    def set_week_and_year(self, year, week):
+        y, w = self.__date_time_helper.calculate_different_year(year, week)
 
-    def set_week(self, week):
-        self.__week = week
+        self.__year = y
+        self.__week = w
         self.__persist_week_to_db()
+
+    def get_week(self):
+        return self.__week
+
+    def get_year(self):
+        return self.__year
 
     def set_request(self, request):
         self.__request = request

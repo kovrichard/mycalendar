@@ -23,17 +23,15 @@ class WeekView(MethodView):
     @login_required
     def get(self, year, week):
         self.__week_controller.set_current_user(current_user)
-        self.__week_controller.set_year(year)
-        self.__week_controller.set_week(week)
+        self.__week_controller.set_week_and_year(year, week)
 
-        current_week = self.__week_controller.get_current_week()
         days_of_week = self.__week_controller.get_days_of_week()
         events = self.__week_controller.get_formatted_events()
 
         return render_template(
             "week.html",
-            year_number=year,
-            week_number=week,
+            year_number=self.__week_controller.get_year(),
+            week_number=self.__week_controller.get_week(),
             days_of_week=days_of_week,
             events=events,
         )
@@ -41,8 +39,7 @@ class WeekView(MethodView):
     @login_required
     def post(self, year, week):
         self.__week_controller.set_current_user(current_user)
-        self.__week_controller.set_year(year)
-        self.__week_controller.set_week(week)
+        self.__week_controller.set_week_and_year(year, week)
         self.__week_controller.set_request(request)
 
         try:
@@ -51,8 +48,8 @@ class WeekView(MethodView):
             events = self.__week_controller.get_formatted_events()
             return render_template(
                 "week.html",
-                year_number=year,
-                week_number=week,
+                year_number=self.__week_controller.get_year(),
+                week_number=self.__week_controller.get_week(),
                 days_of_week=days_of_week,
                 events=events,
             )

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from ddt import data, ddt, unpack
 from flask import current_app
 from truth.truth import AssertThat
 
@@ -49,6 +50,7 @@ TEST_DELETE_EVENT = {
 }
 
 
+@ddt
 class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
     def setUp(self):
         super().setUp()
@@ -113,6 +115,28 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(week.year).IsEqualTo(YEAR)
         AssertThat(week.week_num).IsEqualTo(WEEK)
+
+    @data((2020, 54, 1), (2020, 0, 52), (2019, 53, 1), (2021, 0, 53))
+    @unpack
+    @logged_in_user()
+    def test_get_week_handles_invalid_week(
+        self, year, week, expected_week, default_user
+    ):
+        r = self.client.get(f"/{year}/{week}")
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(r.data).Contains(f"Week - {expected_week}".encode())
+
+    @data((2020, 54, 1), (2020, 0, 52), (2019, 53, 1), (2021, 0, 53))
+    @unpack
+    @logged_in_user()
+    def test_post_week_handles_invalid_week(
+        self, year, week, expected_week, default_user
+    ):
+        r = self.client.post(f"/{year}/{week}", data=TEST_EVENT)
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(r.data).Contains(f"Week - {expected_week}".encode())
 
     @logged_in_user()
     def test_get_week_get_does_not_save_already_existing_week_again(
