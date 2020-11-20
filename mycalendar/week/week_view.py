@@ -23,7 +23,7 @@ class WeekView(MethodView):
     @login_required
     def get(self, year, week):
         self.__week_controller.set_current_user(current_user)
-        self.__week_controller.set_week_and_year(year, week)
+        self.__week_controller.set_year_and_week(year, week)
 
         days_of_week = self.__week_controller.get_days_of_week()
         events = self.__week_controller.get_formatted_events()
@@ -39,7 +39,7 @@ class WeekView(MethodView):
     @login_required
     def post(self, year, week):
         self.__week_controller.set_current_user(current_user)
-        self.__week_controller.set_week_and_year(year, week)
+        self.__week_controller.set_year_and_week(year, week)
         self.__week_controller.set_request(request)
 
         try:
