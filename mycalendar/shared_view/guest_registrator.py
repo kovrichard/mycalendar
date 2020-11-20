@@ -54,7 +54,7 @@ class GuestRegistrator:
         event_id = self.__request.form["event-id"]
         guest_name = self.__request.form["guest-name"]
 
-        if event := Event.query.filter_by(id=event_id).first():
+        if event := Event.query.get(event_id):
             event.guest_name = guest_name
             db.session.add(event)
             db.session.commit()

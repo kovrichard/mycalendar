@@ -24,9 +24,7 @@ class SharedEventView(MethodView):
         if not decoded_token:
             abort(401)
 
-        user_name = (
-            User.query.filter_by(id=decoded_token["user_id"]).first().username
-        )
+        user_name = User.query.get(decoded_token["user_id"]).username
 
         year = int(request.form["year"])
         week = int(request.form["week"])
