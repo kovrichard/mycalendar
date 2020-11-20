@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from ddt import data, ddt, unpack
 from flask import current_app
 from truth.truth import AssertThat
 
@@ -16,6 +17,7 @@ YEAR = 2020
 WEEK = 43
 
 
+@ddt
 class SharedViewTest(
     TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase
 ):
@@ -33,13 +35,8 @@ class SharedViewTest(
         AssertThat(r.status_code).IsEqualTo(401)
 
     def test_shared_event_view_renders_template(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
-        db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         r = self.client.post(
             f"/shared-event/{token}",
@@ -64,13 +61,8 @@ class SharedViewTest(
         AssertThat(r.data).Contains(b'value="OK"')
 
     def test_shared_event_view_renders_guest_registration(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
-        db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         week = Week(year=2020, week_num=2)
         db.session.add(week)
@@ -101,13 +93,8 @@ class SharedViewTest(
         AssertThat(r.status_code).IsEqualTo(401)
 
     def test_register_guest_redirects_to_week_view(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
-        db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         r = self.client.post(
             f"/register-guest/{token}",
@@ -122,8 +109,8 @@ class SharedViewTest(
         )
 
     def test_register_guest_saves_guest_to_event(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         event = Event(
             title="test_title",
@@ -132,10 +119,6 @@ class SharedViewTest(
         )
         db.session.add(event)
         db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
 
         guest_name = "Test Name"
 
@@ -152,13 +135,8 @@ class SharedViewTest(
         AssertThat(r.status_code).IsEqualTo(401)
 
     def test_shared_calendar_renders_template(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
-        db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
         template, context = self.rendered_templates[0]
@@ -172,15 +150,25 @@ class SharedViewTest(
         AssertThat(r.data).Contains(b'value=">"')
 
     def test_shared_calendar_event_creation_is_disabled(self):
-        user = User(username="user", password="password")
-        db.session.add(user)
-        db.session.commit()
-
-        token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).generate(user.id, timedelta(days=1))
+        user = self.add_user()
+        token = self.__create_token(user.id)
 
         r = self.client.get(f"/{YEAR}/{WEEK}/shared-calendar/{token}")
-        template, context = self.rendered_templates[0]
 
         AssertThat(r.data).DoesNotContain(b"btn-4-5")
+
+    @data((2020, 54, 1), (2020, 0, 52), (2019, 53, 1), (2021, 0, 53))
+    @unpack
+    def test_get_week_handles_invalid_week(self, year, week, expected_week):
+        user = self.add_user()
+        token = self.__create_token(user.id)
+
+        r = self.client.get(f"/{year}/{week}/shared-calendar/{token}")
+
+        AssertThat(r.status_code).IsEqualTo(200)
+        AssertThat(r.data).Contains(f"Week - {expected_week}".encode())
+
+    def __create_token(self, user_id):
+        return UserAccess(current_app.config["SHARING_TOKEN_SECRET"]).generate(
+            user_id, timedelta(days=1)
+        )
