@@ -18,7 +18,7 @@ class WeekController:
     def set_current_user(self, current_user):
         self.__current_user = current_user
 
-    def set_week_and_year(self, year, week):
+    def set_year_and_week(self, year, week):
         y, w = self.__date_time_helper.calculate_different_year(year, week)
 
         self.__year = y

@@ -14,9 +14,9 @@ from flask.views import MethodView
 from mycalendar.db_models import db
 from mycalendar.db_models.db_event import Event
 from mycalendar.db_models.db_user import User
-from mycalendar.db_models.db_week import Week
 from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.lib.user_access import UserAccess
+from mycalendar.shared_view.shared_week_controller import SharedWeekController
 
 shared_view_bp = Blueprint(
     "shared_view", __name__, template_folder="templates"
@@ -105,67 +105,30 @@ class RegisterGuest(MethodView):
 
 
 class SharedWeekView(MethodView):
-    def get(self, year, week, token):
-        decoded_token = UserAccess(
-            current_app.config["SHARING_TOKEN_SECRET"]
-        ).decode(token)
+    def __init__(self):
+        self.__shared_week_controller = SharedWeekController()
 
-        if not decoded_token:
+    def get(self, year, week, token):
+        self.__shared_week_controller.set_year_and_week(year, week)
+        self.__shared_week_controller.set_token(token)
+
+        if not self.__shared_week_controller.get_decoded_token():
             abort(401)
 
-        year, week = date_time_helper.calculate_different_year(year, week)
-
-        current_week = self.__persist_week_to_db(year, week)
-        days_of_week = date_time_helper.calculate_days_of_week(year, week)
-
-        events = Event.query.filter_by(
-            week_id=current_week.id, user_id=decoded_token["user_id"]
-        ).all()
+        days_of_week = self.__shared_week_controller.get_days_of_week()
+        events = self.__shared_week_controller.get_formatted_events()
 
         return render_template(
             "shared-week.html",
-            year_number=year,
-            week_number=week,
+            year_number=self.__shared_week_controller.get_year(),
+            week_number=self.__shared_week_controller.get_week(),
             days_of_week=days_of_week,
-            events=self.__format_for_render(events),
+            events=events,
             shared_calendar=True,
-            share_content=decoded_token["share_content"],
-            shared_user_name=User.query.filter_by(id=decoded_token["user_id"])
-            .first()
-            .username,
+            share_content=self.__shared_week_controller.get_share_content(),
+            shared_user_name=self.__shared_week_controller.get_shared_user_name(),
             token=token,
         )
-
-    def __persist_week_to_db(self, year, week):
-        tmp = Week.query.filter_by(year=year, week_num=week).first()
-
-        if tmp is None:
-            tmp = Week(year=year, week_num=week)
-            db.session.add(tmp)
-            db.session.commit()
-
-        return tmp
-
-    def __format_for_render(self, events):
-        tmp = []
-
-        for e in events:
-            item = {}
-            item["title"] = e.title
-            item["location"] = e.location
-            item["day"] = e.start.date().isocalendar()[2] - 1
-            item["hour"] = [
-                h
-                for h in range(
-                    e.start.time().hour,
-                    24 if e.end.time().hour == 0 else e.end.time().hour,
-                )
-            ]
-            item["type"] = "active-event"
-
-            tmp.append(item)
-
-        return tmp
 
 
 shared_view_bp.add_url_rule(
