@@ -9,6 +9,7 @@ from .week_controller import (
     DifferentDayEndError,
     EndBeforeStartError,
     OverlappingEventError,
+    ShortEventError,
 )
 
 week_bp = Blueprint("week", __name__, template_folder="templates")
@@ -58,6 +59,8 @@ class WeekView(MethodView):
             )
         except DifferentDayEndError:
             flash("Event ends on a different day!", "danger")
+        except ShortEventError:
+            flash("Event cannot be shorter, than 1 hour!", "danger")
 
         return render_template(
             "event.html",

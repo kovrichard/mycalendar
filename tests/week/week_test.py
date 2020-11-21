@@ -304,6 +304,33 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         AssertThat(r.data).Contains(b"Event ends on a different day!")
 
     @logged_in_user()
+    def test_get_week_post_does_not_save_event_shorter_than_one_hour(
+        self, default_user
+    ):
+        self.__insert_week()
+
+        short_event = {
+            "event-id": -1,
+            "title": "test_title",
+            "description": "test_description",
+            "location": "test_location",
+            "start_date": "2020-10-20",
+            "start_time": "02:00:00",
+            "end_date": "2020-10-20",
+            "end_time": "02:59:00",
+            "business_hour": 1,
+            "action": "Save",
+            "guest-name": "",
+        }
+
+        r = self.client.post(f"/{YEAR}/{WEEK}", data=short_event)
+
+        template, context = self.rendered_templates[0]
+
+        AssertThat(template.name).IsEqualTo("event.html")
+        AssertThat(r.data).Contains(b"Event cannot be shorter, than 1 hour!")
+
+    @logged_in_user()
     def test_get_week_event_insertion_handles_wrongly_formatted_time(
         self, default_user
     ):

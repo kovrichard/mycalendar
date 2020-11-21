@@ -108,6 +108,9 @@ class WeekController:
             except DifferentDayEndError:
                 db.session.rollback()
                 raise
+            except ShortEventError:
+                db.session.rollback()
+                raise
         else:
             self.delete_event(event)
 
@@ -178,6 +181,7 @@ class WeekController:
         self.__overlapping_event(new_event)
         self.__event_end_is_earlier_than_start(new_event)
         self.__event_ends_on_different_day(new_event)
+        self.__event_is_shorter_than_one_hour(new_event)
 
     def __overlapping_event(self, new_event):
         wrong_events = Event.query.filter(
@@ -212,6 +216,15 @@ class WeekController:
         ):
             raise DifferentDayEndError
 
+    def __event_is_shorter_than_one_hour(self, new_event):
+        start = datetime.datetime.strptime(
+            new_event.start, "%Y-%m-%d %H:%M:%S"
+        )
+        end = datetime.datetime.strptime(new_event.end, "%Y-%m-%d %H:%M:%S")
+
+        if (end - start) < datetime.timedelta(hours=1):
+            raise ShortEventError
+
 
 class OverlappingEventError(Exception):
     pass
@@ -222,4 +235,8 @@ class EndBeforeStartError(Exception):
 
 
 class DifferentDayEndError(Exception):
+    pass
+
+
+class ShortEventError(Exception):
     pass
