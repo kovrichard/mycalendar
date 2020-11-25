@@ -344,6 +344,10 @@ body,html{
     margin-bottom:0.1rem;
 }
 
+.register-login-option:hover {
+    color: rgb(5, 138, 0);
+}
+
 #hour-header {
     width:7%;
     padding-top: 0.5rem;
