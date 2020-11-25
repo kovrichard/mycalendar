@@ -13,7 +13,7 @@ class MainView(MethodView):
     def get(self):
         return redirect(
             url_for(
-                "week.week",
+                "week.week_view",
                 year=self.__main_controller.get_current_year(),
                 week=self.__main_controller.get_current_week(),
                 days_of_week=self.__main_controller.get_days_of_week(),

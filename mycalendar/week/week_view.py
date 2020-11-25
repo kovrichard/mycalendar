@@ -76,6 +76,6 @@ class WeekView(MethodView):
 
 week_bp.add_url_rule(
     "/<int:year>/<int:week>",
-    view_func=WeekView.as_view("week"),
+    view_func=WeekView.as_view("week_view"),
     methods=["GET", "POST"],
 )
