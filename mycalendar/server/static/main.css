@@ -24,7 +24,7 @@ body,html{
     width: 10rem;
 }
 
-.active-event {
+.active-normal-event {
     background-color: gray;
     padding-left: 0.1rem;
     padding-right: 0.1rem;
@@ -32,7 +32,19 @@ body,html{
     border-right-width: 0.7rem;
 }
 
-.event-btn:hover {
+.active-business-event {
+    background-color:  rgb(76, 190, 72);
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+    border-left-width: 0.7rem;
+    border-right-width: 0.7rem;
+}
+
+.active-business-event:hover {
+    background-color: rgb(76, 190, 72);
+}
+
+.active-normal-event:hover {
     background-color: gray;
 }
 
@@ -341,4 +353,16 @@ body,html{
 #days-header {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+.normal-bg {
+    background-color: rgba(5, 138, 0, 0.2);
+}
+
+.shared-bg {
+    background-color: white;
+}
+
+.shared-business-hour-bg {
+    background-color: gray;
 }

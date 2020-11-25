@@ -82,7 +82,7 @@ class WeekController:
                     24 if e.end.time().hour == 0 else e.end.time().hour,
                 )
             ]
-            item["type"] = "active-event"
+            item["type"] = "active-normal-event" if e.event_type == 0 else "active-business-event"
 
             tmp.append(item)
 
