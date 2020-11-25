@@ -35,6 +35,7 @@ class SharedEventView(MethodView):
             year_number=self.__shared_event_controller.get_year(),
             week_number=self.__shared_event_controller.get_week(),
             event=event,
+            shared_calendar=True,
             start_date=event.start.date() if event else start_date,
             start_time=event.start.time() if event else start_time,
             end_date=event.end.date() if event else end_date,
