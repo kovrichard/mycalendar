@@ -38,11 +38,7 @@
                         <th scope="row" class="tw-4">{{ hour }}:00</th>
                         {% for day in range(7) %}
                         <td id="btn-{{ hour }}{{ day }}"class="tw-10 p-0">
-                            {% if shared_calendar %}
                             <form method="post" action="{{ url_for('shared_view.event', token = token) }}">
-                            {% else %}
-                            <form method="post" action="{{ url_for('event.event_view') }}">
-                            {% endif %}
                                 {% set current_event = { "type": "" } %}
                                 {% for event in events if event.day == day and hour in event.hour %}
                                     {% if current_event.update(event) %}{% endif %}
