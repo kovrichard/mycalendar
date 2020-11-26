@@ -1,7 +1,6 @@
 from flask import Blueprint, abort, render_template, request
 from flask.views import MethodView
 
-from mycalendar.lib.datetime_helper import DateTimeHelper
 from mycalendar.shared_view.shared_event_controller import (
     SharedEventController,
 )
@@ -10,7 +9,6 @@ from mycalendar.shared_view.shared_week_controller import SharedWeekController
 shared_view_bp = Blueprint(
     "shared_view", __name__, template_folder="templates"
 )
-date_time_helper = DateTimeHelper()
 
 
 class SharedEventView(MethodView):
