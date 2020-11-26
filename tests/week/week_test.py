@@ -192,8 +192,17 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
 
         AssertThat(event).IsEqualTo(None)
 
+    @data(
+        ("01:00:00", "05:00:00"),
+        ("02:00:00", "03:00:00"),
+        ("03:00:00", "05:00:00"),
+        ("01:00:00", "03:00:00"),
+    )
+    @unpack
     @logged_in_user()
-    def test_get_week_post_does_not_save_overlapping_event(self, default_user):
+    def test_get_week_post_does_not_save_overlapping_event(
+        self, start_time, end_time, default_user
+    ):
         week = self.__insert_week()
         self.__insert_event(default_user.id, week.id)
 
@@ -203,9 +212,9 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
             "description": "test_description",
             "location": "test_location",
             "start_date": "2020-10-20",
-            "start_time": "02:00:00",
+            "start_time": start_time,
             "end_date": "2020-10-20",
-            "end_time": "04:00:00",
+            "end_time": end_time,
             "business_hour": 1,
             "action": "Save",
             "guest-name": "",
@@ -479,7 +488,7 @@ class WeekTest(TestClientMixin, DbMixin, TemplateRenderMixin, AppTestCase):
         start_date="2020-10-20",
         start_time="02:00:00",
         end_date="2020-10-20",
-        end_time="03:00:00",
+        end_time="04:00:00",
         guest_name="",
     ):
         event = Event(

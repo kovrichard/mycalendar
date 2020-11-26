@@ -199,6 +199,10 @@ class WeekController:
                     (new_event.start < Event.end)
                     & (Event.end <= new_event.end)
                 )
+                | (
+                    (Event.start <= new_event.start)
+                    & (new_event.end <= Event.end)
+                )
             )
         ).all()
 
