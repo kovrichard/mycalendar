@@ -2,6 +2,7 @@
 This is a project app for the BME MSc class called "[Software Architectures](https://www.aut.bme.hu/Course/VIAUMA06)".  
   
 You can find the running version of this application by clicking here: https://szoftarch-calendar.herokuapp.com.
+
 Since it is running on the free version of Heroku, it may take 30 seconds to load on the first time,
 after there was no request to the site for 30 minutes. This is completely normal. If this is the case, please wait a bit, until it loads.
 
